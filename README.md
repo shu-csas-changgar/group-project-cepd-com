@@ -1,7 +1,7 @@
 # group-project-cepd-com
 
-Project Overview
+##Project Overview
 
-Architecture Overview
+##Architecture Overview
 
-Tech Stack
+##Technology Stack
