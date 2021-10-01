@@ -1,11 +1,11 @@
 # ABC CORP
 An Equipment Management System
 
-##Project Overview
+## Project Overview
 
-##Architecture Overview
+## Architecture Overview
 
-##Technology Stack
+## Technology Stack
 
 ## Application Flow Sample
 https://abccorp5.godaddysites.com/  <br/>
