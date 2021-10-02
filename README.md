@@ -27,14 +27,14 @@ password: String
 ### Equipment
 id: Integer <br/>
 name: String <br/>
-vendor: Vendor <br/>
+vendor: VendorID <br/>
 equipmentType: String <br/>
 purchaseDate: DateTime <br/>
 expirationDate: DateTime <br/>
 location: Location  <br/>
 floor: String <br/>
-assignedTo: User <br/>
-owner: User
+assignedTo: UserID <br/>
+owner: UserID
 
 ### Vendor
 id: Integer <br/>
