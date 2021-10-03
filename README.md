@@ -21,7 +21,6 @@ address: String <br/>
 officeLocation: ListOfLocationIds <br/>
 equipments: ListOfEquipmentIds  <br/>
 isManager: Boolean <br/>
-isEmployee: Boolean <br/>
 password: String
 
 ### Equipment
