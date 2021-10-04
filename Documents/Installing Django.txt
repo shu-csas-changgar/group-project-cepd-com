@@ -1,0 +1,11 @@
+To Install Django:
+pip install pipenv
+pipenv install django
+pipenv shell   -> to enter virtual environment
+django-admin startproject ABC_CORP
+py manage.py runserver
+Open new tab
+pipenv shell
+py .\manage.py startapp ABC_CORP_APP
+Open Main Folder in IDE
+Add app to Settings 
