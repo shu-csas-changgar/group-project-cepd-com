@@ -18,7 +18,7 @@ name: String <br/>
 email: String <br/>
 phone: String <br/>
 address: String <br/>
-officeLocation: ListOfLocationIds <br/>
+officeLocation: Location <br/>
 equipments: ListOfEquipmentIds  <br/>
 isManager: Boolean <br/>
 password: String
