@@ -51,12 +51,13 @@ Project artifacts in the form of GitHub repository URL. The repository should co
 
 
 ## Architecture Overview
+<br/><br/>
 
 ## Technology Stack
-### Django 3.2.7
-### Python
-### Html, CSS & JavaScript
-### MongoDB
+* Django 3.2.7
+* Python
+* Html, CSS & JavaScript
+* MongoDB
 
 
 ## Application Flow Sample
