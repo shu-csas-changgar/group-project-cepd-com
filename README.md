@@ -3,17 +3,17 @@ An Equipment Management System
 
 ## Project Overview
 ABC Corp has grown from a small office, in a single location, to 1000 employees spread across multiple locations, including a few satellite offices throughout the U.S. During this period of growth, the number of IT equipment leased or purchased by the company has become increasingly difficult to track.
-<br/>
+<br/><br/>
 Presently the company tracks this information on an excel spreadsheet that is shared amongst different IT staff across multiple office locations. This has become very difficult to maintain as multiple copies of the spreadsheet have been made, which has resulted in fragmented and redundant information. There is no single source of truth that accurately reflects the number of equipment in the company’s possession. This is affecting the company’s purchasing decisions as they have ordered too many or not ordered enough equipment, which has resulted in low inventory some items.
-<br/>
-ABC’s IT department would like to develop an application to track all IT equipment the company currently owns or leases. This includes
+<br/><br/>
+ABC’s IT department would like to develop an application to track all IT equipment the company currently owns or leases. This includes:
 <br/>
 * Desktop computers
 * Laptops
 * Servers
 * Printers
 * Mobile devices (phone and tablets)
-<br/>
+
 The department would like to:
 <br/>
 * Track inventory on each item to know when new equipment should be ordered
@@ -21,7 +21,7 @@ The department would like to:
 * In the case of a desktop, laptop, phone and tablet devices, they would like to track which employee each has been assigned. The system would like to track each employee’s name, email, contact information and office location
 * For all equipment there should be an owner/contact person
 * Track the vendor the equipment was purchased/leased from, along with expiration dates for leased items.
-<br/>
+
 The system should allow users to:
 <br/>
 * Import existing data from excel spreadsheets (CSV files) into the database.
