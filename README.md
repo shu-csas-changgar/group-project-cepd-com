@@ -43,7 +43,7 @@ Project artifacts in the form of GitHub repository URL. The repository should co
 * All source code for the application
 * Unit tests
 * Any other useful information
-<br/>
+
 ### Grading
 * Teams will be graded based on
 	* Previously outlined deliverables being met
