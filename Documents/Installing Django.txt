@@ -1,0 +1,29 @@
+To Install Django:
+pip install pipenv
+pipenv install django
+pipenv shell   -> to enter virtual environment
+django-admin startproject ABC_CORP
+py manage.py runserver
+Open new tab
+pipenv shell
+py .\manage.py startapp ABC_CORP_APP
+Open Main Folder in IDE
+Add app to Settings 
+
+
+To make migrations:
+py manage.py makemigrations
+
+py manage.py createsuperuser
+
+
+#To save to database 
+py manage.py shell
+from playground.models import Item, ToDoList
+t = ToDoList(name="Emmanuel\'s List")
+t.save()
+ToDoList.objects.all()
+ToDoList.objects.get(id=1)
+t.item_set.all()
+t.item_set.create(text="Go to the mall", complete=False)
+
