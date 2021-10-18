@@ -29,6 +29,16 @@ The system should allow users to:
 * Add/Update/Deactivate/Search employees.
 * Add/Update/Deactivate/Search vendors.
 
+Security Requirements<br/>
+The system should group users in two roles.
+<br/>
+* InventoryAdmin - Can perform all functions in the application.
+* InventoryUser - Can perform all functions except the following
+* Add/Deactivate equipment
+* Add/Deactivate employees
+* Add/Deactivate vendors
+* Import existing data into the database
+
 ### Deliverables
 Below are the item required deliverables for the final group project.
  <br/>
