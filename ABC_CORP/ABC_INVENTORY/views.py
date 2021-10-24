@@ -38,8 +38,7 @@ def logoutUser(request):
 
 
 def homePage(request):
-    user = request.user
-    return render(request, 'home.html', {'user':user})
+    return render(request, 'home.html', {})
 
 
 def updatePage(request):
