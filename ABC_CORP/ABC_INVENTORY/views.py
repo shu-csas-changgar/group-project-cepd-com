@@ -27,8 +27,6 @@ def registerPage(request):
         if form.is_valid():
             user = form.save()
             name = form.cleaned_data.get('firstName')
-            #group = Group.objects.get(name='user')
-            # user.groups.add(group)
             messages.success(request, 'Account was created for ' + name)
             return redirect('login')
     return render(request, 'register.html', {'form': form})
@@ -40,7 +38,8 @@ def logoutUser(request):
 
 
 def homePage(request):
-    return render(request, 'home.html', {})
+    user = request.user
+    return render(request, 'home.html', {'user':user})
 
 
 def updatePage(request):
