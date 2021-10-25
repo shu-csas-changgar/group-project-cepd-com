@@ -1,1 +1,138 @@
-Registration Page
+<html><link type="text/css" rel="stylesheet" id="dark-mode-custom-link"><link type="text/css" rel="stylesheet" id="dark-mode-general-link"><style lang="en" type="text/css" id="dark-mode-custom-style"></style><style lang="en" type="text/css" id="dark-mode-native-style"></style>
+
+<head>
+     <meta charset="utf-8">
+      <title>ABC CORP LOGIN</title>
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+      <style>
+      .heading-text {
+        font-family: Georgia;
+        font-size: 24px;
+        text-align:center;
+        text-shadow: 10px;
+        font-weight: bold;
+        color: #6495ED;
+        padding-top: 50px;
+        padding-right: 30px;
+        padding-bottom: 50px;
+        padding-left: 80px;
+      }
+      .btn {
+        background-color:#6495ED;
+        border-color:#6495ED !important;
+
+      }
+      .form-label{
+        font-family: Georgia;
+        font-weight: bold;
+        color: #6495ED;
+      }
+
+
+      </style>
+
+   </head>
+   <body>
+      <script>
+      function hoverIn(){
+        document.getElementById("register-btn").style.backgroundColor="black";
+        document.getElementById("register-btn").style.bordercolor="black";
+      }
+
+      function hoverOut(){
+        document.getElementById("register-btn").style.backgroundColor="#6495ED";
+      }
+
+      </script>
+
+      <div class="heading-text">
+        Welcome to ABC Corp. Inventory
+
+        <div class="login-txt">
+              Register Below
+        </div>
+      </div>
+
+      <section class="container1">
+        <section class="row justify-content-center">
+
+          <section class="col-12 col-sm-6 col-md-3">
+
+            <form method="post">
+                <input type="hidden" name="csrfmiddlewaretoken" value="Q3tjp9vx3ein63yPtiSgP1A94Mz3cMjig5Ie4gPCG3UrdGGxK6w1RFOKAmPlvstz">
+
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">First Name</label>
+                  <input class="form-control" name="first-name" id="inputFirstName" aria-describedby="emailHelp">
+
+                </div>
+
+                <div class="mb-3">
+                  <label for="exampleInputPassword1" class="form-label">Last Name</label>
+                  <input class="form-control" name="last-name" id="inputLastName">
+                </div>
+
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Email address</label>
+                  <input class="form-control" name="email" id="inputEmail" aria-describedby="emailHelp">
+
+                </div>
+
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Phone</label>
+                  <input class="form-control" name="phone" id="inputPhone" aria-describedby="emailHelp">
+
+                </div>
+
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Address</label>
+                  <input class="form-control" name="phone" id="inputPhone" aria-describedby="emailHelp">
+
+                </div>
+
+            
+
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Password</label>
+                  <input class="form-control" name="phone" id="inputPhone" aria-describedby="emailHelp">
+
+                </div>
+
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Re-Enter Password</label>
+                  <input class="form-control" name="phone" id="inputPhone" aria-describedby="emailHelp">
+
+                </div>
+
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Select Location</label>
+                  <select id="cars" class="form-control form-label" name="cars">
+                        <option value="volvo">Volvo</option>
+                        <option value="saab">Saab</option>
+                        <option value="fiat">Fiat</option>
+                        <option value="audi">Audi</option>
+                  </select>
+
+                </div>
+
+
+
+
+
+                <button type="submit" onmouseover="hoverIn()" onmouseout="hoverOut()" class="btn btn-primary btn-block" id="register-btn">Register</button>
+
+              </form>
+
+          </section>
+
+        </section>
+
+
+      </section>
+
+
+
+
+</body>
+
+</html>
