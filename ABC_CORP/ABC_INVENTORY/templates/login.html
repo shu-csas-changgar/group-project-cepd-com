@@ -25,6 +25,12 @@
 
       }
 
+      .form-label{
+        font-family: Georgia;
+        font-weight: bold;
+        color: #6495ED;
+      }
+
 
       </style>
 
@@ -38,6 +44,15 @@
 
       function hoverOut(){
         document.getElementById("submit-btn").style.backgroundColor="#6495ED";
+      }
+
+      function hoverIn2(){
+        document.getElementById("register-btn").style.backgroundColor="black";
+        document.getElementById("register-btn").style.bordercolor="black";
+      }
+
+      function hoverOut2(){
+        document.getElementById("register-btn").style.backgroundColor="#6495ED";
       }
 
       </script>
@@ -55,7 +70,7 @@
 
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">Email address</label>
-                  <input type="email" class="form-control" name="email id="exampleInputEmail1" aria-describedby="emailHelp">
+                  <input type="email" class="form-control" name="email" id="exampleInputEmail1" aria-describedby="emailHelp">
 
                 </div>
 
@@ -65,6 +80,14 @@
                 </div>
 
                 <button type="submit" onmouseover="hoverIn()" onmouseout="hoverOut()" class="btn btn-primary btn-block" id="submit-btn">Submit</button>
+
+                <div class="mb-3">
+                  <label for="exampleInputPassword1" class="form-label">Don't have an account yet?</label>
+                  <button type="submit" onmouseover="hoverIn2()" onmouseout="hoverOut2()" class="btn btn-primary btn-block" id="register-btn">Register</button>
+
+
+                </div>
+
 
               </form>
 
