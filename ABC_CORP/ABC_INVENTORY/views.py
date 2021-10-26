@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import CreateUserForm
 from django.contrib.auth.models import Group
+import datetime
 
 
 def loginPage(request):
@@ -38,7 +39,36 @@ def logoutUser(request):
 
 
 def homePage(request):
-    return render(request, 'home.html', {})
+    date = datetime.date.today()
+    #Replace Equipments with content from database in exact format
+    #i.e a list of dictionaries
+    equipments = [
+        {'name':"Desktop",
+        'active':0,
+        'deactivated':0,
+        'total':0,},
+        {'name':"Laptops",
+        'active':0,
+        'deactivated':0,
+        'total':0,},
+        {'name':"Servers",
+        'active':0,
+        'deactivated':0,
+        'total':0,},
+        {'name':"Mobile Devices",
+        'active':0,
+        'deactivated':0,
+        'total':0,},
+        {'name':"Printers",
+        'active':0,
+        'deactivated':0,
+        'total':0,}
+    ]
+    context = {
+        'date':date,
+        'equipments':equipments,
+    }
+    return render(request, 'home.html', context)
 
 
 def updatePage(request):

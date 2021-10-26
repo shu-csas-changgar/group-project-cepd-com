@@ -1,0 +1,69 @@
+.body-card {
+    padding: 0px;
+}
+
+.header-card {
+    padding-top: 1.5rem;
+    background-image: url("../media/HomeImage.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 40%;
+    opacity: 0.8;
+}
+
+#header-text {
+    font-family: Verdana, Helvetica, sans-serif;
+    color: black;
+    text-align: center;
+    padding-top: 60px;
+    padding-bottom: 0px;
+}
+
+.main-body-card {
+    background-color: black;
+    height: 1300px;
+}
+
+#main-body-text {
+    font-family: Verdana, Helvetica, sans-serif;
+    color: white;
+    text-align: center;
+    padding-top: 20px;
+}
+
+.equipment-card {
+    font-family: Verdana, Helvetica, sans-serif;
+    color: white;
+    text-align: left;
+    padding-left: 450px;
+    padding-right: 450px;
+    padding-top: 10px;
+    height: 200px;
+}
+
+.equipment-card #title {
+    float: left;
+}
+
+.equipment-card #value {
+    float: right;
+}
+
+.solid {
+    border-top: 1px solid #bbb;
+    margin-left: 450px;
+    margin-right: 450px;
+    opacity: 0.2;
+}
+
+.footer {
+    background-color: rgb(55, 96, 220);
+    height: 200px;
+}
+
+#footer-text {
+    font-family: Verdana, Helvetica, sans-serif;
+    color: white;
+    text-align: center;
+    padding-top: 70px;
+}

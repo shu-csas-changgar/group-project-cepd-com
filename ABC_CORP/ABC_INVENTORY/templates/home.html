@@ -1,8 +1,48 @@
 {% extends 'navigation.html' %}
-
+{% load static %}
 {% block content %}
-    <div>
-        <p>Home Page</p>
-    </div> 
+    <!DOCTYPE html>
 
+        <head>
+            <link rel="stylesheet" type="text/css" href="{% static '/css/home.css' %}"> 
+        </head>
+        <body>
+            <div class="body-card">
+                <div class="header-card">
+                    <div id="header-text">
+                        <h1>ABC CORPORATION</h1>
+                        <h3>Equipment Portal</h3>
+                    </div>
+                </div>
+                <div class="main-body-card">
+                    <div id="main-body-text">
+                        <h2>Equipment Statistics</h2>
+                    </div>
+                    {% for i in equipments %}
+                        <div class="equipment-card">                        
+                            <div id="title">
+                                <h3>{{i.name}}</h3>                        
+                                <h4>Active</h4>
+                                <h4>Deactivated</h4>
+                                <h4>Total Count</h4>
+                            </div>
+                            <div id="value">
+                                <h2 style="color:black;">Empty</h2>                        
+                                <h4>{{i.active}}</h4>
+                                <h4>{{i.deactivated}}</h4>
+                                <h4>{{i.total}}</h4>
+                            </div>
+                        </div>
+                        <hr class="solid">
+                    {% endfor %}                   
+                </div>
+            </div>            
+        </body>
+    </html>
+    <footer class="footer">
+        <div id="footer-text">
+            <p>Copyright &copy; {{date.year}} - ABC CORPORATION - All Rights Reserved</p>
+        </div>
+    </footer>
+    
 {% endblock %}  
