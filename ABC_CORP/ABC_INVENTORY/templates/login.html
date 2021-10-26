@@ -1,38 +1,13 @@
-
+{% load static %}
 
 <!DOCTYPE html>
 <html>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
    <head>
      <meta charset="utf-8">
       <title>ABC CORP LOGIN</title>
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-      <style>
-      .heading-text {
-        font-family: Georgia;
-        font-size: 24px;
-        text-align:center;
-        text-shadow: 10px;
-        font-weight: bold;
-        color: #6495ED;
-        padding-top: 50px;
-        padding-right: 30px;
-        padding-bottom: 50px;
-        padding-left: 80px;
-      }
-      .btn {
-        background-color:#6495ED;
-        border-color:#6495ED !important;
 
-      }
-
-      .form-label{
-        font-family: Georgia;
-        font-weight: bold;
-        color: #6495ED;
-      }
-
-
-      </style>
 
    </head>
    <body>
@@ -58,7 +33,7 @@
       </script>
 
       <div class="heading-text">
-        Welcome to ABC Corp. Inventory
+      Welcome to ABC Corp.
       </div>
 
       <section class="container1">
@@ -83,7 +58,7 @@
 
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Don't have an account yet?</label>
-                  <<a href="{% url 'register' %}" type="button" onmouseover="hoverIn2()" onmouseout="hoverOut2()" class="btn btn-primary btn-block" id="register-btn">Register</a>
+                  <a href="{% url 'register' %}" type="button" onmouseover="hoverIn2()" onmouseout="hoverOut2()" class="btn btn-primary btn-block" id="register-btn">Register</a>
 
 
                 </div>

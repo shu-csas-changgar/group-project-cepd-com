@@ -1,0 +1,23 @@
+.heading-text {
+  font-family: Georgia;
+  font-size: 24px;
+  text-align:center;
+  text-shadow: 10px;
+  font-weight: bold;
+  color: #6495ED;
+  padding-top: 50px;
+  padding-right: 30px;
+  padding-bottom: 50px;
+  padding-left: 80px;
+}
+.btn {
+  background-color:#6495ED;
+  border-color:#6495ED !important;
+
+}
+
+.form-label{
+  font-family: Georgia;
+  font-weight: bold;
+  color: #6495ED;
+}
