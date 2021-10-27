@@ -42,7 +42,7 @@ class Location(models.Model):
 class Vendor(models.Model):
     name = models.CharField(max_length=150, null=True)
     address = models.CharField(max_length=200, null=True)
-    email = models.EmailField(gettext_lazy('email address'),unique=True)
+    email = models.EmailField(gettext_lazy('email address'),unique=False)
     phone = models.CharField(max_length=25, null=True)  
     is_active = models.BooleanField(default=True)  
 
