@@ -1,0 +1,8 @@
+id,name,address,email,phone,is_active
+1,Lenovo,"400 South Orange Avenue, South Orange, NJ",lenovo@gmail.com,2342349878,1
+2,Samsung,"837 Washington St, New York, NY",samsung@yahoo.com,2347680967,1
+3,IBM,"590 Madison Ave, New York, NY",ibm@solutions.com,3684234856,1
+4,HP,Hewlett-Packard Company 3000 Hanover Street Palo Alto,hp@gmail.com,4672974923,1
+5,Apple,"1 Apple Park Way Cupertino, California",apple@werethebest.com,4760837405,1
+6,Dell Inc,"1 Dell Way Round Rock, TX",dell@weallwegot.com,6803760740,1
+7,Expirion,"777 Brockton Avenue, Abington MA ",experion@weredone.com,2345982435,1
