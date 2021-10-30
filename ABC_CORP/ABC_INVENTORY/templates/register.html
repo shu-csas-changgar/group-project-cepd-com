@@ -28,6 +28,8 @@
         document.getElementById("register-btn").style.backgroundColor="#6495ED";
       }
 
+
+
       </script>
 
 
@@ -45,22 +47,26 @@
           <section class="col-12 col-sm-6 col-md-3">
 
             <form method="post">
-                <input type="hidden" name="csrfmiddlewaretoken" value="Q3tjp9vx3ein63yPtiSgP1A94Mz3cMjig5Ie4gPCG3UrdGGxK6w1RFOKAmPlvstz">
+              {% csrf_token %}
+                <!--<input type="hidden" name="csrfmiddlewaretoken" value="Q3tjp9vx3ein63yPtiSgP1A94Mz3cMjig5Ie4gPCG3UrdGGxK6w1RFOKAmPlvstz">-->
 
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">First Name</label>
                   <input class="form-control" name="first-name" id="inputFirstName" aria-describedby="emailHelp">
+
 
                 </div>
 
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Last Name</label>
                   <input class="form-control" name="last-name" id="inputLastName">
+
                 </div>
 
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">Email address</label>
                   <input class="form-control" name="email" id="inputEmail" aria-describedby="emailHelp">
+
 
                 </div>
 
@@ -68,32 +74,41 @@
                   <label for="exampleInputEmail1" class="form-label">Phone</label>
                   <input class="form-control" name="phone" id="inputPhone" aria-describedby="emailHelp">
 
+
                 </div>
 
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">Address</label>
                   <input class="form-control" name="address" id="inputPhone" aria-describedby="emailHelp">
 
+
                 </div>
 
 
 
                 <div class="mb-3">
-                  <label for="exampleInputEmail1" class="form-label">Password</label>
-                  <input class="form-control" name="password1" id="inputPhone" aria-describedby="emailHelp">
+                  <label for="exampleInputEmail1" id="pwd1" class="form-label">Password</label>
+                  <input type="password" class="form-control" name="password1" id="inputPhone" aria-describedby="emailHelp">
 
                 </div>
 
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">Re-Enter Password</label>
-                  <input class="form-control" name="password2" id="inputPhone" aria-describedby="emailHelp">
+                  <input type="password" class="form-control" name="password2" id="inputPhone" aria-describedby="emailHelp">
+
 
                 </div>
 
                 <div class="mb-3" class="form-control">
                   <label for="exampleInputEmail1" class="form-label">Select Location</label>
                   <div>
-                  {{form.officeLocation}}
+                    <select name="location">
+                    {% for location in locations %}
+                      <option value="{{location.name}}">{{location}}</option>
+                    {% endfor %}
+
+                  </select>
+
                 </div>
 
 

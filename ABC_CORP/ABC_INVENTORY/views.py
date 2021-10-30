@@ -21,16 +21,35 @@ def loginPage(request):
 
 
 def registerPage(request):
-
+    locations = Location.objects.all()
+    #print(locations.count())
+    #locations = ["NYC", "Seattle", "Jersey City"]
+    #locs = list(location.name for location in locations)
     form = CreateUserForm()
+
     if request.method == 'POST':
-        form = CreateUserForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            name = form.cleaned_data.get('firstName')
-            messages.success(request, 'Account was created for ' + firstName + " " + lastName)
-            return redirect('login')
-    return render(request, 'register.html', {'form':form})
+
+
+        firstName=request.POST.get('first-name')
+        lastName=request.POST.get('last-name')
+        email=request.POST.get('email')
+        phone=request.POST.get('phone')
+        address=request.POST.get('address')
+        p1=request.POST.get('password1')
+        p2=request.POST.get('password2')
+        loc=request.POST.get('location')
+
+        location = Location.objects.get(name=loc)
+        #print(place.id)
+
+        #loc2 = Location(name=loc)
+        #loc.save()
+
+
+        new_user = User.objects.create_user(email=email, firstName=firstName, lastName=lastName, password=p1, phone=phone, address=address, officeLocation=Location(id=location.id))
+        messages.success(request, 'Account was created for ' + firstName + " " + lastName)
+        return redirect('login')
+    return render(request, 'register.html', {'form':form, 'locations':locations})
 
 def logoutUser(request):
     pass

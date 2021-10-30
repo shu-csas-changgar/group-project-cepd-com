@@ -21,14 +21,14 @@
         document.getElementById("submit-btn").style.backgroundColor="#6495ED";
       }
 
-      function hoverIn2(){
-        document.getElementById("register-btn").style.backgroundColor="black";
-        document.getElementById("register-btn").style.bordercolor="black";
-      }
+      //function hoverIn2(){
+      //  document.getElementById("register-btn").style.backgroundColor="black";
+      //  document.getElementById("register-btn").style.bordercolor="black";
+      //}
 
-      function hoverOut2(){
-        document.getElementById("register-btn").style.backgroundColor="#6495ED";
-      }
+      //function hoverOut2(){
+      //  document.getElementById("register-btn").style.backgroundColor="#6495ED";
+      //}
 
       </script>
 
@@ -42,6 +42,7 @@
           <section class="col-12 col-sm-6 col-md-3">
 
             <form method="post">
+              {% csrf_token %}
 
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">Email address</label>
@@ -58,7 +59,7 @@
 
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Don't have an account yet?</label>
-                  <a href="{% url 'register' %}" type="button" onmouseover="hoverIn2()" onmouseout="hoverOut2()" class="btn btn-primary btn-block" id="register-btn">Register</a>
+                  <a href="{% url 'register' %}" type="button" class="bt" onmouseover="hoverIn2()" onmouseout="hoverOut2()" id="register-btn">Register Here</a>
 
 
                 </div>
