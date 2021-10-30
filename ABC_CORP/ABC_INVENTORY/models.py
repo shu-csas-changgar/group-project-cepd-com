@@ -55,7 +55,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(gettext_lazy('email address'),unique=True)
     phone = models.CharField(max_length=25, null=True)
     address = models.CharField(max_length=150, null=True)
-    officeLocation = models.ForeignKey(Location, null=True, on_delete=models.CASCADE)#models.CharField(max_length=150, null=True) 
+    officeLocation = models.ForeignKey(Location, null=True, on_delete=models.CASCADE)#models.CharField(max_length=150, null=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
@@ -79,7 +79,7 @@ class Equipment(models.Model):
 
     name = models.CharField(max_length=150, null=True)
     assignedTo = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
-    officeLocation = models.CharField(max_length=150, null=True)
+    officeLocation = models.ForeignKey(Location, null=True, on_delete=models.CASCADE)
     vendor = models.ForeignKey(Vendor, null=True, on_delete=models.CASCADE)
     equipmentType = models.CharField(max_length=200, null=True, choices=TYPES)
     purchaseDate = models.DateField(null=True)
