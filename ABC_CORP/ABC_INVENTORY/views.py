@@ -41,6 +41,9 @@ def logoutUser(request):
 def homePage(request):
     date = datetime.date.today()
     user = request.user
+    #Replace nav1 and nav2 with your navigation
+    #Make sure to set the width of your entire navigation to be 15%
+    #Like width: 15%, that will ensure it's compatible with the home page size
     navigationPage = 'nav2.html'
     if user.is_admin:
         navigationPage = 'nav1.html'
