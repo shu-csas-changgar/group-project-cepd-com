@@ -42,6 +42,7 @@ def homePage(request):
     date = datetime.date.today()
     user = request.user
     #Replace nav1 and nav2 with your navigation
+    #Keep your css seperate, i kept my css for the temp nav inside because its a temp
     #Make sure to set the width of your entire navigation to be 15%
     #Like width: 15%, that will ensure it's compatible with the home page size
     navigationPage = 'nav2.html'
