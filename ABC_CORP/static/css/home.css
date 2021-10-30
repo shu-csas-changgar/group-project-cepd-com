@@ -1,5 +1,6 @@
 .body-card {
     padding: 0px;
+    margin-left: 15%;
 }
 
 .header-card {
@@ -7,8 +8,8 @@
     background-image: url("../media/HomeImage.png");
     background-repeat: no-repeat;
     background-size: cover;
-    height: 40%;
     opacity: 0.8;
+    height: 250px;
 }
 
 #header-text {
@@ -35,8 +36,8 @@
     font-family: Verdana, Helvetica, sans-serif;
     color: white;
     text-align: left;
-    padding-left: 450px;
-    padding-right: 450px;
+    padding-left: 250px;
+    padding-right: 250px;
     padding-top: 10px;
     height: 200px;
 }
@@ -51,8 +52,8 @@
 
 .solid {
     border-top: 1px solid #bbb;
-    margin-left: 450px;
-    margin-right: 450px;
+    margin-left: 250px;
+    margin-right: 250px;
     opacity: 0.2;
 }
 
@@ -66,4 +67,44 @@
     color: white;
     text-align: center;
     padding-top: 70px;
+}
+
+.column {
+    float: left;
+    width: 20%;
+    padding: 5px;
+}
+
+.column-divider {
+    float: left;
+    width: 20%;
+    padding: 5px;
+    padding-right: 90px;
+    padding-left: 90px;
+}
+
+.column a img {
+    opacity: 1;
+    -webkit-transition: .3s ease-in-out;
+    transition: .3s ease-in-out;
+}
+
+.column a:hover img {
+    opacity: .5;
+}
+
+#column-text {
+    font-family: Verdana, Helvetica, sans-serif;
+    color: black;
+    text-align: center;
+    padding-left: 90px;
+}
+
+.row {
+    content: "";
+    clear: both;
+    display: table;
+    padding-left: 200px;
+    padding-right: 250px;
+    margin-left: 15%;
 }

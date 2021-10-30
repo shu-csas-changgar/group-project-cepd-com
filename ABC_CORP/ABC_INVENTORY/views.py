@@ -40,6 +40,10 @@ def logoutUser(request):
 
 def homePage(request):
     date = datetime.date.today()
+    user = request.user
+    navigationPage = 'nav2.html'
+    if user.is_admin:
+        navigationPage = 'nav1.html'
     #Replace Equipments with content from database in exact format
     #i.e a list of dictionaries
     equipments = [
@@ -64,9 +68,12 @@ def homePage(request):
         'deactivated':0,
         'total':0,}
     ]
+
     context = {
         'date':date,
         'equipments':equipments,
+        'user':user,
+        'navigationPage':navigationPage,
     }
     return render(request, 'home.html', context)
 
@@ -77,6 +84,9 @@ def updatePage(request):
 
 def deactivatePage(request):
     return render(request, 'deactivate.html', {})
+
+def reactivatePage(request):
+    return render(request, 'reactivate.html', {})
 
 
 def displayPage(request):
