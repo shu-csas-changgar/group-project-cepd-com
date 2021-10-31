@@ -1,1 +1,83 @@
-Home Page
+{% extends navigationPage %} 
+{% load static %}
+{% block content %}
+    <!DOCTYPE html>
+
+        <head>
+            <title>ABC CORP Home</title>
+            <link rel="stylesheet" type="text/css" href="{% static '/css/home.css' %}"> 
+        </head>
+        <body>
+            <div class="body-card">
+                <div class="header-card">
+                    <div id="header-text">
+                        <h1>ABC CORPORATION</h1>
+                        <h3>Equipment Portal</h3>
+                    </div>
+                </div>
+                <div class="main-body-card">
+                    <div id="main-body-text">
+                        <h2>Equipment Statistics</h2>
+                    </div>
+                    {% for i in equipments %}
+                        <div class="equipment-card">                        
+                            <div id="title">
+                                <h3>{{i.name}}</h3>                        
+                                <h4>Active</h4>
+                                <h4>Deactivated</h4>
+                                <h4>Total Count</h4>
+                            </div>
+                            <div id="value">
+                                <h2 style="color:black;">Empty</h2>                        
+                                <h4>{{i.active}}</h4>
+                                <h4>{{i.deactivated}}</h4>
+                                <h4>{{i.total}}</h4>
+                            </div>
+                        </div>
+                        <hr class="solid">
+                    {% endfor %}                   
+                </div>
+            </div>   
+            <div class="row">
+                <div class="column">
+                    <h4 id="column-text">SEARCH</h4>
+                    <a href="{% url 'search' %}">
+                        <img src="{% static '/media/searchImage.png' %}" alt="Search" width=300px height=150px>
+                    </a>
+                </div>
+                <div class="column-divider"></div>
+                <div class="column">
+                    <h4 id="column-text">UPDATE</h4>
+                    <a href="{% url 'update' %}">
+                        <img src="{% static '/media/updateImage.png' %}" alt="Update" width=300px height=150px>
+                    </a>
+                </div>
+            </div>   
+            <!--Only Admins see this portion-->
+            {% if user.is_admin %}
+            <div class="row">
+                <div class="column">
+                    <h4 id="column-text">ADD</h4>
+                    <a href="{% url 'add' %}">
+                        <img src="{% static '/media/addImage.png' %}" alt="Add" width=300px height=150px>
+                    </a>
+                </div>
+                <div class="column-divider"></div>
+                <div class="column">
+                    <h4 id="column-text">DEACTIVATE</h4>
+                    <a href="{% url 'deactivate' %}">
+                        <img src="{% static '/media/deactivateImage.png' %}" alt="Deactivate" width=300px height=150px>
+                    </a>
+                </div>
+            </div>   
+            <!--End of Admins portion-->
+            {% endif %}      
+        </body>
+    </html>
+    <footer class="footer">
+        <div id="footer-text">
+            <p>Copyright &copy; {{date.year}} - ABC CORPORATION - All Rights Reserved</p>
+        </div>
+    </footer>
+    
+{% endblock %}  

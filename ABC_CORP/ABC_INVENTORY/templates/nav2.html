@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {
+  margin: 0;
+}
+
+#head{
+  color: white;
+  padding: 8px 16px;
+  font-family: Verdana, Helvetica, sans-serif;
+  text-align: center;
+  font-weight: bold;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 15%;
+  background-color: rgb(55, 96, 220);
+  position: fixed;
+  height: 100%;
+  overflow: auto;
+}
+
+li a {
+  display: block;
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+  font-family: Verdana, Helvetica, sans-serif;
+}
+
+li a.active {
+  background-color: white;
+  color: black;
+}
+
+
+li a:hover:not(.active) {
+  background-color: #555;
+  color: white;
+}
+</style>
+</head>
+<body>
+
+<ul>
+  <p id="head">ABC CORP</p>
+  <li><a class="active" href="{% url 'home' %}">Home</a></li>
+  <li><a href="#news">Search</a></li>
+  <li><a href="#about">Reports</a></li>
+  <li><a href="#about">Account</a></li>
+  <li><a href="{% url 'logout' %}">Logout</a></li>
+</ul>
+
+{% block content%}
+
+{% endblock %}
+
+</body>
+</html>
+
+
