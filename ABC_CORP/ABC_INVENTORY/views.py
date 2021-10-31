@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import CreateUserForm
 from .models import  User, Location
+import datetime
 
 def loginPage(request):
     if request.method == 'POST':
@@ -42,7 +43,47 @@ def logoutUser(request):
     return redirect('login')
 
 def homePage(request):
-    return render(request, 'home.html', {})
+    date = datetime.date.today()
+    user = request.user
+    #Replace nav1 and nav2 with your navigation
+    #Keep your css seperate, i kept my css for the temp nav inside because its a temp
+    #Make sure to set the width of your entire navigation to be 15%
+    #Like width: 15%, that will ensure it's compatible with the home page size
+    navigationPage = 'nav2.html'
+    if user.is_admin:
+        navigationPage = 'nav1.html'
+    #Replace Equipments with content from database in exact format
+    #i.e a list of dictionaries
+    equipments = [
+        {'name':"Desktop",
+        'active':0,
+        'deactivated':0,
+        'total':0,},
+        {'name':"Laptops",
+        'active':0,
+        'deactivated':0,
+        'total':0,},
+        {'name':"Servers",
+        'active':0,
+        'deactivated':0,
+        'total':0,},
+        {'name':"Mobile Devices",
+        'active':0,
+        'deactivated':0,
+        'total':0,},
+        {'name':"Printers",
+        'active':0,
+        'deactivated':0,
+        'total':0,}
+    ]
+
+    context = {
+        'date':date,
+        'equipments':equipments,
+        'user':user,
+        'navigationPage':navigationPage,
+    }
+    return render(request, 'home.html', context)
 
 def updatePage(request):
     return render(request, 'update.html', {})
