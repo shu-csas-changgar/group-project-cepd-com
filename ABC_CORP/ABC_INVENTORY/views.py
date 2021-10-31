@@ -91,6 +91,9 @@ def updatePage(request):
 def deactivatePage(request):
     return render(request, 'deactivate.html', {})
 
+def reactivatePage(request):
+    return render(request, 'reactivate.html', {})
+
 def displayPage(request):
     return render(request, 'display.html', {})
 
