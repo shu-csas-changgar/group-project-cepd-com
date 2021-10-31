@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import CreateUserForm
-from django.contrib.auth.models import Group
+from .models import  User, Location
 import datetime
 
 
@@ -22,16 +22,22 @@ def loginPage(request):
 
 
 def registerPage(request):
+    locations = Location.objects.all()
     form = CreateUserForm()
-    if request.method == 'POST':
-        form = CreateUserForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            name = form.cleaned_data.get('firstName')
-            messages.success(request, 'Account was created for ' + name)
-            return redirect('login')
-    return render(request, 'register.html', {'form': form})
 
+    if request.method == 'POST':
+        firstName=request.POST.get('first-name')
+        lastName=request.POST.get('last-name')
+        email=request.POST.get('email')
+        phone=request.POST.get('phone')
+        address=request.POST.get('address')
+        p1=request.POST.get('password1')
+        loc=request.POST.get('location')
+        location = Location.objects.get(name=loc)
+        User.objects.create_user(email=email, firstName=firstName, lastName=lastName, password=p1, phone=phone, address=address, officeLocation=Location(id=location.id))
+        messages.success(request, 'Account was created for ' + firstName + " " + lastName)
+        return redirect('login')
+    return render(request, 'register.html', {'form':form, 'locations':locations})
 
 def logoutUser(request):
     logout(request)

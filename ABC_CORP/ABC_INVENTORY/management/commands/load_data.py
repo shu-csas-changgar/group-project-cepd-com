@@ -3,6 +3,7 @@ from csv import DictReader
 from datetime import datetime
 from django.core.management import BaseCommand
 from pytz import UTC
+from django.contrib.auth import get_user_model
 
 DATE_FORMAT = '%m/%d/%Y'
 
@@ -11,6 +12,11 @@ class Command(BaseCommand):
     help = "Loads data from csv files onto our database"
 
     def handle(self, *args, **options):
+        print("Creating Super User")
+        db = get_user_model()
+        db.objects.create_superuser('super@gmail.com','Super','Super','password')
+        print('Super User Created')
+
         print("Loading Location data")
         for row in DictReader(open('./location.csv')):
             location = Location()
@@ -48,4 +54,3 @@ class Command(BaseCommand):
             equipment.vendor = Vendor.objects.get(id=int(row['vendor_id']))
             equipment.save()
         print("Equipment data loaded successfully")
-
