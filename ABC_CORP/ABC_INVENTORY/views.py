@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import CreateUserForm
-from .models import  User, Location
+from .models import  User, Location, Equipment
 import datetime
 
 def loginPage(request):
@@ -54,27 +54,57 @@ def homePage(request):
         navigationPage = 'nav1.html'
     #Replace Equipments with content from database in exact format
     #i.e a list of dictionaries
+
+    #Desktop
+    activeDesktop = Equipment.objects.filter(equipmentType="Desktop", is_active=1).count()
+    nonActiveDesktop = Equipment.objects.filter(equipmentType="Desktop", is_active=0).count()
+    totalDesktop = activeDesktop+nonActiveDesktop
+
+    #Laptop
+    activeLaptop = Equipment.objects.filter(equipmentType="Laptop", is_active=1).count()
+    nonActiveLaptop = Equipment.objects.filter(equipmentType="Laptop", is_active=0).count()
+    totalLaptop = activeLaptop+nonActiveLaptop
+
+    #Server
+    activeServer = Equipment.objects.filter(equipmentType="Server", is_active=1).count()
+    nonActiveServer = Equipment.objects.filter(equipmentType="Server", is_active=0).count()
+    totalServer = activeServer+nonActiveServer
+
+    #Mobile Devices
+    activeMD = Equipment.objects.filter(equipmentType="Mobile Device", is_active=1).count()
+    nonActiveMD = Equipment.objects.filter(equipmentType="Mobile Device", is_active=0).count()
+    totalMD = activeMD+nonActiveMD
+
+    #Printers
+    activePrinters = Equipment.objects.filter(equipmentType="Printer", is_active=1).count()
+    nonActivePrinters = Equipment.objects.filter(equipmentType="Printer", is_active=0).count()
+    totalPrinters = activePrinters+nonActivePrinters
+
     equipments = [
         {'name':"Desktop",
-        'active':0,
-        'deactivated':0,
-        'total':0,},
+        'active':activeDesktop,
+        'deactivated':nonActiveDesktop,
+        'total':totalDesktop,},
+
         {'name':"Laptops",
-        'active':0,
-        'deactivated':0,
-        'total':0,},
+        'active':activeLaptop,
+        'deactivated':nonActiveLaptop,
+        'total':totalLaptop,},
+
         {'name':"Servers",
-        'active':0,
-        'deactivated':0,
-        'total':0,},
+        'active':activeServer,
+        'deactivated':nonActiveServer,
+        'total':totalServer,},
+
         {'name':"Mobile Devices",
-        'active':0,
-        'deactivated':0,
-        'total':0,},
+        'active':activeMD,
+        'deactivated':nonActiveMD,
+        'total':totalMD,},
+
         {'name':"Printers",
-        'active':0,
-        'deactivated':0,
-        'total':0,}
+        'active':activePrinters,
+        'deactivated':nonActivePrinters,
+        'total':totalPrinters,}
     ]
 
     context = {
