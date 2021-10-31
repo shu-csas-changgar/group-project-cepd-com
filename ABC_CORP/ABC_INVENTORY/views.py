@@ -124,8 +124,14 @@ def deactivatePage(request):
 def reactivatePage(request):
     return render(request, 'reactivate.html', {})
 
-def displayPage(request):
-    return render(request, 'display.html', {})
+def displayEquipment(request, Equipment):
+    return render(request, 'displayEquipment.html', {})
+
+def displayVendor(request, Vendor):
+    return render(request, 'displayVendor.html', {})
+
+def displayUser(request, User):
+    return render(request, 'displayUser.html', {})
 
 def searchPage(request):
     return render(request, 'search.html', {})
@@ -133,12 +139,14 @@ def searchPage(request):
 def addPage(request):
     return render(request, 'add.html', {})
 
-def reportPage(request, isImport):
-    if(isImport):
-        print('Importing CSV')
-    else:
-        print('Exporting CSV')
+def reportPage(request):
     return render(request, 'report.html', {})
+
+def importPage(request):
+    return render(request, 'import.html', {})
+
+def exportPage(request):
+    return render(request, 'export.html', {})
 
 def accountPage(request):
     return render(request, 'account.html', {})
