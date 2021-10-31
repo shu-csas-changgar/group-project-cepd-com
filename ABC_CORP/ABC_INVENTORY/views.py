@@ -49,9 +49,9 @@ def homePage(request):
     #Keep your css seperate, i kept my css for the temp nav inside because its a temp
     #Make sure to set the width of your entire navigation to be 15%
     #Like width: 15%, that will ensure it's compatible with the home page size
-    navigationPage = 'nav2.html'
+    navigationPage = 'usernav.html'
     if user.is_admin:
-        navigationPage = 'nav1.html'
+        navigationPage = 'adminnav.html'
     #Replace Equipments with content from database in exact format
     #i.e a list of dictionaries
 
