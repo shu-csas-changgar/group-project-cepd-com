@@ -45,16 +45,9 @@ def logoutUser(request):
 def homePage(request):
     date = datetime.date.today()
     user = request.user
-    #Replace nav1 and nav2 with your navigation
-    #Keep your css seperate, i kept my css for the temp nav inside because its a temp
-    #Make sure to set the width of your entire navigation to be 15%
-    #Like width: 15%, that will ensure it's compatible with the home page size
     navigationPage = 'usernav.html'
     if user.is_admin:
         navigationPage = 'adminnav.html'
-    #Replace Equipments with content from database in exact format
-    #i.e a list of dictionaries
-
     #Desktop
     activeDesktop = Equipment.objects.filter(equipmentType="Desktop", is_active=1).count()
     nonActiveDesktop = Equipment.objects.filter(equipmentType="Desktop", is_active=0).count()
