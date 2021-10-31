@@ -45,16 +45,9 @@ def logoutUser(request):
 def homePage(request):
     date = datetime.date.today()
     user = request.user
-    #Replace nav1 and nav2 with your navigation
-    #Keep your css seperate, i kept my css for the temp nav inside because its a temp
-    #Make sure to set the width of your entire navigation to be 15%
-    #Like width: 15%, that will ensure it's compatible with the home page size
-    navigationPage = 'nav2.html'
+    navigationPage = 'usernav.html'
     if user.is_admin:
-        navigationPage = 'nav1.html'
-    #Replace Equipments with content from database in exact format
-    #i.e a list of dictionaries
-
+        navigationPage = 'adminnav.html'
     #Desktop
     activeDesktop = Equipment.objects.filter(equipmentType="Desktop", is_active=1).count()
     nonActiveDesktop = Equipment.objects.filter(equipmentType="Desktop", is_active=0).count()
@@ -124,8 +117,14 @@ def deactivatePage(request):
 def reactivatePage(request):
     return render(request, 'reactivate.html', {})
 
-def displayPage(request):
-    return render(request, 'display.html', {})
+def displayEquipment(request, Equipment):
+    return render(request, 'displayEquipment.html', {})
+
+def displayVendor(request, Vendor):
+    return render(request, 'displayVendor.html', {})
+
+def displayUser(request, User):
+    return render(request, 'displayUser.html', {})
 
 def searchPage(request):
     return render(request, 'search.html', {})
@@ -133,12 +132,14 @@ def searchPage(request):
 def addPage(request):
     return render(request, 'add.html', {})
 
-def reportPage(request, isImport):
-    if(isImport):
-        print('Importing CSV')
-    else:
-        print('Exporting CSV')
+def reportPage(request):
     return render(request, 'report.html', {})
+
+def importPage(request):
+    return render(request, 'import.html', {})
+
+def exportPage(request):
+    return render(request, 'export.html', {})
 
 def accountPage(request):
     return render(request, 'account.html', {})
