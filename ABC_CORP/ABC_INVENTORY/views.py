@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import CreateUserForm
-from django.contrib.auth.models import Group
 from .models import  User, Location
 
 def loginPage(request):
@@ -22,37 +21,25 @@ def loginPage(request):
 
 def registerPage(request):
     locations = Location.objects.all()
-    #print(locations.count())
-    #locations = ["NYC", "Seattle", "Jersey City"]
-    #locs = list(location.name for location in locations)
     form = CreateUserForm()
 
     if request.method == 'POST':
-
-
         firstName=request.POST.get('first-name')
         lastName=request.POST.get('last-name')
         email=request.POST.get('email')
         phone=request.POST.get('phone')
         address=request.POST.get('address')
         p1=request.POST.get('password1')
-        p2=request.POST.get('password2')
         loc=request.POST.get('location')
-
         location = Location.objects.get(name=loc)
-        #print(place.id)
-
-        #loc2 = Location(name=loc)
-        #loc.save()
-
-
-        new_user = User.objects.create_user(email=email, firstName=firstName, lastName=lastName, password=p1, phone=phone, address=address, officeLocation=Location(id=location.id))
+        User.objects.create_user(email=email, firstName=firstName, lastName=lastName, password=p1, phone=phone, address=address, officeLocation=Location(id=location.id))
         messages.success(request, 'Account was created for ' + firstName + " " + lastName)
         return redirect('login')
     return render(request, 'register.html', {'form':form, 'locations':locations})
 
 def logoutUser(request):
-    pass
+    logout(request)
+    return redirect('login')
 
 def homePage(request):
     return render(request, 'home.html', {})
