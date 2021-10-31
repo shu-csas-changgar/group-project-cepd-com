@@ -1,1 +1,66 @@
-Login Page
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/authentication.css' %}">
+   <head>
+     <meta charset="utf-8">
+      <title>ABC CORP LOGIN</title>
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	  <script>
+		function hoverIn(){
+			document.getElementById("submit-btn").style.backgroundColor="black";
+			document.getElementById("submit-btn").style.bordercolor="black";
+		}
+
+		function hoverOut(){
+			document.getElementById("submit-btn").style.backgroundColor="#6495ED";
+		}
+     </script>
+   </head>
+   <body>    
+      <div class="heading-text">
+      	Welcome to ABC Corp.
+      </div>
+
+      <section class="container1">
+        <section class="row justify-content-center">
+
+          <section class="col-12 col-sm-6 col-md-3">
+
+            <form method="post">
+              {% csrf_token %}
+
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Email address</label>
+                  <input type="email" class="form-control" name="email" id="exampleInputEmail1" aria-describedby="emailHelp">
+                </div>
+
+                <div class="mb-3">
+                  <label for="exampleInputPassword1" class="form-label">Password</label>
+                  <input type="password" class="form-control" name="password" id="exampleInputPassword1">
+                </div>
+
+                <button type="submit" onmouseover="hoverIn()" onmouseout="hoverOut()" class="btn btn-primary btn-block" id="submit-btn">Login</button>
+
+				{% for message in messages %}
+					<p class="form-label">{{message}}</p>
+				{% endfor %}
+
+                <div class="mb-3">
+                  <label class="form-label">Don't have an account yet?</label>
+                  <a href="{% url 'register' %}">Register</a>
+                </div>
+
+              </form>
+
+          </section>
+
+        </section>
+
+
+      </section>
+   </body>
+
+
+</html>

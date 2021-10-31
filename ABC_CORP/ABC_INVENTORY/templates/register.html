@@ -1,1 +1,103 @@
-Registration Page
+{% load static %}
+<html>
+	<head>
+		<title>ABC CORP Registration</title>
+		<link type="text/css" rel="stylesheet" id="dark-mode-custom-link">
+		<link type="text/css" rel="stylesheet" id="dark-mode-general-link">
+		<link rel="stylesheet" type="text/css" href="{% static 'css/authentication.css' %}">
+		<style lang="en" type="text/css" id="dark-mode-custom-style"></style>
+		<style lang="en" type="text/css" id="dark-mode-native-style"></style>
+    	<meta charset="utf-8">
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<script>
+			function hoverIn(){
+				document.getElementById("register-btn").style.backgroundColor="black";
+				document.getElementById("register-btn").style.bordercolor="black";
+			}
+
+			function hoverOut(){
+				document.getElementById("register-btn").style.backgroundColor="#6495ED";
+			}
+      </script>   	
+   </head>
+
+   <body>
+      <div class="heading-text">
+        Welcome to ABC Corp.
+
+        <div class="login-txt">
+              Register Below
+        </div>
+      </div>
+
+      <section class="container1">
+        <section class="row justify-content-center">
+          <section class="col-12 col-sm-6 col-md-3">
+
+            <form method="post">
+              {% csrf_token %}
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">First Name</label>
+                  <input class="form-control" name="first-name" id="inputFirstName" aria-describedby="emailHelp">
+                </div>
+
+                <div class="mb-3">
+                  <label for="exampleInputPassword1" class="form-label">Last Name</label>
+                  <input class="form-control" name="last-name" id="inputLastName">
+                </div>
+
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Email address</label>
+                  <input class="form-control" name="email" id="inputEmail" aria-describedby="emailHelp">
+                </div>
+
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Phone</label>
+                  <input class="form-control" name="phone" id="inputPhone" aria-describedby="emailHelp">
+                </div>
+
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Address</label>
+                  <input class="form-control" name="address" id="inputPhone" aria-describedby="emailHelp">
+                </div>
+
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" id="pwd1" class="form-label">Password</label>
+                  <input type="password" class="form-control" name="password1" id="inputPhone" aria-describedby="emailHelp">
+                </div>
+
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Re-Enter Password</label>
+                  <input type="password" class="form-control" name="password2" id="inputPhone" aria-describedby="emailHelp">
+                </div>
+
+                <div class="mb-3" class="form-control">
+                  <label for="exampleInputEmail1" class="form-label">Select Location</label>
+                  <div>
+                    <select name="location">
+                    {% for location in locations %}
+                      <option value={{location.name}}>{{location.name}}</option>
+                    {% endfor %}
+                  	</select>
+                	</div>
+                </div>
+
+				{{form.errors}}
+				{% for message in messages %}
+					<p class="form-label">{{message}}</p>
+				{% endfor %}
+
+                <button type="submit" onmouseover="hoverIn()" onmouseout="hoverOut()" class="btn btn-primary btn-block" id="register-btn">Register</button>
+				
+				<div class="mb-3">
+                  <label class="form-label">Already have an account?</label>
+                  <a href="{% url 'login' %}">Login</a>
+                </div>
+
+              </form>
+          </section>
+        </section>
+      </section>
+
+	</body>
+</html>
