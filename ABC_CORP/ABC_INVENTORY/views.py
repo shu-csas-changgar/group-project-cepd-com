@@ -2,8 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import CreateUserForm
-from .models import  User, Location, Equipment
+from .models import  User, Location, Equipment, Vendor
 import datetime
+
 
 def loginPage(request):
     if request.method == 'POST':
@@ -129,8 +130,25 @@ def displayUser(request, User):
 def searchPage(request):
     return render(request, 'search.html', {})
 
-def addPage(request):
-    return render(request, 'add.html', {})
+def addEquipment(request):
+    date = datetime.date.today()
+    navigationPage = 'usernav.html'
+    if request.user.is_admin:
+        navigationPage = 'adminnav.html'
+    locations = Location.objects.all()
+    users = User.objects.all()
+    vendors = Vendor.objects.all()
+    print(request.POST.get('name'))
+    context = {
+        'date':date,
+        'navigationPage': navigationPage,
+        'locations': locations,
+        'users': users,
+        'vendors': vendors,
+
+
+    }
+    return render(request, 'addEquipment.html', context)
 
 def reportPage(request):
     return render(request, 'report.html', {})

@@ -1,0 +1,112 @@
+{% extends navigationPage %} 
+{% load static %}
+{% block content %}
+    <!DOCTYPE html>
+
+        <head>
+            <title>ABC CORP Add Equipment</title>
+            <link rel="stylesheet" type="text/css" href="{% static '/css/add.css' %}"> 
+        </head>
+        <body>
+            <div class="body-card">
+                <p class="body-card-text"> Add Equpment</p>
+                <div class="form-container">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-25">
+                            <label class="form-text" for="fname">Name</label>
+                            </div>
+                            <div class="col-75">
+                            <input type="text" required name="name" placeholder="Equpment name..">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-25">
+                            <label class="form-text" >Assigned To</label>
+                            </div>
+                            <div class="col-75">
+                                <select required name="assigned_to">
+                                    {% for user in users %}
+                                        <option value={{user.id}}>{{user.firstName}} {{user.lastName}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-25">
+                            <label class="form-text">Office Location</label>
+                            </div>
+                            <div class="col-75">
+                                <select required name="office_location">
+                                    {% for location in locations %}
+                                        <option value={{location.id}}>{{location.name}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-25">
+                            <label class="form-text" >Vendor</label>
+                            </div>
+                            <div class="col-75">
+                                <select required name="vendor">
+                                    {% for vendor in vendors %}
+                                        <option value={{vendor.id}}>{{vendor.name}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-25">
+                            <label class="form-text">Equipment Type</label>
+                            </div>
+                            <div class="col-75">
+                                <select required name="equipment_type">
+                                    <option value="Laptop">Laptop</option>
+                                    <option value="Desktop">Desktop</option>
+                                    <option value="Server">Server</option>
+                                    <option value="Printer">Printer</option>
+                                    <option value="Mobile Device">Mobile Device</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-25">
+                            <label class="form-text" >Purchase Date</label>
+                            </div>
+                            <div class="col-75">
+                            <input type="date" required name="purchase_date" >
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-25">
+                            <label class="form-text" >Expiration Date</label>
+                            </div>
+                            <div class="col-75">
+                            <input type="date" required name="expiration_date" >
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-25">
+                            <label class="form-text" >Floor</label>
+                            </div>
+                            <div class="col-75">
+                            <input type="text" required name="floor" >
+                            </div>
+                        </div>
+                         <br>
+                        <input type="submit" class="add-btn" value="Add">
+                    </form>
+                </div>
+            </div>
+        </body>
+        <footer class="footer">
+            <div id="footer-text">
+                <p>Copyright &copy; {{date.year}} - ABC CORPORATION - All Rights Reserved</p>
+            </div>
+        </footer>
+    </html>
+    
+    
+{% endblock %}  
