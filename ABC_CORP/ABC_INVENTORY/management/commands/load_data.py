@@ -48,7 +48,7 @@ class Command(BaseCommand):
             equipment.purchaseDate = cleanedPurDate
             equipment.expirationDate = cleanedExpDate
             equipment.floor = row['floor']
-            equipment.is_active = True if row['is_active'] == 1 else False            
+            equipment.is_active = True if row['is_active'] == "1" else False            
             equipment.assignedTo = User.objects.get(id=int(row['assignedTo_id']))
             equipment.officeLocation = Location.objects.get(id=int(row['officeLocation_id']))
             equipment.vendor = Vendor.objects.get(id=int(row['vendor_id']))
