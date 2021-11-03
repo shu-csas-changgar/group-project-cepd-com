@@ -113,13 +113,17 @@ def updateEquipment(request,equipmentId):
     e = Equipment.objects.get(id=equipmentId)
     return render(request, 'updateEquipment.html', {'equipment':e})
 
+def updateVendor(request,vendorId):
+    v = Vendor.objects.get(id=vendorId)
+    return render(request, 'updateVendor.html', {'vendor':v})
+
 def deactivateEquipment(request,equipmentId):
     e = Equipment.objects.get(id=equipmentId)
     return render(request, 'deactivateEquipment.html', {'equipment':e})
 
 def deactivateVendor(request,vendorId):
     v = Vendor.objects.get(id=vendorId)
-    return render(request, 'deactivateEquipment.html', {'vendor':v})
+    return render(request, 'deactivateVendor.html', {'vendor':v})
 
 def deactivateUser(request,userId):
     u = Vendor.objects.get(id=userId)
@@ -133,7 +137,8 @@ def displayEquipment(request, equipmentId):
     return render(request, 'displayEquipment.html', {'equipment':e})
 
 def displayVendor(request, vendorId):
-    return render(request, 'displayVendor.html', {})
+    v = Vendor.objects.get(id=vendorId)
+    return render(request, 'displayVendor.html', {'vendor':v})
 
 def displayUser(request, userId):
     return render(request, 'displayUser.html', {})
@@ -168,8 +173,8 @@ def addEquipment(request):
         equipmentType = request.POST.get('equipment_type')
         pd = request.POST.get('purchase_date')
         purchaseDate = datetime.datetime.strptime(pd, '%Y-%m-%d')
-        ed = request.POST.get('expiration_daet')
-        expirationDate = datetime.datetime.strptime(pd, '%Y-%m-%d')
+        ed = request.POST.get('expiration_date')
+        expirationDate = datetime.datetime.strptime(ed, '%Y-%m-%d')
         floor = request.POST.get('floor')
 
         e = Equipment(name=name,assignedTo=User(id=assignedToId),
@@ -183,6 +188,33 @@ def addEquipment(request):
         context['assignedTo'] = assignedTo.firstName+' '+assignedTo.lastName
         return render(request, 'addEquipment.html', context)
     return render(request, 'addEquipment.html', context)
+
+def addVendor(request):
+    date = datetime.date.today()
+    navigationPage = 'usernav.html'
+    if request.user.is_admin:
+        navigationPage = 'adminnav.html'
+    vendors = Vendor.objects.all()
+
+    context = {
+        'date':date,
+        'navigationPage': navigationPage,
+        'vendors': vendors,
+        'hasAdded':False,
+    }
+    if request.method == 'POST':
+        name = request.POST.get('name')        
+        address = request.POST.get('address')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+
+        v = Vendor(name=name,address=address,
+            email=email, phone = phone)
+        v.save()
+        context['hasAdded'] = True
+        context['addedVendor'] = v
+        return render(request, 'addVendor.html', context)
+    return render(request, 'addVendor.html', context)
 
 def reportPage(request):
     return render(request, 'report.html', {})

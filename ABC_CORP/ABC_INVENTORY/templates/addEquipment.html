@@ -5,7 +5,7 @@
 
         <head>
             <title>ABC CORP Add Equipment</title>
-            <link rel="stylesheet" type="text/css" href="{% static '/css/add.css' %}"> 
+            <link rel="stylesheet" type="text/css" href="{% static '/css/addEquipment.css' %}"> 
         </head>
         <body>
             <div class="body-card">
@@ -15,10 +15,10 @@
                         {% csrf_token %}
                         <div class="row">
                             <div class="col-25">
-                            <label class="form-text" for="fname">Name</label>
+                            <label class="form-text">Name</label>
                             </div>
                             <div class="col-75">
-                            <input type="text" required name="name" placeholder="Equpment name..">
+                            <input type="text" required name="name" placeholder="Equipment name..">
                             </div>
                         </div>
                         <div class="row">
@@ -26,7 +26,7 @@
                             <label class="form-text" >Assigned To</label>
                             </div>
                             <div class="col-75">
-                                <select required name="assigned_to">
+                                <select required name="assigned_to" placeholder="Assigned To..">
                                     {% for user in users %}
                                         <option value={{user.id}}>{{user.firstName}} {{user.lastName}}</option>
                                     {% endfor %}
@@ -38,7 +38,7 @@
                             <label class="form-text">Office Location</label>
                             </div>
                             <div class="col-75">
-                                <select required name="office_location">
+                                <select required name="office_location"  placeholder="Office Location..">
                                     {% for location in locations %}
                                         <option value={{location.id}}>{{location.name}}</option>
                                     {% endfor %}
@@ -50,7 +50,7 @@
                             <label class="form-text" >Vendor</label>
                             </div>
                             <div class="col-75">
-                                <select required name="vendor">
+                                <select required name="vendor" placeholder="Vendor..">
                                     {% for vendor in vendors %}
                                         <option value={{vendor.id}}>{{vendor.name}}</option>
                                     {% endfor %}
@@ -62,7 +62,7 @@
                             <label class="form-text">Equipment Type</label>
                             </div>
                             <div class="col-75">
-                                <select required name="equipment_type">
+                                <select required name="equipment_type" placeholder="Equipment Type..">
                                     <option value="Laptop">Laptop</option>
                                     <option value="Desktop">Desktop</option>
                                     <option value="Server">Server</option>
@@ -76,7 +76,7 @@
                             <label class="form-text" >Purchase Date</label>
                             </div>
                             <div class="col-75">
-                            <input type="date" required name="purchase_date" >
+                            <input type="date" required name="purchase_date" placeholder="Purchase Date..">
                             </div>
                         </div>
                         <div class="row">
@@ -84,7 +84,7 @@
                             <label class="form-text" >Expiration Date</label>
                             </div>
                             <div class="col-75">
-                            <input type="date" required name="expiration_date" >
+                            <input type="date" required name="expiration_date" placeholder="Expiration Date..">
                             </div>
                         </div>
                         <div class="row">
@@ -92,7 +92,7 @@
                             <label class="form-text" >Floor</label>
                             </div>
                             <div class="col-75">
-                            <input type="text" required name="floor" >
+                            <input type="text" required name="floor" placeholder="Floor..">
                             </div>
                         </div>
                          <br>
@@ -110,7 +110,11 @@
                         <p id="short-description-label">
                             Assigned To
                         </p>
-                        <br><br><br>
+                        <p id="short-description-links">
+                            <a href="{% url 'updateEquipment' equipmentId=addedEquipment.id %}">Update</a> |
+                            <a href="{% url 'deactivateEquipment' equipmentId=addedEquipment.id %}">Deactivate</a> |
+                            <a href="{% url 'displayEquipment' equipmentId=addedEquipment.id %}">View</a>
+                        </p>
                         <p id="short-description-value">
                             {{addedEquipment.name}}
                         </p>
@@ -119,12 +123,7 @@
                         </p>
                         <p id="short-description-value">
                             {{assignedTo}}
-                        </p>
-                        <p id="short-description-links">
-                            <a href="{% url 'updateEquipment' equipmentId=addedEquipment.id %}">Update</a> |
-                            <a href="{% url 'deactivateEquipment' equipmentId=addedEquipment.id %}">Deactivate</a> |
-                            <a href="{% url 'displayEquipment' equipmentId=addedEquipment.id %}">View</a>
-                        <p>
+                        </p>                        
                     </div>
                 {% endif %}
             </div>
