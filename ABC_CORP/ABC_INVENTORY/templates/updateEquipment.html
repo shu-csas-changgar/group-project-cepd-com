@@ -1,5 +1,157 @@
-Update Equipment
-<br>
-Equipment Name: {{ equipment.name }} <br>
-Equipment Type: {{ equipment.equipmentType }} <br>
-Equipment Expiration: {{ equipment.expirationDate }} <br>
+{% extends navigationPage %} 
+{% load static %}
+{% block content %}
+    <!DOCTYPE html>
+
+        <head>
+            <title>ABC CORP Update Equipment</title>
+            <link rel="stylesheet" type="text/css" href="{% static '/css/addEquipment.css' %}"> 
+        </head>
+        <body>
+            <div class="body-card">
+                <p class="body-card-text"> Update Equpment</p>
+                <div class="form-container">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-25">
+                            <label class="form-text">Name</label>
+                            </div>
+                            <div class="col-75">
+                            <input type="text" required name="name" value= "{{ equipment.name }}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-25">
+                            <label class="form-text" >Assigned To</label>
+                            </div>
+                            <div class="col-75">
+                                <select required name="assigned_to">
+                                    {% for user in users %}
+                                        {% if user.id == equipment.assignedTo.id%}
+                                            <option value={{user.id}} selected = "selected">{{user.firstName}} {{user.lastName}}</option>
+                                        {% else %}
+                                            <option value={{user.id}}>{{user.firstName}} {{user.lastName}}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-25">
+                            <label class="form-text">Office Location</label>
+                            </div>
+                            <div class="col-75">
+                                <select required name="office_location">
+                                    {% for location in locations %}
+                                        {% if location.id == equipment.officeLocation.id%}
+                                            <option value={{location.id}} selected = "selected">{{location.name}}</option>
+                                        {% else %}    
+                                            <option value={{location.id}}>{{location.name}}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-25">
+                            <label class="form-text" >Vendor</label>
+                            </div>
+                            <div class="col-75">
+                                <select required name="vendor">
+                                    {% for vendor in vendors %}
+                                        {% if location.id == equipment.officeLocation.id%}
+                                            <option value={{vendor.id}} selected = "selected">{{vendor.name}}</option>
+                                        {% else %}    
+                                            <option value={{vendor.id}}>{{vendor.name}}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-25">
+                            <label class="form-text">Equipment Type</label>
+                            </div>
+                            <div class="col-75">
+                                <select required name="equipment_type" value= "{{ equipment.equipmentType }}">
+                                    {% for type in equipmentTypes %}
+                                        {% if type == equipment.equipmentType%}
+                                            <option value="{{type}}" selected = "selected">{{type}}</option>
+                                        {% else %}    
+                                            <option value="{{type}}">{{type}}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-25">
+                            <label class="form-text" >Purchase Date</label>
+                            </div>
+                            <div class="col-75">
+                            <input type="date" required name="purchase_date" value="{{ purchaseDate}}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-25">
+                            <label class="form-text" >Expiration Date</label>
+                            </div>
+                            <div class="col-75">
+                            <input type="date" required name="expiration_date" value= {{ expirationDate }}>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-25">
+                            <label class="form-text" >Floor</label>
+                            </div>
+                            <div class="col-75">
+                            <input type="text" required name="floor" value= "{{ equipment.floor }}">
+                            </div>
+                        </div>
+                         <br>
+                        <input type="submit" class="add-btn" value="Update">
+                    </form>
+                </div>
+                {% if hasAdded %}
+                    <div class="short-description">
+                        <p id="short-description-label">
+                            Equipment Name
+                        </p>
+                        <p id="short-description-label">
+                            Equipment Type
+                        </p>
+                        <p id="short-description-label">
+                            Assigned To
+                        </p>
+                        <p id="short-description-links">
+                            <a href="{% url 'updateEquipment' equipmentId=equipment.id %}">Update</a> |
+                            <a href="{% url 'deactivateEquipment' equipmentId=equipment.id %}">Deactivate</a> |
+                            <a href="{% url 'displayEquipment' equipmentId=equipment.id %}">View</a>
+                        </p>
+                        <p id="short-description-value">
+                            {{equipment.name}}
+                        </p>
+                        <p id="short-description-value">
+                            {{equipment.equipmentType}}
+                        </p>
+                        <p id="short-description-value">
+                            {{assignedTo}}
+                        </p>                        
+                    </div>
+                {% endif %}
+            </div>
+        </body>
+        <footer class="footer">
+            <div id="footer-text">                
+                <p>Copyright &copy; {{date.year}} - ABC CORPORATION - All Rights Reserved</p>
+            </div>
+        </footer>
+        <script>
+            $('a.add.dropbtn').addClass('active')
+            $('li.dropdown').addClass('active') 
+        </script> 
+    </html>
+    
+    
+{% endblock %}  

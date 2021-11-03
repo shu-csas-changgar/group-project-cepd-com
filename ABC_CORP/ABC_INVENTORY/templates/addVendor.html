@@ -65,7 +65,6 @@
                             <a href="{% url 'deactivateVendor' vendorId=addedVendor.id %}">Deactivate</a> |
                             <a href="{% url 'displayVendor' vendorId=addedVendor.id %}">View</a>
                         </p>
-
                         <p id="short-description-value">
                             {{addedVendor.name}}
                         </p>
@@ -84,6 +83,10 @@
                 <p>Copyright &copy; {{date.year}} - ABC CORPORATION - All Rights Reserved</p>
             </div>
         </footer>
+        <script>
+            $('a.add.dropbtn').addClass('active')
+            $('li.dropdown').addClass('active')
+        </script> 
     </html>
     
     

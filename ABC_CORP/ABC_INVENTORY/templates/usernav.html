@@ -2,26 +2,34 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" type="text/css" href="{% static '/css/navigation.css' %}"> 
+  <link rel="stylesheet" type="text/css" href="{% static '/css/navigation.css' %}"> 
 </head>
 <body>
 
 <ul>
   <p id="head">ABC CORP</p>
-  <li><a class="active" href="{% url 'home' %}">Home</a></li>
+  <li class="dropdown"><a class="home dropbtn" href="{% url 'home' %}">Home</a></li>
   <li class="dropdown">
-    <a href="javascript:void(0)" class ="dropbtn">Search</a>
+    <a href="javascript:void(0)" class ="search dropbtn">Search</a>
     <div class="dropdown-content">
       <a href="#">Equipment</a>
       <a href="#">Users</a>
       <a href="#">Vendors</a>
     </div>
   </li>
-  <li><a href="#about">Report</a></li>
-  <li><a href="#about">Accounts</a></li>
-  <li><a href="{% url 'logout' %}">Logout</a></li>
+  <li class="dropdown"><a href="{% url 'report' %}" class ="report dropbtn">Report</a></li>
+  <li class="dropdown"><a href="#about" class ="account dropbtn">Account</a></li>
+  <li class="dropdown"><a href="{% url 'logout' %}" class ="logout dropbtn">Logout</a></li>
 
 </ul>
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script type ="text/javascript">
+    $(document).on('click', 'li.dropdown', function(){
+    $(this).siblings().find('a.dropbtn').removeClass('active')
+    $(this).addClass('active').siblings().removeClass('active')
+    $(this).find("a.dropbtn").addClass('active')
+  })
+  </script>
 
 {% block content%}
 
