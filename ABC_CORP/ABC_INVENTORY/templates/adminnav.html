@@ -8,9 +8,9 @@
 
 <ul>
   <p id="head">ABC CORP</p>
-  <li><a class="active" href="{% url 'home' %}">Home</a></li>
+  <li class="dropdown"><a class="home dropbtn" href="{% url 'home' %}">Home</a></li>
   <li class="dropdown">
-    <a href="javascript:void(0)" class ="dropbtn">Add</a>
+    <a href="javascript:void(0)" class ="add dropbtn">Add</a>
     <div class="dropdown-content">
       <a href="#">Equipment</a>
       <a href="#">User</a>
@@ -18,16 +18,16 @@
     </div>
   </li>
   <li class="dropdown">
-    <a href="javascript:void(0)" class ="dropbtn">Search</a>
+    <a href="javascript:void(0)" class ="search dropbtn">Search</a>
     <div class="dropdown-content">
       <a href="#">Equipment</a>
       <a href="#">Users</a>
       <a href="#">Vendors</a>
     </div>
   </li>
-  <li class="dropdown"><a href="{% url 'report' %}" class ="dropbtn">Report</a></li>
-  <li class="dropdown"><a href="#about" class ="dropbtn">Accounts</a></li>
-  <li class="dropdown"><a href="{% url 'logout' %}" class ="dropbtn">Logout</a></li>
+  <li class="dropdown"><a href="{% url 'report' %}" class ="report dropbtn">Report</a></li>
+  <li class="dropdown"><a href="#about" class ="account dropbtn">Account</a></li>
+  <li class="dropdown"><a href="{% url 'logout' %}" class ="logout dropbtn">Logout</a></li>
 
 </ul>
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
@@ -37,10 +37,7 @@
     $(this).addClass('active').siblings().removeClass('active')
     $(this).find("a.dropbtn").addClass('active')
   })
-  $(document).on('click', 'li a', function(){
-    $(this).addClass('active').siblings().removeClass('active')
-  })
-</script>
+  </script>
 
 {% block content%}
 
