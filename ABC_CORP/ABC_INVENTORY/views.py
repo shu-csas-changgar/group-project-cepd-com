@@ -133,7 +133,17 @@ def addPage(request):
     return render(request, 'add.html', {})
 
 def reportPage(request):
-    return render(request, 'report.html', {})
+    date = datetime.date.today()
+    user = request.user
+    navigationPage = 'usernav.html'
+    if user.is_admin:
+        navigationPage = 'adminnav.html'   
+    context = {
+        'date':date,
+        'user':user,
+        'navigationPage':navigationPage,
+    }    
+    return render(request, 'report.html', context)
 
 def importPage(request):
     return render(request, 'import.html', {})
