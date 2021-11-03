@@ -99,10 +99,38 @@
                         <input type="submit" class="add-btn" value="Add">
                     </form>
                 </div>
+                {% if hasAdded %}
+                    <div class="short-description">
+                        <p id="short-description-label">
+                            Equipment Name
+                        </p>
+                        <p id="short-description-label">
+                            Equipment Type
+                        </p>
+                        <p id="short-description-label">
+                            Assigned To
+                        </p>
+                        <br><br><br>
+                        <p id="short-description-value">
+                            {{addedEquipment.name}}
+                        </p>
+                        <p id="short-description-value">
+                            {{addedEquipment.equipmentType}}
+                        </p>
+                        <p id="short-description-value">
+                            {{assignedTo}}
+                        </p>
+                        <p id="short-description-links">
+                            <a href="{% url 'updateEquipment' equipmentId=addedEquipment.id %}">Update</a> |
+                            <a href="{% url 'deactivateEquipment' equipmentId=addedEquipment.id %}">Deactivate</a> |
+                            <a href="{% url 'displayEquipment' equipmentId=addedEquipment.id %}">View</a>
+                        <p>
+                    </div>
+                {% endif %}
             </div>
         </body>
         <footer class="footer">
-            <div id="footer-text">
+            <div id="footer-text">                
                 <p>Copyright &copy; {{date.year}} - ABC CORPORATION - All Rights Reserved</p>
             </div>
         </footer>

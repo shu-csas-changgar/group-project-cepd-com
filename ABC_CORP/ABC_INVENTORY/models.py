@@ -66,7 +66,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ['firstName','lastName'] 
 
     def __str__(self):
-        return self.firstName+' '+self.lastName
+        return str(self.firstName)+' '+str(self.lastName)
 
 class Equipment(models.Model):
     TYPES = (

@@ -109,25 +109,37 @@ def homePage(request):
     }
     return render(request, 'home.html', context)
 
-def updatePage(request):
-    return render(request, 'update.html', {})
+def updateEquipment(request,equipmentId):
+    e = Equipment.objects.get(id=equipmentId)
+    return render(request, 'updateEquipment.html', {'equipment':e})
 
-def deactivatePage(request):
-    return render(request, 'deactivate.html', {})
+def deactivateEquipment(request,equipmentId):
+    e = Equipment.objects.get(id=equipmentId)
+    return render(request, 'deactivateEquipment.html', {'equipment':e})
+
+def deactivateVendor(request,vendorId):
+    v = Vendor.objects.get(id=vendorId)
+    return render(request, 'deactivateEquipment.html', {'vendor':v})
+
+def deactivateUser(request,userId):
+    u = Vendor.objects.get(id=userId)
+    return render(request, 'deactivateEquipment.html', {'user':u})
 
 def reactivatePage(request):
     return render(request, 'reactivate.html', {})
 
-def displayEquipment(request, Equipment):
-    return render(request, 'displayEquipment.html', {})
+def displayEquipment(request, equipmentId):
+    e = Equipment.objects.get(id=equipmentId)
+    return render(request, 'displayEquipment.html', {'equipment':e})
 
-def displayVendor(request, Vendor):
+def displayVendor(request, vendorId):
     return render(request, 'displayVendor.html', {})
 
-def displayUser(request, User):
+def displayUser(request, userId):
     return render(request, 'displayUser.html', {})
 
 def searchPage(request):
+    #return redirect('addEquipment',id=e.name)
     return render(request, 'search.html', {})
 
 def addEquipment(request):
@@ -138,16 +150,38 @@ def addEquipment(request):
     locations = Location.objects.all()
     users = User.objects.all()
     vendors = Vendor.objects.all()
-    print(request.POST.get('name'))
+
     context = {
         'date':date,
         'navigationPage': navigationPage,
         'locations': locations,
         'users': users,
         'vendors': vendors,
-
-
+        'hasAdded':False,
     }
+
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        assignedToId = int(request.POST.get('assigned_to'))
+        officeLocationId = int(request.POST.get('office_location'))
+        vendorId = int(request.POST.get('vendor'))
+        equipmentType = request.POST.get('equipment_type')
+        pd = request.POST.get('purchase_date')
+        purchaseDate = datetime.datetime.strptime(pd, '%Y-%m-%d')
+        ed = request.POST.get('expiration_daet')
+        expirationDate = datetime.datetime.strptime(pd, '%Y-%m-%d')
+        floor = request.POST.get('floor')
+
+        e = Equipment(name=name,assignedTo=User(id=assignedToId),
+            officeLocation=Location(id=officeLocationId),
+            vendor=Vendor(id=vendorId), equipmentType=equipmentType,
+            purchaseDate=purchaseDate,expirationDate=expirationDate,floor=floor,is_active=True)
+        e.save()
+        context['hasAdded'] = True
+        context['addedEquipment'] = e
+        assignedTo = User.objects.get(id=assignedToId)
+        context['assignedTo'] = assignedTo.firstName+' '+assignedTo.lastName
+        return render(request, 'addEquipment.html', context)
     return render(request, 'addEquipment.html', context)
 
 def reportPage(request):
