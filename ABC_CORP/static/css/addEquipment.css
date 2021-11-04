@@ -1,0 +1,140 @@
+.body-card {
+    margin-left: 15%;
+    height: 900px;
+    padding-top: 1.5rem;
+}
+
+.body-card-text {
+    font-family: Verdana, Helvetica, sans-serif;
+    color: rgb(55, 96, 220);
+    margin-left: 350px;
+    font-weight: bold;
+}
+
+.form-text {
+    font-family: Verdana, Helvetica, sans-serif;
+    color: rgb(55, 96, 220);
+    margin-left: 10px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+input[type=text],
+select,
+textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+}
+
+label {
+    padding: 12px 12px 12px 0;
+    display: inline-block;
+}
+
+input[type=submit] {
+    background-color: rgb(55, 96, 220);
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    float: right;
+}
+
+.form-container {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+    width: 60%;
+    height: 520px;
+    margin-left: 30px;
+}
+
+.col-25 {
+    float: left;
+    width: 25%;
+    margin-top: 6px;
+}
+
+.col-75 {
+    float: left;
+    width: 75%;
+    margin-top: 6px;
+}
+
+.add-btn {
+    margin-right: 300px;
+    color: rgb(55, 96, 220);
+}
+
+.add-btn:hover {
+    background-color: rgba(62, 132, 175, 0.959);
+}
+
+
+/* Clear floats after the columns */
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+
+/* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
+
+@media screen and (max-width: 600px) {
+    .col-25,
+    .col-75,
+    input[type=submit] {
+        width: 100%;
+        margin-top: 0;
+    }
+}
+
+.short-description {
+    height: 120px;
+    width: 60%;
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 10px;
+    margin-top: 15px;
+    margin-left: 30px;
+}
+
+#short-description-label {
+    font-family: Verdana, Helvetica, sans-serif;
+    float: left;
+    color: rgb(55, 96, 220);
+    width: 170px;
+    font-weight: bold;
+}
+
+#short-description-value {
+    font-family: Verdana, Helvetica, sans-serif;
+    float: left;
+    color: black;
+    width: 170px;
+}
+
+#short-description-links {
+    font-family: Verdana, Helvetica, sans-serif;
+    color: rgb(55, 96, 220);
+}
+
+.footer {
+    background-color: rgb(55, 96, 220);
+    height: 200px;
+}
+
+#footer-text {
+    font-family: Verdana, Helvetica, sans-serif;
+    color: white;
+    text-align: center;
+    padding-top: 70px;
+}

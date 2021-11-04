@@ -1,16 +1,16 @@
 body {
     margin: 0;
-  }
-  
-  #head{
+}
+
+#head {
     color: white;
     padding: 8px 16px;
     font-family: Verdana, Helvetica, sans-serif;
     text-align: center;
     font-weight: bold;
-  }
-  
-  ul {
+}
+
+ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -19,9 +19,10 @@ body {
     position: fixed;
     width: 15%;
     height: 100%;
-  }
-  
-  li a, .dropbtn {
+}
+
+li a,
+.dropbtn {
     display: block;
     color: white;
     text-align: center;
@@ -30,43 +31,44 @@ body {
     width: 100%;
     text-decoration: none;
     font-family: Verdana, Helvetica, sans-serif;
-  }
-  
-  li a.active {
+}
+
+li a.active {
     background-color: white;
     color: black;
-  }
-  
-  li a:hover, .dropdown:hover .dropbtn {
+}
+
+li a:hover,
+.dropdown:hover .dropbtn {
     background-color: #555;
     color: white;
-  }
-  li.dropdown {
+}
+
+li.dropdown {
     display: inline-block;
     width: 100%;
-  }
-  
-  .dropdown-content{
+}
+
+.dropdown-content {
     display: none;
     background-color: rgb(32, 32, 32);
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
-  }
-  
-  .dropdown-content a {
+}
+
+.dropdown-content a {
     color: white;
     padding-top: 10px;
     padding-bottom: 10px;
     text-decoration: none;
     display: block;
     text-align: center;
-  }
-  
-  .dropdown-content a:hover {
+}
+
+.dropdown-content a:hover {
     background-color: 323232;
-  
-  }
-  
-  .dropdown:hover .dropdown-content {
+}
+
+.dropdown:hover .dropdown-content {
     display: block;
-  }
+}

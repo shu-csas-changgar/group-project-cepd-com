@@ -4,12 +4,12 @@
     <!DOCTYPE html>
 
         <head>
-            <title>ABC CORP Account</title>
+            <title>ABC CORP Update User</title>
             <link rel="stylesheet" type="text/css" href="{% static '/css/addUser.css' %}"> 
         </head>
         <body>
             <div class="body-card">
-                <p class="body-card-text"> Account Information</p>
+                <p class="body-card-text"> Update User</p>
                 <div class="form-container">
                     <form method="post">
                         {% csrf_token %}
@@ -98,10 +98,38 @@
                             </div>
                         </div>
                          <br>
-                        <input type="submit" class="add-btn" value="Update &#38; Logout">
+                        <input type="submit" class="add-btn" value="Update">
                     </form>
                 </div>
-              </div>
+                {% if hasAdded %}
+                    <div class="short-description">
+                        <p id="short-description-label">
+                            User Name
+                        </p>
+                        <p id="short-description-label">
+                            Office Location
+                        </p>
+                        <p id="short-description-label">
+                            User Email
+                        </p>
+                        <p id="short-description-links">
+                            <a href="{% url 'updateUser' userId=user.id %}">Update</a> |
+                            <a href="{% url 'deactivateUser' userId=user.id %}">Deactivate</a> |
+                            <a href="{% url 'displayUser' userId=user.id %}">View</a>
+                        </p>
+                        <p id="short-description-value">
+                            {{user.firstName}} {{addedUser.lastName}}
+                        </p>
+                        <p id="short-description-value">
+                            {{officeLocation}}
+                        </p>  
+                        <p id="short-description-value">
+                            {{user.email}}
+                        </p>
+                                              
+                    </div>
+                {% endif %}
+            </div>
         </body>
         <footer class="footer">
             <div id="footer-text">                
@@ -109,7 +137,7 @@
             </div>
         </footer>
         <script>
-            $('a.account.dropbtn').addClass('active')
+            $('a.add.dropbtn').addClass('active')
             $('li.dropdown').addClass('active')
         </script> 
     </html>
