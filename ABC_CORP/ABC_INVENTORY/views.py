@@ -244,9 +244,6 @@ def deactivateUser(request,userId):
     u = User.objects.get(id=userId)
     return render(request, 'deactivateUser.html', {'user':u})
 
-def reactivatePage(request):
-    return render(request, 'reactivate.html', {})
-
 def displayEquipment(request, equipmentId):
     e = Equipment.objects.get(id=equipmentId)
     return render(request, 'displayEquipment.html', {'equipment':e})
