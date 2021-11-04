@@ -21,6 +21,7 @@ urlpatterns = [
     path('deactivateUser/<int:userId>', views.deactivateUser, name="deactivateUser"),
     path('reactivate/', views.reactivatePage, name="reactivate"),
     path('report/', views.reportPage, name="report"),
+    path('account/', views.accountPage, name="account"),
 
 
 ]

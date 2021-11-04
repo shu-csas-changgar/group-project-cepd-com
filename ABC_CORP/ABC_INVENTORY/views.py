@@ -376,4 +376,39 @@ def exportPage(request):
     return render(request, 'export.html', {})
 
 def accountPage(request):
-    return render(request, 'account.html', {})
+    u = request.user
+    date = datetime.date.today()
+    navigationPage = 'usernav.html'
+    if request.user.is_admin:
+        navigationPage = 'adminnav.html'
+    locations = Location.objects.all()
+    context = {
+        'date':date,
+        'navigationPage': navigationPage,
+        'locations': locations,
+        'user': u, 
+    }
+
+    if request.method == 'POST':
+        firstName=request.POST.get('first_name')
+        lastName=request.POST.get('last_name')
+        email=request.POST.get('email')
+        phone=request.POST.get('phone')
+        address=request.POST.get('address')
+        p1=request.POST.get('password1')
+        locId=request.POST.get('location')
+        location = Location.objects.get(id=locId)
+        is_admin = False if request.POST.get('is_admin') == None else True
+
+        u.email=email
+        u.firstName=firstName
+        u.lastName=lastName
+        u.set_password(p1)
+        u.phone=phone
+        u.address=address
+        u.officeLocation=Location(id=location.id)
+        u.is_admin=is_admin
+        u.save()
+        return redirect('logout')
+    return render(request, 'account.html', context)
+

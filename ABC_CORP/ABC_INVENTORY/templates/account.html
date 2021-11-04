@@ -1,1 +1,118 @@
-Account Page
+{% extends navigationPage %} 
+{% load static %}
+{% block content %}
+    <!DOCTYPE html>
+
+        <head>
+            <title>ABC CORP Account</title>
+            <link rel="stylesheet" type="text/css" href="{% static '/css/addUser.css' %}"> 
+        </head>
+        <body>
+            <div class="body-card">
+                <p class="body-card-text"> Account Information</p>
+                <div class="form-container">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-25">
+                            <label class="form-text">First Name</label>
+                            </div>
+                            <div class="col-75">
+                            <input type="text" required name="first_name" value= "{{ user.firstName }}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-25">
+                            <label class="form-text">Last Name</label>
+                            </div>
+                            <div class="col-75">
+                            <input type="text" required name="last_name"value= "{{ user.lastName }}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-25">
+                            <label class="form-text">Email</label>
+                            </div>
+                            <div class="col-75">
+                            <input type="text" required name="email" value= "{{ user.email }}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-25">
+                            <label class="form-text">Phone</label>
+                            </div>
+                            <div class="col-75">
+                            <input type="text" required name="phone" value= "{{ user.phone }}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-25">
+                            <label class="form-text">Address</label>
+                            </div>
+                            <div class="col-75">
+                            <input type="text" required name="address" value= "{{ user.address }}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-25">
+                            <label class="form-text">Password</label>
+                            </div>
+                            <div class="col-75">
+                            <input type="password" required name="password1" placeholder="Enter New Password">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-25">
+                            <label class="form-text">Confirm Password</label>
+                            </div>
+                            <div class="col-75">
+                            <input type="password" required name="password2" placeholder="Confirm Password">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-25">
+                            <label class="form-text" >Location</label>
+                            </div>
+                            <div class="col-75">
+                                <select required name="location">
+                                    {% for location in locations %}
+                                        {% if user.officeLocation.id == location.id%}
+                                            <option value={{location.id}} selected = "selected">{{location.name}}</option>
+                                        {% else %}
+                                            <option value={{location.id}}>{{location.name}}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-25">
+                            <label class="form-text" >Is Admin?</label>
+                            </div>
+                            <div class="col-75">
+                            {% if user.is_admin%}
+                                <input type="checkbox" name="is_admin" value=True checked>
+                            {% else %}
+                                <input type="checkbox" name="is_admin" value=False>
+                            {% endif%}
+                            </div>
+                        </div>
+                         <br>
+                        <input type="submit" class="add-btn" value="Update &#38; Logout">
+                    </form>
+                </div>
+              </div>
+        </body>
+        <footer class="footer">
+            <div id="footer-text">                
+                <p>Copyright &copy; {{date.year}} - ABC CORPORATION - All Rights Reserved</p>
+            </div>
+        </footer>
+        <script>
+            $('a.account.dropbtn').addClass('active')
+            $('li.dropdown').addClass('active')
+        </script> 
+    </html>
+    
+    
+{% endblock %}  
