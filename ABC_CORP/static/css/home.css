@@ -97,7 +97,8 @@
     font-family: Verdana, Helvetica, sans-serif;
     color: black;
     text-align: center;
-    padding-left: 90px;
+    padding-left: 20px;
+    width: 250px;
 }
 
 .row {
@@ -107,4 +108,11 @@
     padding-left: 200px;
     padding-right: 250px;
     margin-left: 15%;
+}
+
+#row-text {
+    font-family: Verdana, Helvetica, sans-serif;
+    color: black;
+    margin-left: 315px;
+    font-weight: bold;
 }

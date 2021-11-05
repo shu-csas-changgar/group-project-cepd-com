@@ -4,12 +4,12 @@
     <!DOCTYPE html>
 
         <head>
-            <title>ABC CORP Account</title>
+            <title>ABC CORP Add User</title>
             <link rel="stylesheet" type="text/css" href="{% static '/css/addUser.css' %}"> 
         </head>
         <body>
             <div class="body-card">
-                <p class="body-card-text"> Account Information</p>
+                <p class="body-card-text"> Add User</p>
                 <div class="form-container">
                     <form method="post">
                         {% csrf_token %}
@@ -18,7 +18,7 @@
                             <label class="form-text">First Name</label>
                             </div>
                             <div class="col-75">
-                            <input type="text" required name="first_name" value= "{{ user.firstName }}">
+                            <input type="text" required name="first_name" placeholder="First Name..">
                             </div>
                         </div>
                         <div class="row">
@@ -26,7 +26,7 @@
                             <label class="form-text">Last Name</label>
                             </div>
                             <div class="col-75">
-                            <input type="text" required name="last_name"value= "{{ user.lastName }}">
+                            <input type="text" required name="last_name" placeholder="Last Name..">
                             </div>
                         </div>
                         <div class="row">
@@ -34,7 +34,7 @@
                             <label class="form-text">Email</label>
                             </div>
                             <div class="col-75">
-                            <input type="text" required name="email" value= "{{ user.email }}">
+                            <input type="text" required name="email" placeholder="email@gmail.com">
                             </div>
                         </div>
                         <div class="row">
@@ -42,7 +42,7 @@
                             <label class="form-text">Phone</label>
                             </div>
                             <div class="col-75">
-                            <input type="text" required name="phone" value= "{{ user.phone }}">
+                            <input type="text" required name="phone" placeholder="000-000-0000">
                             </div>
                         </div>
                         <div class="row">
@@ -50,7 +50,7 @@
                             <label class="form-text">Address</label>
                             </div>
                             <div class="col-75">
-                            <input type="text" required name="address" value= "{{ user.address }}">
+                            <input type="text" required name="address" placeholder="Address...">
                             </div>
                         </div>
                         <div class="row">
@@ -58,7 +58,7 @@
                             <label class="form-text">Password</label>
                             </div>
                             <div class="col-75">
-                            <input type="password" required name="password1" placeholder="Enter New Password">
+                            <input type="password" required name="password1" placeholder="Enter Password...">
                             </div>
                         </div>
                         <div class="row">
@@ -66,7 +66,7 @@
                             <label class="form-text">Confirm Password</label>
                             </div>
                             <div class="col-75">
-                            <input type="password" required name="password2" placeholder="Confirm Password">
+                            <input type="password" required name="password2" placeholder="Confirm Password...">
                             </div>
                         </div>
                         <div class="row">
@@ -76,11 +76,7 @@
                             <div class="col-75">
                                 <select required name="location">
                                     {% for location in locations %}
-                                        {% if user.officeLocation.id == location.id%}
-                                            <option value={{location.id}} selected = "selected">{{location.name}}</option>
-                                        {% else %}
-                                            <option value={{location.id}}>{{location.name}}</option>
-                                        {% endif %}
+                                        <option value={{location.id}}>{{location.name}}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -90,18 +86,42 @@
                             <label class="form-text" >Is Admin?</label>
                             </div>
                             <div class="col-75">
-                            {% if user.is_admin%}
-                                <input type="checkbox" name="is_admin" value=True checked>
-                            {% else %}
-                                <input type="checkbox" name="is_admin" value=False>
-                            {% endif%}
+                            <input type="checkbox" name="is_admin" value=False>
                             </div>
                         </div>
                          <br>
-                        <input type="submit" class="add-btn" value="Update &#38; Logout">
+                        <input type="submit" class="add-btn" value="Add">
                     </form>
                 </div>
-              </div>
+                {% if hasAdded %}
+                    <div class="short-description">
+                        <p id="short-description-label">
+                            User Name
+                        </p>
+                        <p id="short-description-label">
+                            Office Location
+                        </p>
+                        <p id="short-description-label">
+                            User Email
+                        </p>
+                        <p id="short-description-links">
+                            <a href="{% url 'updateUser' userId=addedUser.id %}">Update</a> |
+                            <a href="{% url 'deactivateUser' userId=addedUser.id %}">Deactivate</a> |
+                            <a href="{% url 'displayUser' userId=addedUser.id %}">View</a>
+                        </p>
+                        <p id="short-description-value">
+                            {{addedUser.firstName}} {{addedUser.lastName}}
+                        </p>
+                        <p id="short-description-value">
+                            {{officeLocation}}
+                        </p>  
+                        <p id="short-description-value">
+                            {{addedUser.email}}
+                        </p>
+                                              
+                    </div>
+                {% endif %}
+            </div>
         </body>
         <footer class="footer">
             <div id="footer-text">                
@@ -109,7 +129,7 @@
             </div>
         </footer>
         <script>
-            $('a.account.dropbtn').addClass('active')
+            $('a.add.dropbtn').addClass('active')
             $('li.dropdown').addClass('active')
         </script> 
     </html>

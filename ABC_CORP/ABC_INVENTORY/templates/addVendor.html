@@ -1,0 +1,93 @@
+{% extends navigationPage %} 
+{% load static %}
+{% block content %}
+    <!DOCTYPE html>
+
+        <head>
+            <title>ABC CORP Add Vendor</title>
+            <link rel="stylesheet" type="text/css" href="{% static '/css/addVendor.css' %}"> 
+        </head>
+        <body>
+            <div class="body-card">
+                <p class="body-card-text"> Add Vendor</p>
+                <div class="form-container">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-25">
+                            <label class="form-text">Name</label>
+                            </div>
+                            <div class="col-75">
+                            <input type="text" required name="name" placeholder="Vendor name..">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-25">
+                            <label class="form-text" >Address</label>
+                            </div>
+                            <div class="col-75">
+                            <input type="text" required name="address" placeholder="Address..">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-25">
+                            <label class="form-text" >Email</label>
+                            </div>
+                            <div class="col-75">
+                            <input type="text" required name="email" placeholder="email@gmail.com">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-25">
+                            <label class="form-text" >Phone</label>
+                            </div>
+                            <div class="col-75">
+                            <input type="text" required name="phone" placeholder="Phone...">
+                            </div>
+                        </div>
+                         <br>
+                        <input type="submit" class="add-btn" value="Add">
+                    </form>
+                </div>
+                {% if hasAdded %}
+                    <div class="short-description">
+                        <p id="short-description-label">
+                            Vendor Name
+                        </p>
+                        <p id="short-description-label">
+                            Vendor Phone
+                        </p>
+                        <p id="short-description-label">
+                            Vendor Email
+                        </p>
+                        <p id="short-description-links">
+                            <a href="{% url 'updateVendor' vendorId=addedVendor.id %}">Update</a> |
+                            <a href="{% url 'deactivateVendor' vendorId=addedVendor.id %}">Deactivate</a> |
+                            <a href="{% url 'displayVendor' vendorId=addedVendor.id %}">View</a>
+                        </p>
+                        <p id="short-description-value">
+                            {{addedVendor.name}}
+                        </p>
+                        <p id="short-description-value">
+                            {{addedVendor.phone}}
+                        </p>
+                        <p id="short-description-value">
+                            {{addedVendor.email}}
+                        </p>
+                    </div>
+                {% endif %} 
+            </div>
+        </body>
+        <footer class="footer">
+            <div id="footer-text">                
+                <p>Copyright &copy; {{date.year}} - ABC CORPORATION - All Rights Reserved</p>
+            </div>
+        </footer>
+        <script>
+            $('a.add.dropbtn').addClass('active')
+            $('li.dropdown').addClass('active')
+        </script> 
+    </html>
+    
+    
+{% endblock %}  
