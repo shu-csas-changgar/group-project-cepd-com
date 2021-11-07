@@ -1,0 +1,121 @@
+{% extends navigationPage %} 
+{% load static %}
+{% block content %}
+    <!DOCTYPE html>
+
+        <head>
+            <title>ABC CORP Search Equipment</title>
+            <link rel="stylesheet" type="text/css" href="{% static '/css/searchEquipment.css' %}"> 
+        </head>
+        <body>
+            <div class="body-card">
+                <p class="body-card-text"> Search Equpment</p>
+                <div class="form-container">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-25">
+                            <label class="form-text" >Equipment Type</label>
+                            </div>
+                            <div class="col-75">
+                                <select required name="equipment_type" placeholder="Equipment Type....">
+                                    {% for type in equipmentTypes %}
+                                        <option value={{type}}> {{type}}</option>
+                                    {% endfor %}
+                                        <option value=-1 selected="selected">Any</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-25">
+                            <label class="form-text" >Assigned To</label>
+                            </div>
+                            <div class="col-75">
+                                <select required name="assigned_to" placeholder="Assigned To..">
+                                    {% for user in users %}
+                                        <option value={{user.id}}>{{user.firstName}} {{user.lastName}}</option>
+                                    {% endfor %}
+                                        <option value=-1 selected="selected">Any</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-25">
+                            <label class="form-text">Office Location</label>
+                            </div>
+                            <div class="col-75">
+                                <select required name="office_location"  placeholder="Office Location..">
+                                    {% for location in locations %}
+                                        <option value={{location.id}}>{{location.name}}</option>
+                                    {% endfor %}
+                                        <option value=-1 selected="selected">Any</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-25">
+                            <label class="form-text" >Vendor</label>
+                            </div>
+                            <div class="col-75">
+                                <select required name="vendor" placeholder="Vendor..">
+                                    {% for vendor in vendors %}
+                                        <option value={{vendor.id}}>{{vendor.name}}</option>
+                                    {% endfor %}
+                                    <option value=-1 selected="selected">Any</option>
+                                </select>
+                            </div>
+                        </div>
+                        <input type="submit" class="search-btn" value="Search">
+                    </form>
+                </div>
+                {% if hasAdded %}
+                    <div id="search-query">
+                        <h3>Search Query:</h3>
+                        <p>Equipment Type: {{ selectedequipmentType }}</p>
+                        <p>Assigned To: {{ selectedassingedTo }}</p>
+                        <p>Office Location: {{ selectedofficeLocation }}</p>
+                        <p>Vendor: {{ selectedvendor }}</p>                        
+                    </div>
+                    {% for val in equipments %}
+                        <div class="short-description">
+                            <p id="short-description-label">
+                                Equipment Name
+                            </p>
+                            <p id="short-description-label">
+                                Equipment Type
+                            </p>
+                            <p id="short-description-label">
+                                Assigned To
+                            </p>
+                            <p id="short-description-links">
+                                <a href="{% url 'updateEquipment' equipmentId=val.equipment.id %}">Update</a> |
+                                <a href="{% url 'deactivateEquipment' equipmentId=val.equipment.id %}">Deactivate</a> |
+                                <a href="{% url 'displayEquipment' equipmentId=val.equipment.id %}">View</a>
+                            </p>
+                            <p id="short-description-value">
+                                {{val.equipment.name}} 
+                            </p>
+                            <p id="short-description-value">
+                                {{val.equipment.equipmentType}}
+                            </p>
+                            <p id="short-description-value">
+                                {{val.assignedTo}}
+                            </p>                        
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </body>
+        <footer class="footer">
+            <div id="footer-text">                
+                <p>Copyright &copy; {{date.year}} - ABC CORPORATION - All Rights Reserved</p>
+            </div>
+        </footer>
+        <script>
+            $('a.search.dropbtn').addClass('active')
+            $('li.dropdown').addClass('active')
+        </script> 
+    </html>
+    
+    
+{% endblock %}  

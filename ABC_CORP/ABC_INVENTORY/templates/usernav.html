@@ -12,9 +12,9 @@
   <li class="dropdown">
     <a href="javascript:void(0)" class ="search dropbtn">Search</a>
     <div class="dropdown-content">
-      <a href="#">Equipment</a>
-      <a href="#">Users</a>
-      <a href="#">Vendors</a>
+      <a href="{% url 'searchEquipment' %}">Equipment</a>
+      <a href="{% url 'searchUser' %}">Users</a>
+      <a href="{% url 'searchVendor' %}">Vendors</a>
     </div>
   </li>
   <li class="dropdown"><a href="{% url 'report' %}" class ="report dropbtn">Report</a></li>
