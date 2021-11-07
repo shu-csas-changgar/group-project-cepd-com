@@ -256,9 +256,96 @@ def displayUser(request, userId):
     u = User.objects.get(id=userId)
     return render(request, 'displayUser.html', {'user':u})
 
-def searchPage(request):
-    #return redirect('addEquipment',id=e.name)
-    return render(request, 'search.html', {})
+def searchEquipment(request):
+    date = datetime.date.today()
+    navigationPage = 'usernav.html'
+    if request.user.is_admin:
+        navigationPage = 'adminnav.html'
+
+    users = User.objects.all()
+    locations = Location.objects.all()
+    vendors = Vendor.objects.all()
+    types = ["Laptop", "Desktop", "Server", "Printer", "Mobile Devices"]
+    context = {
+        'date':date,
+        'navigationPage': navigationPage,
+        'equipmentTypes': types,
+        'users':users,
+        'locations': locations,
+        'vendors':vendors,
+        'hasAdded':False,
+    }
+
+    if request.method == 'POST':
+        assignedToId = int(request.POST.get('assigned_to'))
+        officeLocationId = int(request.POST.get('office_location'))
+        vendorId = int(request.POST.get('vendor'))
+        equipmentType = request.POST.get('equipment_type')
+
+        selectedassingedTo = "Any"
+        selectedofficeLocation = "Any"
+        selectedvendor = "Any"
+        selectedequipmentType = "Any"
+
+        #Only pulls active Equipments
+        equipments = Equipment.objects.filter(is_active=True)
+        if assignedToId != -1:
+            u = User.objects.get(id=assignedToId)
+            selectedassingedTo = u.firstName+" "+u.lastName
+            equipments = equipments.filter(assignedTo = u)
+        if officeLocationId != -1:
+            l = Location.objects.get(id=officeLocationId)
+            selectedofficeLocation = str(l.name)
+            equipments = equipments.filter(officeLocation = l)
+        if vendorId != -1:
+            v = Vendor.objects.get(id=vendorId)
+            selectedvendor = str(v.name)
+            equipments = equipments.filter(vendor = v)
+        if equipmentType != "-1":
+            selectedequipmentType = equipmentType
+            equipments = equipments.filter(equipmentType = equipmentType)
+
+        e = []
+        for equipment in equipments:
+            asTo = equipment.assignedTo
+            e.append(
+                {
+                    'equipment': equipment,
+                    'assignedTo': str(asTo.firstName+' '+asTo.lastName),
+                }
+            )
+        context['selectedassingedTo'] = selectedassingedTo
+        context['selectedofficeLocation'] = selectedofficeLocation
+        context['selectedvendor'] = selectedvendor
+        context['selectedequipmentType'] = selectedequipmentType
+        context['hasAdded'] = True
+        context['equipments'] = e
+        return render(request, 'searchEquipment.html', context)
+    return render(request, 'searchEquipment.html', context)
+
+def searchUser(request):
+    date = datetime.date.today()
+    navigationPage = 'usernav.html'
+    if request.user.is_admin:
+        navigationPage = 'adminnav.html'
+    context = {
+        'date':date,
+        'navigationPage': navigationPage,
+    }
+    
+    return render(request, 'searchUser.html', context)
+
+def searchVendor(request):
+    date = datetime.date.today()
+    navigationPage = 'usernav.html'
+    if request.user.is_admin:
+        navigationPage = 'adminnav.html'
+    context = {
+        'date':date,
+        'navigationPage': navigationPage,
+    }
+    
+    return render(request, 'searchVendor.html', context)
 
 def addEquipment(request):
     date = datetime.date.today()
