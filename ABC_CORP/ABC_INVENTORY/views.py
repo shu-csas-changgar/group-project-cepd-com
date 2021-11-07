@@ -233,16 +233,54 @@ def updateUser(request,userId):
     return render(request, 'updateUser.html', context)
 
 def deactivateEquipment(request,equipmentId):
-    e = Equipment.objects.get(id=equipmentId)
-    return render(request, 'deactivateEquipment.html', {'equipment':e})
+    date = datetime.date.today()
+    navigationPage = 'adminnav.html'
+    if request.user.is_admin:
+        e = Equipment.objects.get(id=equipmentId)
+        context = {
+            'date':date,
+            'navigationPage': navigationPage,
+            'equipment':e,
+        }
+        if "yes" in request.POST:
+            e.is_active = False
+            e.save()
+            return redirect('searchEquipment')
+        if "no" in request.POST:
+            return redirect('searchEquipment')            
+        return render(request, 'deactivateEquipment.html', context)
+    else:
+        return redirect('home')
 
 def deactivateVendor(request,vendorId):
-    v = Vendor.objects.get(id=vendorId)
-    return render(request, 'deactivateVendor.html', {'vendor':v})
+    date = datetime.date.today()
+    navigationPage = 'adminnav.html'
+    if request.user.is_admin:
+        v = Vendor.objects.get(id=vendorId)
+        context = {
+            'date':date,
+            'navigationPage': navigationPage,
+            'vendor':v,
+        }
+
+        return render(request, 'deactivateVendor.html', context)
+    else:
+        return redirect('home')
 
 def deactivateUser(request,userId):
-    u = User.objects.get(id=userId)
-    return render(request, 'deactivateUser.html', {'user':u})
+    date = datetime.date.today()
+    navigationPage = 'adminnav.html'
+    if request.user.is_admin:
+        u = User.objects.get(id=userId)
+        context = {
+            'date':date,
+            'navigationPage': navigationPage,
+            'user':u,
+        }
+
+        return render(request, 'deactivateUser.html', context)
+    else:
+        return redirect('home')
 
 def displayEquipment(request, equipmentId):
     e = Equipment.objects.get(id=equipmentId)
@@ -349,106 +387,108 @@ def searchVendor(request):
 
 def addEquipment(request):
     date = datetime.date.today()
-    navigationPage = 'usernav.html'
+    navigationPage = 'adminnav.html'
     if request.user.is_admin:
-        navigationPage = 'adminnav.html'
-    locations = Location.objects.all()
-    users = User.objects.all()
-    vendors = Vendor.objects.all()
+        locations = Location.objects.all()
+        users = User.objects.all()
+        vendors = Vendor.objects.all()
 
-    context = {
-        'date':date,
-        'navigationPage': navigationPage,
-        'locations': locations,
-        'users': users,
-        'vendors': vendors,
-        'hasAdded':False,
-    }
+        context = {
+            'date':date,
+            'navigationPage': navigationPage,
+            'locations': locations,
+            'users': users,
+            'vendors': vendors,
+            'hasAdded':False,
+        }
 
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        assignedToId = int(request.POST.get('assigned_to'))
-        officeLocationId = int(request.POST.get('office_location'))
-        vendorId = int(request.POST.get('vendor'))
-        equipmentType = request.POST.get('equipment_type')
-        pd = request.POST.get('purchase_date')
-        purchaseDate = datetime.datetime.strptime(pd, '%Y-%m-%d')
-        ed = request.POST.get('expiration_date')
-        expirationDate = datetime.datetime.strptime(ed, '%Y-%m-%d')
-        floor = request.POST.get('floor')
+        if request.method == 'POST':
+            name = request.POST.get('name')
+            assignedToId = int(request.POST.get('assigned_to'))
+            officeLocationId = int(request.POST.get('office_location'))
+            vendorId = int(request.POST.get('vendor'))
+            equipmentType = request.POST.get('equipment_type')
+            pd = request.POST.get('purchase_date')
+            purchaseDate = datetime.datetime.strptime(pd, '%Y-%m-%d')
+            ed = request.POST.get('expiration_date')
+            expirationDate = datetime.datetime.strptime(ed, '%Y-%m-%d')
+            floor = request.POST.get('floor')
 
-        e = Equipment(name=name,assignedTo=User(id=assignedToId),
-            officeLocation=Location(id=officeLocationId),
-            vendor=Vendor(id=vendorId), equipmentType=equipmentType,
-            purchaseDate=purchaseDate,expirationDate=expirationDate,floor=floor,is_active=True)
-        e.save()
-        context['hasAdded'] = True
-        context['addedEquipment'] = e
-        assignedTo = User.objects.get(id=assignedToId)
-        context['assignedTo'] = assignedTo.firstName+' '+assignedTo.lastName
+            e = Equipment(name=name,assignedTo=User(id=assignedToId),
+                officeLocation=Location(id=officeLocationId),
+                vendor=Vendor(id=vendorId), equipmentType=equipmentType,
+                purchaseDate=purchaseDate,expirationDate=expirationDate,floor=floor,is_active=True)
+            e.save()
+            context['hasAdded'] = True
+            context['addedEquipment'] = e
+            assignedTo = User.objects.get(id=assignedToId)
+            context['assignedTo'] = assignedTo.firstName+' '+assignedTo.lastName
+            return render(request, 'addEquipment.html', context)
         return render(request, 'addEquipment.html', context)
-    return render(request, 'addEquipment.html', context)
+    else:
+        return redirect('home')
 
 def addVendor(request):
     date = datetime.date.today()
-    navigationPage = 'usernav.html'
+    navigationPage = 'adminnav.html'
     if request.user.is_admin:
-        navigationPage = 'adminnav.html'
+        context = {
+            'date':date,
+            'navigationPage': navigationPage,
+            'hasAdded':False,
+        }
+        if request.method == 'POST':
+            name = request.POST.get('name')        
+            address = request.POST.get('address')
+            email = request.POST.get('email')
+            phone = request.POST.get('phone')
 
-    context = {
-        'date':date,
-        'navigationPage': navigationPage,
-        'hasAdded':False,
-    }
-    if request.method == 'POST':
-        name = request.POST.get('name')        
-        address = request.POST.get('address')
-        email = request.POST.get('email')
-        phone = request.POST.get('phone')
-
-        v = Vendor(name=name,address=address,
-            email=email, phone = phone)
-        v.save()
-        context['hasAdded'] = True
-        context['addedVendor'] = v
+            v = Vendor(name=name,address=address,
+                email=email, phone = phone)
+            v.save()
+            context['hasAdded'] = True
+            context['addedVendor'] = v
+            return render(request, 'addVendor.html', context)
         return render(request, 'addVendor.html', context)
-    return render(request, 'addVendor.html', context)
+    else:
+        return redirect('home')
 
 def addUser(request):
     date = datetime.date.today()
-    navigationPage = 'usernav.html'
+    navigationPage = 'adminnav.html'
     if request.user.is_admin:
-        navigationPage = 'adminnav.html'
-    locations = Location.objects.all()
+        locations = Location.objects.all()
 
-    context = {
-        'date':date,
-        'navigationPage': navigationPage,
-        'locations': locations,
-        'hasAdded':False,
-    }
+        context = {
+            'date':date,
+            'navigationPage': navigationPage,
+            'locations': locations,
+            'hasAdded':False,
+        }
 
-    if request.method == 'POST':
-        firstName=request.POST.get('first_name')
-        lastName=request.POST.get('last_name')
-        email=request.POST.get('email')
-        phone=request.POST.get('phone')
-        address=request.POST.get('address')
-        p1=request.POST.get('password1')
-        locId=request.POST.get('location')
-        location = Location.objects.get(id=locId)
-        is_admin = False if request.POST.get('is_admin') == None else True
+        if request.method == 'POST':
+            firstName=request.POST.get('first_name')
+            lastName=request.POST.get('last_name')
+            email=request.POST.get('email')
+            phone=request.POST.get('phone')
+            address=request.POST.get('address')
+            p1=request.POST.get('password1')
+            locId=request.POST.get('location')
+            location = Location.objects.get(id=locId)
+            is_admin = False if request.POST.get('is_admin') == None else True
 
-        u = User.objects.create_user(email=email, firstName=firstName,
-        lastName=lastName, password=p1, phone=phone, address=address,
-         officeLocation=Location(id=location.id),is_admin=is_admin)
+            u = User.objects.create_user(email=email, firstName=firstName,
+            lastName=lastName, password=p1, phone=phone, address=address,
+            officeLocation=Location(id=location.id),is_admin=is_admin)
 
-        context['hasAdded'] = True
-        context['addedUser'] = u
-        officeLocation = Location.objects.get(id=locId)
-        context['officeLocation'] = officeLocation
+            context['hasAdded'] = True
+            context['addedUser'] = u
+            officeLocation = Location.objects.get(id=locId)
+            context['officeLocation'] = officeLocation
+            return render(request, 'addUser.html', context)
         return render(request, 'addUser.html', context)
-    return render(request, 'addUser.html', context)
+    else:
+        return redirect('home')
     
 def reportPage(request):
     date = datetime.date.today()

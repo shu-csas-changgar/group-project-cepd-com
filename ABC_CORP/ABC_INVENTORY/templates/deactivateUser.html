@@ -1,5 +1,33 @@
-Deactivate User
-<br>
-User Name: {{ user.firstName }} {{ user.lastName}} <br>
-User Address: {{ user.address }} <br>
-User email: {{ user.email }} <br>
+{% extends navigationPage %} 
+{% load static %}
+{% block content %}
+    <!DOCTYPE html>
+
+        <head>
+            <title>ABC CORP Deactivate User</title>
+            <link rel="stylesheet" type="text/css" href="{% static '/css/deactivate.css' %}"> 
+        </head>
+        <body>
+            <div class="body-card">
+                <p class="body-card-text"> Deactivate User</p>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-text">
+                        <h4>Are you sure you want to deactivate this User?</h4>
+                        <!--<p>Name: {{user.name}}</p>-->
+                        <!--Repeat Above Line for other user props-->
+                    </div>
+                    <input type="submit"name="yes" class="deactivate-btn" value="Yes">
+                    <input type="submit" name="no" class="deactivate-btn" value="No">
+                </form>
+            </div>
+        </body>
+        <footer class="footer">
+            <div id="footer-text">                
+                <p>Copyright &copy; {{date.year}} - ABC CORPORATION - All Rights Reserved</p>
+            </div>
+        </footer>        
+    </html>
+    
+    
+{% endblock %}  
