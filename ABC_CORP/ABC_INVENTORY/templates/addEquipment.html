@@ -119,7 +119,7 @@
                             {{addedEquipment.name}}
                         </p>
                         <p id="short-description-value">
-                            {{addedEquipment.equipmentType}}
+                            {{addedEquipment.equipmentType}}    
                         </p>
                         <p id="short-description-value">
                             {{assignedTo}}
@@ -136,6 +136,10 @@
         <script>
             $('a.add.dropbtn').addClass('active')
             $('li.dropdown').addClass('active')
+
+            $(document).on('click', '.deactivate', deactivate(){
+            return confirm('Are you sure you want to deactivate this Equipment?');
+            })
         </script> 
     </html>
     
