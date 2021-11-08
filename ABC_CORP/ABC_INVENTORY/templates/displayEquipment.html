@@ -1,90 +1,88 @@
 {% extends navigationPage %}
 {% load static %}
+{% block content %}
+    <!DOCTYPE html>
 
-<!DOCTYPE html>
-<html>
-  <link rel="stylesheet" type="text/css" href="{% static 'css/authentication.css' %}">
-   <head>
-     <meta charset="utf-8">
-      <title>ABC CORP LOGIN</title>
-      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-   </head>
+        <head>
+            <title>ABC CORP Add Equipment</title>
 
-   <style>
-
-  .box {
-    margin: 0 auto;
-    background-color: #f0f8ff;
-    width: 400px;
-    height: 400px;
-    padding: 20px;
-    border-radius: 25px;
-    border: 1px solid #5ca0f2;
-    background-position-x: center;
-    bottom: 10px
-    background-color: #ffffff;
-    margin-top: 70px;
-
-  }
-
-  .user-heading{
-    margin:auto;
-    text-align:center;
-    font-family: Georgia;
-    color: #5ca0f2;
-    font-weight:bold;
-    border: 1px solid #5ca0f2;
-    border-radius: 25px;
+        </head>
+        <style>
 
 
-  }
+        .footer {
+          margin-top: 1000px;
+            background-color: rgb(55, 96, 220);
+            height: 200px;
+        }
 
-  .user-info{
-    margin:auto;
-    text-align:center;
-    font-family:Georgia;
-    color: #5ca0f2;
+        #footer-text {
+            font-family: Verdana, Helvetica, sans-serif;
+            color: white;
+            text-align: center;
+            padding-top: 70px;
+        }
 
-  }
-
-  .info{
-    margin-top: 60px;
-  }
-   </style>
-
-
-   <body>
-
-      <section class="container1">
-        <section class="row justify-content-center">
-
-          <section class="col-12 col-sm-6 col-md-3">
-            <div class="box">
-              <div class="user-heading">
-                Equipment Information
+        .box {
+          background-color: #f0f8ff;
+          width: 400px;
+          height: 400px;
+          padding: 20px;
+          border-radius: 25px;
+          bottom: 10px
+          background-color: #ffffff;
+          margin-left: 20%;
+        }
+        .user-heading{
+          margin:auto;
+          text-align:center;
+          font-family: Georgia;
+          color: #5ca0f2;
+          font-weight:bold;
+          border-radius: 25px;
+        }
+        .user-info{
+          margin:auto;
+          text-align:left;
+          margin-left:10px;
+          font-family:Georgia;
+          color: #5ca0f2;
+          margin-top:10px;
+        }
+        .info{
+          margin-top: 30px;
+        }
+        .container1{
+          margin-left: 15%;
+          padding-top: 10px;
+        }
+        </style>
+        <body>
+          <div class="container1">
+            <div class="row justify-content-center">
+              <div class="col-12 col-sm-6 col-md-3">
+                <div class="box">
+                  <div class="user-heading">
+                    Equipment Information
+                  </div>
+                  <div class="info">
+                      <div class="user-info" id="name">Name: {{equipment.name}}</div>
+                      <div class="user-info" id="type">Type: {{equipment.equipmentType}}</div>
+                      <div class="user-info" id="purchaseDate">Purchase Date: {{equipment.purchaseDate}}</div>
+                      <div class="user-info" id="expiration">Expiration Date: {{equipment.expirationDate}}</div>
+                      <div class="user-info" id="floor">Floor: {{equipment.floor}}</div>
+                      <div class="user-info" id="phone">Vendor: {{equipment.vendor}}</div>
+                  </div>
               </div>
-
-              <div class="info">
-              <div class="user-info" id="name">Name: {{equipment.name}}</div>
-              <div class="user-info" id="type">Type: {{equipment.equipmentType}}</div>
-              <div class="user-info" id="purchaseDate">Purchase Date: {{equipment.purchaseDate}}</div>
-              <div class="user-info" id="expiration">Expiration Date: {{equipment.expirationDate}}</div>
-              <div class="user-info" id="floor">Floor: {{equipment.floor}}</div>
-              <div class="user-info" id="phone">Vendor: {{equipment.vendor}}</div>
-              </div>
-
-
+            </div>
+          </div>
+        </body>
+        <footer class="footer">
+            <div id="footer-text">
+                <p>Copyright &copy; {{date.year}} - ABC CORPORATION - All Rights Reserved</p>
+            </div>
+        </footer>
+    </html>
 
 
-
-
-          </section>
-
-        </section>
-
-
-      </section>
-   </body>
-
-
-</html>
+{% endblock %}

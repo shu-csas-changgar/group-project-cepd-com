@@ -175,7 +175,7 @@ def updateVendor(request,vendorId):
         'vendor':v
     }
     if request.method == 'POST':
-        name = request.POST.get('name')        
+        name = request.POST.get('name')
         address = request.POST.get('address')
         email = request.POST.get('email')
         phone = request.POST.get('phone')
@@ -202,7 +202,7 @@ def updateUser(request,userId):
         'navigationPage': navigationPage,
         'locations': locations,
         'user': u,
-        'hasAdded':False,        
+        'hasAdded':False,
     }
 
     if request.method == 'POST':
@@ -246,7 +246,13 @@ def deactivateUser(request,userId):
 
 def displayEquipment(request, equipmentId):
     e = Equipment.objects.get(id=equipmentId)
-    return render(request, 'displayEquipment.html', {'equipment':e})
+    date = datetime.date.today()
+    navigationPage = 'usernav.html'
+    if request.user.is_admin:
+        navigationPage = 'adminnav.html'
+
+    context = {'equipment':e, 'navigationPage' : navigationPage, 'date': date}
+    return render(request, 'displayEquipment.html', context)
 
 def displayVendor(request, vendorId):
     v = Vendor.objects.get(id=vendorId)
@@ -314,7 +320,7 @@ def addVendor(request):
         'hasAdded':False,
     }
     if request.method == 'POST':
-        name = request.POST.get('name')        
+        name = request.POST.get('name')
         address = request.POST.get('address')
         email = request.POST.get('email')
         phone = request.POST.get('phone')
@@ -362,18 +368,18 @@ def addUser(request):
         context['officeLocation'] = officeLocation
         return render(request, 'addUser.html', context)
     return render(request, 'addUser.html', context)
-    
+
 def reportPage(request):
     date = datetime.date.today()
     user = request.user
     navigationPage = 'usernav.html'
     if user.is_admin:
-        navigationPage = 'adminnav.html'   
+        navigationPage = 'adminnav.html'
     context = {
         'date':date,
         'user':user,
         'navigationPage':navigationPage,
-    }    
+    }
     return render(request, 'report.html', context)
 
 def importPage(request):
@@ -393,7 +399,7 @@ def accountPage(request):
         'date':date,
         'navigationPage': navigationPage,
         'locations': locations,
-        'user': u, 
+        'user': u,
     }
 
     if request.method == 'POST':
@@ -418,4 +424,3 @@ def accountPage(request):
         u.save()
         return redirect('logout')
     return render(request, 'account.html', context)
-
