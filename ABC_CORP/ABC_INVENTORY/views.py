@@ -256,11 +256,23 @@ def displayEquipment(request, equipmentId):
 
 def displayVendor(request, vendorId):
     v = Vendor.objects.get(id=vendorId)
-    return render(request, 'displayVendor.html', {'vendor':v})
+    date = datetime.date.today()
+    navigationPage = 'usernav.html'
+    if request.user.is_admin:
+        navigationPage = 'adminnav.html'
+
+    context = {'vendor':v, 'navigationPage' : navigationPage, 'date': date}
+    return render(request, 'displayVendor.html', context)
 
 def displayUser(request, userId):
     u = User.objects.get(id=userId)
-    return render(request, 'displayUser.html', {'user':u})
+    date = datetime.date.today()
+    navigationPage = 'usernav.html'
+    if request.user.is_admin:
+        navigationPage = 'adminnav.html'
+
+    context = {'user':u, 'navigationPage' : navigationPage, 'date': date}
+    return render(request, 'displayUser.html', context)
 
 def searchPage(request):
     #return redirect('addEquipment',id=e.name)
