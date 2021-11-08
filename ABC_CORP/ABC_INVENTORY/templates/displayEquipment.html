@@ -1,5 +1,39 @@
-Display Equipment
-<br>
-Equipment Name: {{ equipment.name }} <br>
-Equipment Type: {{ equipment.equipmentType }} <br>
-Equipment Expiration: {{ equipment.expirationDate }} <br>
+{% extends navigationPage %}
+{% load static %}
+{% block content %}
+    <!DOCTYPE html>
+
+        <head>
+            <title>ABC CORP Add Equipment</title>
+            <link rel="stylesheet" type="text/css" href="{% static '/css/displayEquipment.css' %}">
+
+        </head>
+        <body>
+          <div class="container1">
+            <div class="row justify-content-center">
+              <div class="col-12 col-sm-6 col-md-3">
+                <div class="box">
+                  <div class="user-heading">
+                    Equipment Information
+                  </div>
+                  <div class="info">
+                      <div class="user-info" id="name">Name: {{equipment.name}}</div>
+                      <div class="user-info" id="type">Type: {{equipment.equipmentType}}</div>
+                      <div class="user-info" id="purchaseDate">Purchase Date: {{equipment.purchaseDate}}</div>
+                      <div class="user-info" id="expiration">Expiration Date: {{equipment.expirationDate}}</div>
+                      <div class="user-info" id="floor">Floor: {{equipment.floor}}</div>
+                      <div class="user-info" id="phone">Vendor: {{equipment.vendor}}</div>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </body>
+        <footer class="footer">
+            <div id="footer-text">
+                <p>Copyright &copy; {{date.year}} - ABC CORPORATION - All Rights Reserved</p>
+            </div>
+        </footer>
+    </html>
+
+
+{% endblock %}

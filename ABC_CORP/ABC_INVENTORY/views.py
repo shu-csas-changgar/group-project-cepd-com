@@ -5,7 +5,6 @@ from .forms import CreateUserForm
 from .models import  User, Location, Equipment, Vendor
 import datetime
 
-
 def loginPage(request):
     if request.method == 'POST':
         email = request.POST.get('email')
