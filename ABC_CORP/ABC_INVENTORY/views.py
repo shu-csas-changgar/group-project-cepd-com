@@ -281,18 +281,36 @@ def deactivateUser(request,userId):
         return render(request, 'deactivateUser.html', context)
     else:
         return redirect('home')
-
+    
 def displayEquipment(request, equipmentId):
     e = Equipment.objects.get(id=equipmentId)
-    return render(request, 'displayEquipment.html', {'equipment':e})
+    date = datetime.date.today()
+    navigationPage = 'usernav.html'
+    if request.user.is_admin:
+        navigationPage = 'adminnav.html'
+
+    context = {'equipment':e, 'navigationPage' : navigationPage, 'date': date}
+    return render(request, 'displayEquipment.html', context)
 
 def displayVendor(request, vendorId):
     v = Vendor.objects.get(id=vendorId)
-    return render(request, 'displayVendor.html', {'vendor':v})
+    date = datetime.date.today()
+    navigationPage = 'usernav.html'
+    if request.user.is_admin:
+        navigationPage = 'adminnav.html'
+
+    context = {'vendor':v, 'navigationPage' : navigationPage, 'date': date}
+    return render(request, 'displayVendor.html', context)
 
 def displayUser(request, userId):
     u = User.objects.get(id=userId)
-    return render(request, 'displayUser.html', {'user':u})
+    date = datetime.date.today()
+    navigationPage = 'usernav.html'
+    if request.user.is_admin:
+        navigationPage = 'adminnav.html'
+
+    context = {'user':u, 'navigationPage' : navigationPage, 'date': date}
+    return render(request, 'displayUser.html', context)
 
 def searchEquipment(request):
     date = datetime.date.today()
