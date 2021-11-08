@@ -1,0 +1,49 @@
+.footer {
+    margin-top: 230px;
+    background-color: rgb(55, 96, 220);
+    height: 200px;
+}
+
+#footer-text {
+    font-family: Verdana, Helvetica, sans-serif;
+    color: white;
+    text-align: center;
+    padding-top: 70px;
+}
+
+.box {
+    background-color: #f0f8ff;
+    width: 400px;
+    height: 250px;
+    padding: 20px;
+    border-radius: 25px;
+    bottom: 10px;
+    margin-left: 20%;
+}
+
+.user-heading {
+    margin: auto;
+    text-align: center;
+    font-family: Georgia;
+    color: #5ca0f2;
+    font-weight: bold;
+    border-radius: 25px;
+}
+
+.user-info {
+    margin: auto;
+    text-align: left;
+    margin-left: 10px;
+    font-family: Georgia;
+    color: #5ca0f2;
+    margin-top: 10px;
+}
+
+.info {
+    margin-top: 30px;
+}
+
+.container1 {
+    margin-left: 15%;
+    padding-top: 10px;
+}

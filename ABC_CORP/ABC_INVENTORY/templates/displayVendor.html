@@ -1,5 +1,37 @@
-Display Vendor
-<br>
-Vendor Name: {{ vendor.name }} <br>
-Vendor Phone: {{ vendor.phone }} <br>
-Vendor Address: {{ vendor.address }} <br>
+{% extends navigationPage %}
+{% load static %}
+{% block content %}
+    <!DOCTYPE html>
+
+        <head>
+            <title>ABC CORP Display Vendor</title>
+            <link rel="stylesheet" type="text/css" href="{% static '/css/displayVendor.css' %}">
+
+        </head>
+        <body>
+          <div class="container1">
+            <div class="row justify-content-center">
+              <div class="col-12 col-sm-6 col-md-3">
+                <div class="box">
+                  <div class="user-heading">
+                    Vendor Information
+                  </div>
+                  <div class="info">
+                    <div class="user-info" id="name">Name: {{vendor.name}}</div>
+                    <div class="user-info" id="address">Address: {{vendor.address}}</div>
+                    <div class="user-info" id="email">Email: {{vendor.email}}</div>
+                    <div class="user-info" id="phone">Phone: {{vendor.phone}}</div>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </body>
+        <footer class="footer">
+            <div id="footer-text">
+                <p>Copyright &copy; {{date.year}} - ABC CORPORATION - All Rights Reserved</p>
+            </div>
+        </footer>
+    </html>
+
+
+{% endblock %}
