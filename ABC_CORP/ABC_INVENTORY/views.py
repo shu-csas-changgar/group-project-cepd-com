@@ -281,7 +281,7 @@ def deactivateUser(request,userId):
         return render(request, 'deactivateUser.html', context)
     else:
         return redirect('home')
-    
+
 def displayEquipment(request, equipmentId):
     e = Equipment.objects.get(id=equipmentId)
     date = datetime.date.today()
