@@ -1,5 +1,33 @@
-Deactivate Page
-<br>
-Vendor Name: {{ vendor.name }} <br>
-Vendor Phone: {{ vendor.phone }} <br>
-Vendor Address: {{ vendor.address }} <br>
+{% extends navigationPage %} 
+{% load static %}
+{% block content %}
+    <!DOCTYPE html>
+
+        <head>
+            <title>ABC CORP Deactivate Vendor</title>
+            <link rel="stylesheet" type="text/css" href="{% static '/css/deactivate.css' %}"> 
+        </head>
+        <body>
+            <div class="body-card">
+                <p class="body-card-text"> Deactivate Vendor</p>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-text">
+                        <h4>Are you sure you want to deactivate this Vendor?</h4>
+                        <!--<p>Name: {{vendor.name}}</p>-->
+                        <!--Repeat Above Line for other vendor props-->
+                    </div>
+                    <input type="submit"name="yes" class="deactivate-btn" value="Yes">
+                    <input type="submit" name="no" class="deactivate-btn" value="No">
+                </form>
+            </div>
+        </body>
+        <footer class="footer">
+            <div id="footer-text">                
+                <p>Copyright &copy; {{date.year}} - ABC CORPORATION - All Rights Reserved</p>
+            </div>
+        </footer>        
+    </html>
+    
+    
+{% endblock %}  

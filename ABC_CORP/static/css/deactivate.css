@@ -1,0 +1,45 @@
+.body-card {
+    margin-left: 15%;
+    height: 900px;
+    padding-top: 1.5rem;
+}
+
+.body-card-text {
+    font-family: Verdana, Helvetica, sans-serif;
+    color: rgb(55, 96, 220);
+    margin-left: 150px;
+    font-weight: bold;
+}
+
+.form-text {
+    font-family: Verdana, Helvetica, sans-serif;
+    color: rgb(55, 96, 220);
+    margin-left: 30px;
+}
+
+.deactivate-btn {
+    margin-left: 30px;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    width: 70px;
+    cursor: pointer;
+    background-color: rgb(55, 96, 220);
+}
+
+.deactivate-btn:hover {
+    background-color: rgba(62, 132, 175, 0.959);
+}
+
+.footer {
+    background-color: rgb(55, 96, 220);
+    height: 200px;
+}
+
+#footer-text {
+    font-family: Verdana, Helvetica, sans-serif;
+    color: white;
+    text-align: center;
+    padding-top: 70px;
+}
