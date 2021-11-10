@@ -261,7 +261,12 @@ def deactivateVendor(request,vendorId):
             'navigationPage': navigationPage,
             'vendor':v,
         }
-
+        if "yes" in request.POST:
+            v.is_active = False
+            v.save()
+            return redirect('searchVendor')
+        if "no" in request.POST:
+            return redirect('searchVendor')            
         return render(request, 'deactivateVendor.html', context)
     else:
         return redirect('home')
@@ -383,6 +388,8 @@ def searchUser(request):
     navigationPage = 'usernav.html'
     if request.user.is_admin:
         navigationPage = 'adminnav.html'
+
+    
     context = {
         'date':date,
         'navigationPage': navigationPage,
@@ -395,11 +402,47 @@ def searchVendor(request):
     navigationPage = 'usernav.html'
     if request.user.is_admin:
         navigationPage = 'adminnav.html'
+
     context = {
         'date':date,
         'navigationPage': navigationPage,
+        'hasAdded':False,
     }
-    
+
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        address = request.POST.get('address')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+
+        selectedName = "Any"
+        selectedAddress = "Any"
+        selectedEmail = "Any"
+        selectedPhone = "Any"
+
+        #Only pulls active Vendor
+        vendors = Vendor.objects.filter(is_active=True)
+        if name != "":
+            selectedName = name
+            vendors = vendors.filter(name = name)
+        if address != "":
+            selectedAddress = address
+            vendors = vendors.filter(address = address)
+        if email != "":
+            selectedEmail = email
+            vendors = vendors.filter(email = email)
+        if phone != "":
+            selectedPhone = phone
+            vendors = vendors.filter(phone = phone)
+
+        context['vendors'] = vendors
+        context['selectedName'] = selectedName
+        context['selectedAddress'] = selectedAddress
+        context['selectedEmail'] = selectedEmail
+        context['selectedPhone'] = selectedPhone
+        context['hasAdded'] = True
+        return render(request, 'searchVendor.html', context)
+
     return render(request, 'searchVendor.html', context)
 
 def addEquipment(request):
