@@ -9,7 +9,7 @@
         </head>
         <body>
             <div class="body-card">
-                <p class="body-card-test">Search Vendor</p>
+                <p class="body-card-text">Search Vendor</p>
                 <div class="form-container">
                     <form method="post">
                         {% csrf_token %}
@@ -18,13 +18,7 @@
                             <label class="form-text" >Name</label>
                             </div>
                             <div class="col-75">
-                                <input type="search">
-                                <!--<select required name="equipment_type" placeholder="Equipment Type....">
-                                    {% for type in equipmentTypes %}
-                                        <option value={{type}}> {{type}}</option>
-                                    {% endfor %}
-                                        <option value=-1 selected="selected">Any</option>
-                                </select>-->
+                                <input type="text" name="name">
                             </div>
                         </div>
                         <div class="row">
@@ -32,13 +26,7 @@
                             <label class="form-text" >Address</label>
                             </div>
                             <div class="col-75">
-                                <input type="search">
-                                <!--<select required name="equipment_type" placeholder="Equipment Type....">
-                                    {% for type in equipmentTypes %}
-                                        <option value={{type}}> {{type}}</option>
-                                    {% endfor %}
-                                        <option value=-1 selected="selected">Any</option>
-                                </select>-->
+                                <input type="text" name="address">
                             </div>
                         </div>
                         <div class="row">
@@ -46,13 +34,7 @@
                             <label class="form-text" >Email</label>
                             </div>
                             <div class="col-75">
-                                <input type="search">
-                                <!--<select required name="equipment_type" placeholder="Equipment Type....">
-                                    {% for type in equipmentTypes %}
-                                        <option value={{type}}> {{type}}</option>
-                                    {% endfor %}
-                                        <option value=-1 selected="selected">Any</option>
-                                </select>-->
+                                <input type="text" name="email">
                             </div>
                         </div>
                         <div class="row">
@@ -60,17 +42,48 @@
                             <label class="form-text" >Phone Number</label>
                             </div>
                             <div class="col-75">
-                                <input type="search">
-                                <!--<select required name="equipment_type" placeholder="Equipment Type....">
-                                    {% for type in equipmentTypes %}
-                                        <option value={{type}}> {{type}}</option>
-                                    {% endfor %}
-                                        <option value=-1 selected="selected">Any</option>
-                                </select>-->
+                                <input type="text" name="phone">
                             </div>
                         </div>
+                        <input type="submit" class="search-btn" value="Search">
                     </form>
                 </div>
+                {% if hasAdded %}
+                    <div id="search-query">
+                        <h3>Search Query:</h3>
+                        <p>Name: {{ selectedName }}</p>
+                        <p>Address: {{ selectedAddress }}</p>
+                        <p>Email: {{ selectedEmail }}</p>
+                        <p>Phone Number: {{ selectedPhone }}</p>                        
+                    </div>
+                    {% for val in vendors %}
+                        <div class="short-description">
+                            <p id="short-description-label">
+                                Name
+                            </p>
+                            <p id="short-description-label">
+                                Phone Number
+                            </p>
+                            <p id="short-description-label">
+                                Email
+                            </p>
+                            <p id="short-description-links">
+                                <a href="{% url 'updateVendor' vendorId=val.id %}">Update</a> |
+                                <a href="{% url 'deactivateVendor' vendorId=val.id %}">Deactivate</a> |
+                                <a href="{% url 'displayVendor' vendorId=val.id %}">View</a>
+                            </p>
+                            <p id="short-description-value">
+                                {{val.name}} 
+                            </p>
+                            <p id="short-description-value">
+                                {{val.phone}}
+                            </p>             
+                            <p id="short-description-value">
+                                {{val.email}}
+                            </p>              
+                        </div>
+                    {% endfor %}
+                {% endif %}
             </div>
         </body>
         <footer class="footer">
@@ -80,7 +93,6 @@
         </footer>
         <script>
             $('a.search.dropbtn').addClass('active')
-            $('li.dropdown').addClass('active')
         </script> 
     </html>
     
