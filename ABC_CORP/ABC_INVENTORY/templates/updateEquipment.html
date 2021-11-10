@@ -128,7 +128,7 @@
                             <a href="{% url 'updateEquipment' equipmentId=equipment.id %}">Update</a> |
                             <a href="{% url 'deactivateEquipment' equipmentId=equipment.id %}">Deactivate</a> |
                             <a href="{% url 'displayEquipment' equipmentId=equipment.id %}">View</a>
-                        </p>
+                        </p><br/><br/><br/>
                         <p id="short-description-value">
                             {{equipment.name}}
                         </p>
@@ -149,7 +149,6 @@
         </footer>
         <script>
             $('a.add.dropbtn').addClass('active')
-            $('li.dropdown').addClass('active') 
         </script> 
     </html>
     

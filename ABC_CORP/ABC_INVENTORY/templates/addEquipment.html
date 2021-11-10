@@ -114,7 +114,7 @@
                             <a href="{% url 'updateEquipment' equipmentId=addedEquipment.id %}">Update</a> |
                             <a href="{% url 'deactivateEquipment' equipmentId=addedEquipment.id %}">Deactivate</a> |
                             <a href="{% url 'displayEquipment' equipmentId=addedEquipment.id %}">View</a>
-                        </p>
+                        </p><br/><br/><br/>
                         <p id="short-description-value">
                             {{addedEquipment.name}}
                         </p>
@@ -136,10 +136,6 @@
         <script>
             $('a.add.dropbtn').addClass('active')
             $('li.dropdown').addClass('active')
-
-            $(document).on('click', '.deactivate', deactivate(){
-            return confirm('Are you sure you want to deactivate this Equipment?');
-            })
         </script> 
     </html>
     

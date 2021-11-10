@@ -1,1 +1,25 @@
-nav page
+{% extends navigationPage %} 
+{% load static %}
+{% block content %}
+    <!DOCTYPE html>
+        <head>
+            <title>ABC CORP Reports</title>
+            <link rel="stylesheet" type="text/css" href="{% static '/css/searchUser.css' %}"> 
+        </head>
+        <body>
+            <div class="body-card">
+
+            </div>
+        </body>
+        <footer class="footer">
+            <div id="footer-text">                
+                <p>Copyright &copy; {{date.year}} - ABC CORPORATION - All Rights Reserved</p>
+            </div>
+        </footer>
+        <script>
+            $('a.report.dropbtn').addClass('active')
+        </script> 
+    </html>
+    
+    
+{% endblock %}  

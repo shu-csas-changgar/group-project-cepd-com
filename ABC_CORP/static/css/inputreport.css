@@ -1,0 +1,25 @@
+.body-card {
+    margin-left: 15%;
+    height: 900px;
+    padding-top: 1.5rem;
+}
+
+.body-card-text {
+    font-family: Verdana, Helvetica, sans-serif;
+    color: rgb(55, 96, 220);
+    margin-left: 350px;
+    font-weight: bold;
+}
+
+.footer {
+    background-color: rgb(55, 96, 220);
+    height: 200px;
+    margin-top: 125%;
+}
+
+#footer-text {
+    font-family: Verdana, Helvetica, sans-serif;
+    color: white;
+    text-align: center;
+    padding-top: 70px;
+}
