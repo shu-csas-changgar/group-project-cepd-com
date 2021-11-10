@@ -9,7 +9,64 @@
         </head>
         <body>
             <div class="body-card">
-
+                <p class="body-card-test">Search Vendor</p>
+                <div class="form-container">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-25">
+                            <label class="form-text" >Name</label>
+                            </div>
+                            <div class="col-75">
+                                <!--<select required name="equipment_type" placeholder="Equipment Type....">
+                                    {% for type in equipmentTypes %}
+                                        <option value={{type}}> {{type}}</option>
+                                    {% endfor %}
+                                        <option value=-1 selected="selected">Any</option>
+                                </select>-->
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-25">
+                            <label class="form-text" >Address</label>
+                            </div>
+                            <div class="col-75">
+                                <!--<select required name="equipment_type" placeholder="Equipment Type....">
+                                    {% for type in equipmentTypes %}
+                                        <option value={{type}}> {{type}}</option>
+                                    {% endfor %}
+                                        <option value=-1 selected="selected">Any</option>
+                                </select>-->
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-25">
+                            <label class="form-text" >Email</label>
+                            </div>
+                            <div class="col-75">
+                                <!--<select required name="equipment_type" placeholder="Equipment Type....">
+                                    {% for type in equipmentTypes %}
+                                        <option value={{type}}> {{type}}</option>
+                                    {% endfor %}
+                                        <option value=-1 selected="selected">Any</option>
+                                </select>-->
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-25">
+                            <label class="form-text" >Phone Number</label>
+                            </div>
+                            <div class="col-75">
+                                <!--<select required name="equipment_type" placeholder="Equipment Type....">
+                                    {% for type in equipmentTypes %}
+                                        <option value={{type}}> {{type}}</option>
+                                    {% endfor %}
+                                        <option value=-1 selected="selected">Any</option>
+                                </select>-->
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </body>
         <footer class="footer">

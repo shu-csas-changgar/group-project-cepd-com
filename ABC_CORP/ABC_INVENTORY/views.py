@@ -261,7 +261,12 @@ def deactivateVendor(request,vendorId):
             'navigationPage': navigationPage,
             'vendor':v,
         }
-
+        if "yes" in request.POST:
+            v.is_active = False
+            v.save()
+            return redirect('searchVendor')
+        if "no" in request.POST:
+            return redirect('searchVendor')            
         return render(request, 'deactivateVendor.html', context)
     else:
         return redirect('home')
@@ -383,6 +388,8 @@ def searchUser(request):
     navigationPage = 'usernav.html'
     if request.user.is_admin:
         navigationPage = 'adminnav.html'
+
+    
     context = {
         'date':date,
         'navigationPage': navigationPage,
@@ -395,9 +402,11 @@ def searchVendor(request):
     navigationPage = 'usernav.html'
     if request.user.is_admin:
         navigationPage = 'adminnav.html'
+    vendors = Vendor.objects.all()
     context = {
         'date':date,
         'navigationPage': navigationPage,
+        'vendors':vendors,
     }
     
     return render(request, 'searchVendor.html', context)
