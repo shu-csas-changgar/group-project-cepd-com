@@ -1,26 +1,48 @@
-{% extends navigationPage %} 
+{% extends navigationPage %}
 {% load static %}
 {% block content %}
     <!DOCTYPE html>
 
         <head>
             <title>ABC CORP Search User</title>
-            <link rel="stylesheet" type="text/css" href="{% static '/css/searchUser.css' %}"> 
+            <link rel="stylesheet" type="text/css" href="{% static '/css/searchUser.css' %}">
         </head>
         <body>
             <div class="body-card">
+              <p class="body-card-text"> Search User</p>
+              <div class="form-container">
+              <form method="post">
+                {% csrf_token %}
 
+                <div class="row">
+                    <div class="col-25">
+                    <label class="form-text"First Name</label>
+                    </div>
+                    <div class="col-75">
+                        <input name="first_name" placeholder="First Name...">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-25">
+                    <label class="form-text"Last Name</label>
+                    </div>
+                    <div class="col-75">
+                        <input name="first_name" placeholder="Last Name...">
+                    </div>
+                </div>
+              </form>
             </div>
         </body>
         <footer class="footer">
-            <div id="footer-text">                
+            <div id="footer-text">
                 <p>Copyright &copy; {{date.year}} - ABC CORPORATION - All Rights Reserved</p>
             </div>
         </footer>
         <script>
             $('a.search.dropbtn').addClass('active')
-        </script> 
+        </script>
     </html>
-    
-    
-{% endblock %}  
+
+
+{% endblock %}
