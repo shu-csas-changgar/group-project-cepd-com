@@ -32,6 +32,7 @@ def registerPage(request):
         address=request.POST.get('address')
         p1=request.POST.get('password1')
         loc=request.POST.get('location')
+        print(loc)
         location = Location.objects.get(name=loc)
         User.objects.create_user(email=email, firstName=firstName, lastName=lastName, password=p1, phone=phone, address=address, officeLocation=Location(id=location.id))
         messages.success(request, 'Account was created for ' + firstName + " " + lastName)
@@ -174,7 +175,7 @@ def updateVendor(request,vendorId):
         'vendor':v
     }
     if request.method == 'POST':
-        name = request.POST.get('name')        
+        name = request.POST.get('name')
         address = request.POST.get('address')
         email = request.POST.get('email')
         phone = request.POST.get('phone')
@@ -201,7 +202,7 @@ def updateUser(request,userId):
         'navigationPage': navigationPage,
         'locations': locations,
         'user': u,
-        'hasAdded':False,        
+        'hasAdded':False,
     }
 
     if request.method == 'POST':
@@ -246,7 +247,7 @@ def deactivateEquipment(request,equipmentId):
             e.save()
             return redirect('searchEquipment')
         if "no" in request.POST:
-            return redirect('searchEquipment')            
+            return redirect('searchEquipment')
         return render(request, 'deactivateEquipment.html', context)
     else:
         return redirect('home')
@@ -266,7 +267,7 @@ def deactivateVendor(request,vendorId):
             v.save()
             return redirect('searchVendor')
         if "no" in request.POST:
-            return redirect('searchVendor')            
+            return redirect('searchVendor')
         return render(request, 'deactivateVendor.html', context)
     else:
         return redirect('home')
@@ -386,15 +387,84 @@ def searchEquipment(request):
 def searchUser(request):
     date = datetime.date.today()
     navigationPage = 'usernav.html'
+    locations = Location.objects.all()
     if request.user.is_admin:
         navigationPage = 'adminnav.html'
 
-    
+
     context = {
-        'date':date,
-        'navigationPage': navigationPage,
+            'date':date,
+            'navigationPage': navigationPage,
+            'locations':locations,
+            'hasAdded':False,
     }
-    
+
+
+
+    if request.method == 'POST':
+        firstName=request.POST.get('first-name')
+        lastName=request.POST.get('last-name')
+        email=request.POST.get('email')
+        locationId=int(request.POST.get('location'))
+        is_admin=request.POST.get('is_admin')
+
+
+
+
+        selectedFName = "Any"
+        selectedLName = "Any"
+        selectedEmail = "Any"
+        selectedLocation = "Any"
+        selectedIsAdmin = "Any"
+
+
+        users = User.objects.filter(is_active=True)
+        print(users)
+
+        if firstName != "":
+            selectedName = firstName
+            users=users.filter(firstName=firstName)
+        print(users)
+
+        if lastName != "":
+            selectedLName=lastName
+            users=users.filter(lastName=lastName)
+        print(users)
+
+        if email != "":
+            selectedEmail = email
+            users=users.filter(email=email)
+        print(users)
+
+
+        if locationId != -1:
+            locationOBJ = Location.objects.get(id=locationId)
+            selectedLocation = locationOBJ.name
+            print("YEs")
+            users = users.filter(officeLocation=locationOBJ)
+        print(users)
+
+
+        selectedIsAdmin = is_admin
+        if is_admin == "Yes":
+            users = users.filter(is_admin=True)
+        else:
+            users = users.filter(is_admin=True)
+
+        print(users)
+
+        context['users'] = users
+        context['selectedFName'] = selectedFName
+        context['selectedLName'] = selectedLName
+        context['selectedEmail'] = selectedEmail
+        context['selectedLocation'] = selectedLocation
+        context['selectedIsAdmin'] = selectedIsAdmin
+        context['hasAdded'] = True
+        print(context['hasAdded'])
+        print(users)
+        return render(request, 'searchUser.html', context)
+
+
     return render(request, 'searchUser.html', context)
 
 def searchVendor(request):
@@ -498,7 +568,7 @@ def addVendor(request):
             'hasAdded':False,
         }
         if request.method == 'POST':
-            name = request.POST.get('name')        
+            name = request.POST.get('name')
             address = request.POST.get('address')
             email = request.POST.get('email')
             phone = request.POST.get('phone')
@@ -549,18 +619,18 @@ def addUser(request):
         return render(request, 'addUser.html', context)
     else:
         return redirect('home')
-    
+
 def reportPage(request):
     date = datetime.date.today()
     user = request.user
     navigationPage = 'usernav.html'
     if user.is_admin:
-        navigationPage = 'adminnav.html'   
+        navigationPage = 'adminnav.html'
     context = {
         'date':date,
         'user':user,
         'navigationPage':navigationPage,
-    }    
+    }
     return render(request, 'report.html', context)
 
 def importPage(request):
@@ -580,7 +650,7 @@ def accountPage(request):
         'date':date,
         'navigationPage': navigationPage,
         'locations': locations,
-        'user': u, 
+        'user': u,
     }
 
     if request.method == 'POST':
@@ -605,4 +675,3 @@ def accountPage(request):
         u.save()
         return redirect('logout')
     return render(request, 'account.html', context)
-
