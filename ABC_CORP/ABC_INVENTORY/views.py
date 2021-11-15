@@ -31,9 +31,9 @@ def registerPage(request):
         phone=request.POST.get('phone')
         address=request.POST.get('address')
         p1=request.POST.get('password1')
-        loc=request.POST.get('location')
+        loc=int(request.POST.get('location'))
         print(loc)
-        location = Location.objects.get(name=loc)
+        location = Location.objects.get(id=loc)
         User.objects.create_user(email=email, firstName=firstName, lastName=lastName, password=p1, phone=phone, address=address, officeLocation=Location(id=location.id))
         messages.success(request, 'Account was created for ' + firstName + " " + lastName)
         return redirect('login')
@@ -282,7 +282,20 @@ def deactivateUser(request,userId):
             'navigationPage': navigationPage,
             'user':u,
         }
+        if "yes" in request.POST:
+            u.is_active=False
+            u.save()
+            try:
+                return redirect('searchUser')
 
+            except AttributeError:
+                return redirect('home')
+
+        if "no" in request.POST:
+            try:
+                return redirect('searchUser')
+            except AttributeError:
+                return redirect('home')
         return render(request, 'deactivateUser.html', context)
     else:
         return redirect('home')
@@ -419,39 +432,39 @@ def searchUser(request):
 
 
         users = User.objects.filter(is_active=True)
-        print(users)
+
 
         if firstName != "":
             selectedName = firstName
             users=users.filter(firstName=firstName)
-        print(users)
+
 
         if lastName != "":
             selectedLName=lastName
             users=users.filter(lastName=lastName)
-        print(users)
+
 
         if email != "":
             selectedEmail = email
             users=users.filter(email=email)
-        print(users)
+
 
 
         if locationId != -1:
             locationOBJ = Location.objects.get(id=locationId)
             selectedLocation = locationOBJ.name
-            print("YEs")
+
             users = users.filter(officeLocation=locationOBJ)
-        print(users)
+
 
 
         selectedIsAdmin = is_admin
         if is_admin == "Yes":
             users = users.filter(is_admin=True)
         else:
-            users = users.filter(is_admin=True)
+            users = users.filter(is_admin=False)
 
-        print(users)
+
 
         context['users'] = users
         context['selectedFName'] = selectedFName
