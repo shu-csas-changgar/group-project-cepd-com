@@ -4,6 +4,7 @@ from django.contrib import messages
 from .forms import CreateUserForm
 from .models import  User, Location, Equipment, Vendor
 import datetime
+from django.http import HttpResponse
 
 def loginPage(request):
     if request.method == 'POST':
@@ -282,16 +283,20 @@ def deactivateUser(request,userId):
             'navigationPage': navigationPage,
             'user':u,
         }
-        if "yes" in request.POST:
-            u.is_active=False
-            u.save()
-            try:
-                return redirect('searchUser')
+        if request.user.id != userId:
+            if "yes" in request.POST:
+                u.is_active=False
+                u.save()
+                try:
+                    return redirect('searchUser')
 
-            except AttributeError:
-                return redirect('home')
+                except AttributeError:
+                    return redirect('home')
+        if request.user.id == userId:
+            error_string = "Invalid Operation, kindly return to Home Page: " + '<a href="/home">HOME PAGE</a>'
+            return HttpResponse(error_string)
 
-        if "no" in request.POST:
+        if "no" in request.POST and request.user.id != userId:
             try:
                 return redirect('searchUser')
             except AttributeError:
