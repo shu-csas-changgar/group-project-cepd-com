@@ -409,16 +409,12 @@ def searchUser(request):
     if request.user.is_admin:
         navigationPage = 'adminnav.html'
 
-
     context = {
             'date':date,
             'navigationPage': navigationPage,
             'locations':locations,
             'hasAdded':False,
     }
-
-
-
     if request.method == 'POST':
         firstName=request.POST.get('first-name')
         lastName=request.POST.get('last-name')
@@ -426,50 +422,31 @@ def searchUser(request):
         locationId=int(request.POST.get('location'))
         is_admin=request.POST.get('is_admin')
 
-
-
-
         selectedFName = "Any"
         selectedLName = "Any"
         selectedEmail = "Any"
         selectedLocation = "Any"
         selectedIsAdmin = "Any"
 
-
         users = User.objects.filter(is_active=True)
-
-
         if firstName != "":
-            selectedName = firstName
+            selectedFName = firstName
             users=users.filter(firstName=firstName)
-
-
         if lastName != "":
             selectedLName=lastName
             users=users.filter(lastName=lastName)
-
-
         if email != "":
             selectedEmail = email
             users=users.filter(email=email)
-
-
-
         if locationId != -1:
             locationOBJ = Location.objects.get(id=locationId)
             selectedLocation = locationOBJ.name
-
             users = users.filter(officeLocation=locationOBJ)
-
-
-
-        selectedIsAdmin = is_admin
+        selectedIsAdmin = is_admin      
         if is_admin == "Yes":
             users = users.filter(is_admin=True)
-        else:
+        if is_admin == "No":
             users = users.filter(is_admin=False)
-
-
 
         context['users'] = users
         context['selectedFName'] = selectedFName
@@ -478,11 +455,7 @@ def searchUser(request):
         context['selectedLocation'] = selectedLocation
         context['selectedIsAdmin'] = selectedIsAdmin
         context['hasAdded'] = True
-        print(context['hasAdded'])
-        print(users)
         return render(request, 'searchUser.html', context)
-
-
     return render(request, 'searchUser.html', context)
 
 def searchVendor(request):
