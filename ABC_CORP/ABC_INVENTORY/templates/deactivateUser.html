@@ -14,19 +14,15 @@
                     {% csrf_token %}
                     <div class="form-text">
                         <h4>Are you sure you want to deactivate this User?</h4>
-                        <!--<p>Name: {{user.name}}</p>-->
-                        <!--Repeat Above Line for other user props-->
                         <p>First Name: {{user.firstName}}</p>
                         <p>Last Name: {{user.lastName}}</p>
                         <p>Email: {{user.email}}</p>
                         <p>Phone: {{user.phone}}</p>
                         <p>Location: {{user.officeLocation}}</p>
                         <p>Address: {{user.address}}</p>
-
-
                     </div>
-                    <input type="submit"name="yes" class="deactivate-btn" value="Yes">
-                    <input type="submit" name="no" class="deactivate-btn" value="No">
+                    <input type="submit"name="Yes" class="deactivate-btn" value="Yes">
+                    <input type="submit" name="No" class="deactivate-btn" value="No">
                 </form>
             </div>
         </body>

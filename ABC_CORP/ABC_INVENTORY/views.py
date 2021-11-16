@@ -282,26 +282,18 @@ def deactivateUser(request,userId):
             'date':date,
             'navigationPage': navigationPage,
             'user':u,
-        }
-        if request.user.id != userId:
-            if "yes" in request.POST:
-                u.is_active=False
-                u.save()
-                try:
-                    return redirect('searchUser')
-
-                except AttributeError:
-                    return redirect('home')
-        if request.user.id == userId:
-            error_string = "Invalid Operation, kindly return to Home Page: " + '<a href="/home">HOME PAGE</a>'
-            return HttpResponse(error_string)
-
-        if "no" in request.POST and request.user.id != userId:
-            try:
-                return redirect('searchUser')
-            except AttributeError:
-                return redirect('home')
-        return render(request, 'deactivateUser.html', context)
+            }
+        if request.user.id == userId: 
+            error_string = "Invalid Operation, Cannot Deactivate Current User. Kindly Return To Home Page: " + '<a href="/home">HOME PAGE</a>'
+            return HttpResponse(error_string)   
+        elif "Yes" in request.POST:   
+            u.is_active = False
+            u.save()
+            return redirect('home')
+        elif "No" in request.POST:
+            return redirect('home')   
+        else:          
+            return render(request, 'deactivateUser.html', context)
     else:
         return redirect('home')
 
