@@ -4,6 +4,7 @@ from django.contrib import messages
 from .forms import CreateUserForm
 from .models import  User, Location, Equipment, Vendor
 import datetime
+from django.http import HttpResponse
 
 def loginPage(request):
     if request.method == 'POST':
@@ -31,8 +32,9 @@ def registerPage(request):
         phone=request.POST.get('phone')
         address=request.POST.get('address')
         p1=request.POST.get('password1')
-        loc=request.POST.get('location')
-        location = Location.objects.get(name=loc)
+        loc=int(request.POST.get('location'))
+        print(loc)
+        location = Location.objects.get(id=loc)
         User.objects.create_user(email=email, firstName=firstName, lastName=lastName, password=p1, phone=phone, address=address, officeLocation=Location(id=location.id))
         messages.success(request, 'Account was created for ' + firstName + " " + lastName)
         return redirect('login')
@@ -174,7 +176,7 @@ def updateVendor(request,vendorId):
         'vendor':v
     }
     if request.method == 'POST':
-        name = request.POST.get('name')        
+        name = request.POST.get('name')
         address = request.POST.get('address')
         email = request.POST.get('email')
         phone = request.POST.get('phone')
@@ -201,7 +203,7 @@ def updateUser(request,userId):
         'navigationPage': navigationPage,
         'locations': locations,
         'user': u,
-        'hasAdded':False,        
+        'hasAdded':False,
     }
 
     if request.method == 'POST':
@@ -246,7 +248,7 @@ def deactivateEquipment(request,equipmentId):
             e.save()
             return redirect('searchEquipment')
         if "no" in request.POST:
-            return redirect('searchEquipment')            
+            return redirect('searchEquipment')
         return render(request, 'deactivateEquipment.html', context)
     else:
         return redirect('home')
@@ -266,7 +268,7 @@ def deactivateVendor(request,vendorId):
             v.save()
             return redirect('searchVendor')
         if "no" in request.POST:
-            return redirect('searchVendor')            
+            return redirect('searchVendor')
         return render(request, 'deactivateVendor.html', context)
     else:
         return redirect('home')
@@ -280,9 +282,18 @@ def deactivateUser(request,userId):
             'date':date,
             'navigationPage': navigationPage,
             'user':u,
-        }
-
-        return render(request, 'deactivateUser.html', context)
+            }
+        if request.user.id == userId: 
+            error_string = "Invalid Operation, Cannot Deactivate Current User. Kindly Return To Home Page: " + '<a href="/home">HOME PAGE</a>'
+            return HttpResponse(error_string)   
+        elif "Yes" in request.POST:   
+            u.is_active = False
+            u.save()
+            return redirect('home')
+        elif "No" in request.POST:
+            return redirect('home')   
+        else:          
+            return render(request, 'deactivateUser.html', context)
     else:
         return redirect('home')
 
@@ -386,15 +397,57 @@ def searchEquipment(request):
 def searchUser(request):
     date = datetime.date.today()
     navigationPage = 'usernav.html'
+    locations = Location.objects.all()
     if request.user.is_admin:
         navigationPage = 'adminnav.html'
 
-    
     context = {
-        'date':date,
-        'navigationPage': navigationPage,
+            'date':date,
+            'navigationPage': navigationPage,
+            'locations':locations,
+            'hasAdded':False,
     }
-    
+    if request.method == 'POST':
+        firstName=request.POST.get('first-name')
+        lastName=request.POST.get('last-name')
+        email=request.POST.get('email')
+        locationId=int(request.POST.get('location'))
+        is_admin=request.POST.get('is_admin')
+
+        selectedFName = "Any"
+        selectedLName = "Any"
+        selectedEmail = "Any"
+        selectedLocation = "Any"
+        selectedIsAdmin = "Any"
+
+        users = User.objects.filter(is_active=True)
+        if firstName != "":
+            selectedFName = firstName
+            users=users.filter(firstName=firstName)
+        if lastName != "":
+            selectedLName=lastName
+            users=users.filter(lastName=lastName)
+        if email != "":
+            selectedEmail = email
+            users=users.filter(email=email)
+        if locationId != -1:
+            locationOBJ = Location.objects.get(id=locationId)
+            selectedLocation = locationOBJ.name
+            users = users.filter(officeLocation=locationOBJ)
+        selectedIsAdmin = is_admin      
+        if is_admin == "Yes":
+            users = users.filter(is_admin=True)
+        if is_admin == "No":
+            users = users.filter(is_admin=False)
+
+        context['users'] = users
+        context['selectedFName'] = selectedFName
+        context['selectedLName'] = selectedLName
+        context['selectedEmail'] = selectedEmail
+        context['selectedLocation'] = selectedLocation
+        context['selectedIsAdmin'] = selectedIsAdmin
+        context['hasAdded'] = True
+        return render(request, 'searchUser.html', context)
     return render(request, 'searchUser.html', context)
 
 def searchVendor(request):
@@ -498,7 +551,7 @@ def addVendor(request):
             'hasAdded':False,
         }
         if request.method == 'POST':
-            name = request.POST.get('name')        
+            name = request.POST.get('name')
             address = request.POST.get('address')
             email = request.POST.get('email')
             phone = request.POST.get('phone')
@@ -549,18 +602,18 @@ def addUser(request):
         return render(request, 'addUser.html', context)
     else:
         return redirect('home')
-    
+
 def reportPage(request):
     date = datetime.date.today()
     user = request.user
     navigationPage = 'usernav.html'
     if user.is_admin:
-        navigationPage = 'adminnav.html'   
+        navigationPage = 'adminnav.html'
     context = {
         'date':date,
         'user':user,
         'navigationPage':navigationPage,
-    }    
+    }
     return render(request, 'report.html', context)
 
 def importPage(request):
@@ -580,7 +633,7 @@ def accountPage(request):
         'date':date,
         'navigationPage': navigationPage,
         'locations': locations,
-        'user': u, 
+        'user': u,
     }
 
     if request.method == 'POST':
@@ -605,4 +658,3 @@ def accountPage(request):
         u.save()
         return redirect('logout')
     return render(request, 'account.html', context)
-
