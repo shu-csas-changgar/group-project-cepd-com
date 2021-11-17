@@ -302,8 +302,10 @@ def deactivateUser(request,userId):
             'user':u,
             }
         if request.user.id == userId: 
-            error_string = "Invalid Operation, Cannot Deactivate Current User. Kindly Return To Home Page: " + '<a href="/home">HOME PAGE</a>'
-            return HttpResponse(error_string)   
+            errorMessage = "Bad Operation, User you are attempting to deactivate is currently logged in."
+            redirectUrlName = "searchUser"
+            redirectPageName = "Search User"
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)  
         elif "Yes" in request.POST:   
             u.is_active = False
             u.save()
