@@ -33,8 +33,26 @@ def registerPage(request):
         address=request.POST.get('address')
         p1=request.POST.get('password1')
         loc=int(request.POST.get('location'))
-        print(loc)
         location = Location.objects.get(id=loc)
+
+        '''
+        Error Handle Section
+
+        Errors to Handle:
+        -Error when entering an email that already exist in database
+            --errorMessage = "User with this email aready exist, enter a different email."
+            --redirectUrlName = "register"
+            --redirectPageName = "Register"
+
+        -Registration does not check if both passwords are the same
+            --errorMessage = "Passwords do not match, enter the same password for both password fields."
+            --redirectUrlName = "register"
+            --redirectPageName = "Register"
+        
+        if(some error condition):
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+        '''
+
         User.objects.create_user(email=email, firstName=firstName, lastName=lastName, password=p1, phone=phone, address=address, officeLocation=Location(id=location.id))
         messages.success(request, 'Account was created for ' + firstName + " " + lastName)
         return redirect('login')
@@ -267,7 +285,7 @@ def deactivateVendor(request,vendorId):
             v.is_active = False
             v.save()
             return redirect('searchVendor')
-        if "no" in request.POST:
+        if "no" in request.POST:            
             return redirect('searchVendor')
         return render(request, 'deactivateVendor.html', context)
     else:
@@ -304,6 +322,12 @@ def displayEquipment(request, equipmentId):
     if request.user.is_admin:
         navigationPage = 'adminnav.html'
 
+    '''
+    Update Needed
+    -Does not display all an equipment's props
+	--Add remaining equipment properties
+    '''
+
     context = {'equipment':e, 'navigationPage' : navigationPage, 'date': date}
     return render(request, 'displayEquipment.html', context)
 
@@ -323,6 +347,12 @@ def displayUser(request, userId):
     navigationPage = 'usernav.html'
     if request.user.is_admin:
         navigationPage = 'adminnav.html'
+
+    '''
+    Update Needed
+    -Does not display all an User's props
+	--Add remaining User properties
+    '''
 
     context = {'user':u, 'navigationPage' : navigationPage, 'date': date}
     return render(request, 'displayUser.html', context)
@@ -527,6 +557,19 @@ def addEquipment(request):
             expirationDate = datetime.datetime.strptime(ed, '%Y-%m-%d')
             floor = request.POST.get('floor')
 
+            '''
+            Error Handle Section
+
+            Errors to Handle:
+            -User can enter expiration that is earlier than purchase date
+                --errorMessage = "Expiration date is earlier than Purchase date, ensure Purchase date is earlier than Expiration date."
+                --redirectUrlName = "addEquipment"
+                --redirectPageName = "Add Equipment"
+            
+            if(some error condition):
+                return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+            '''
+
             e = Equipment(name=name,assignedTo=User(id=assignedToId),
                 officeLocation=Location(id=officeLocationId),
                 vendor=Vendor(id=vendorId), equipmentType=equipmentType,
@@ -590,6 +633,24 @@ def addUser(request):
             location = Location.objects.get(id=locId)
             is_admin = False if request.POST.get('is_admin') == None else True
 
+            '''
+            Error Handle Section
+
+            Errors to Handle:
+            -Error when entering an email that already exist in database
+                --errorMessage = "User with this email aready exist, enter a different email."
+                --redirectUrlName = "addUser"
+                --redirectPageName = "Add User"
+
+            -Does not check if both passwords are the same
+                --errorMessage = "Passwords do not match, enter the same password for both password fields."
+                --redirectUrlName = "addUser"
+                --redirectPageName = "Add User"
+            
+            if(some error condition):
+                return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+            '''
+
             u = User.objects.create_user(email=email, firstName=firstName,
             lastName=lastName, password=p1, phone=phone, address=address,
             officeLocation=Location(id=location.id),is_admin=is_admin)
@@ -647,6 +708,24 @@ def accountPage(request):
         location = Location.objects.get(id=locId)
         is_admin = False if request.POST.get('is_admin') == None else True
 
+        '''
+        Error Handle Section
+
+        Errors to Handle:
+        -Error when entering an email that already exist in database
+            --errorMessage = "User with this email aready exist, enter a different email."
+            --redirectUrlName = "account"
+            --redirectPageName = "Account"
+
+        -Does not check if both passwords are the same
+            --errorMessage = "Passwords do not match, enter the same password for both password fields."
+            --redirectUrlName = "account"
+            --redirectPageName = "Account"
+        
+        if(some error condition):
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+        '''
+
         u.email=email
         u.firstName=firstName
         u.lastName=lastName
@@ -658,3 +737,14 @@ def accountPage(request):
         u.save()
         return redirect('logout')
     return render(request, 'account.html', context)
+
+def errorHandler(request,errorMessage, redirectUrlName, redirectPageName):
+    date = datetime.date.today()
+    context = {
+            'date':date,
+            'errorMessage':errorMessage,
+            'redirectUrlName': redirectUrlName,
+            'redirectPageName': redirectPageName,
+        }
+    return render(request, 'error.html', context)
+

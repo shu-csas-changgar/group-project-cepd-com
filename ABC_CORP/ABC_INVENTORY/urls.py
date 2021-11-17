@@ -23,6 +23,7 @@ urlpatterns = [
     path('deactivateUser/<int:userId>', views.deactivateUser, name="deactivateUser"),
     path('report/', views.reportPage, name="report"),
     path('account/', views.accountPage, name="account"),
+    path('error/<str:errorMessage>/<str:redirectUrlName>/<str:redirectPageName>', views.errorHandler, name="error"),
 
 
 ]
