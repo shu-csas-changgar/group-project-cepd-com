@@ -21,7 +21,8 @@ urlpatterns = [
     path('deactivateEquipment/<int:equipmentId>', views.deactivateEquipment, name="deactivateEquipment"),
     path('deactivateVendor/<int:vendorId>', views.deactivateVendor, name="deactivateVendor"),
     path('deactivateUser/<int:userId>', views.deactivateUser, name="deactivateUser"),
-    path('report/', views.reportPage, name="report"),
+    path('import/', views.importPage, name="import"),
+    path('export/', views.exportPage, name="export"),
     path('account/', views.accountPage, name="account"),
 
 

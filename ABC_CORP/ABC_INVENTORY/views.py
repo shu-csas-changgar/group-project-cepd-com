@@ -1,9 +1,16 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
+from .models import  User, Location, Equipment, Vendor
 from django.contrib import messages
 from .forms import CreateUserForm
-from .models import  User, Location, Equipment, Vendor
+from django.http import HttpResponse
+from .forms import UploadFileForm
+from csv import DictReader
+from datetime import datetime as dt
 import datetime
+from pytz import UTC
+import csv
+import os
 
 def loginPage(request):
     if request.method == 'POST':
@@ -549,8 +556,70 @@ def addUser(request):
         return render(request, 'addUser.html', context)
     else:
         return redirect('home')
+
+def importPage(request):
+    date = datetime.date.today()
+    user = request.user
+    navigationPage = 'usernav.html'
+    if user.is_admin:
+        navigationPage = 'adminnav.html'   
+
+    context = {
+        'date':date,
+        'navigationPage':navigationPage,
+    } 
+       
+    if "Download Template" in request.POST:
+        print("Download Template")
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="equipmentTemplate.csv"'
+
+        writer = csv.writer(response)
+        writer.writerow(['id','name', 'equipmentType', 'purchaseDate', 'expirationDate', 'floor', 'is_active', 'assignedTo_id', 'officeLocation_id', 'vendor_id'])
+        
+        equipments = Equipment.objects.all().values_list('id','name', 'equipmentType', 'purchaseDate', 'expirationDate', 'floor', 'is_active', 'assignedTo_id', 'officeLocation_id', 'vendor_id')
+        writer.writerow(equipments.get(id=1))        
+        return response
     
-def reportPage(request):
+    if "Import" in request.POST:
+        print("Import")
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            handle_uploaded_file(request.FILES['file'])
+            context['form'] = UploadFileForm()
+            return render(request, 'import.html', context)
+    
+    form = UploadFileForm()
+    context['form'] = form
+    return render(request, 'import.html', context)
+
+def handle_uploaded_file(f):    
+    DATE_FORMAT = '%Y-%m-%d'
+    with open('./uploaded.csv', 'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
+    for row in DictReader(open('./uploaded.csv')):
+        equipment = Equipment()
+        equipment.name = row['name']
+        equipment.equipmentType = row['equipmentType']
+        purDate = row['purchaseDate']
+        expDate = row['expirationDate']
+        print(purDate)
+        cleanedPurDate = UTC.localize(
+            dt.strptime(purDate, DATE_FORMAT))
+        cleanedExpDate = UTC.localize(
+            dt.strptime(expDate, DATE_FORMAT))            
+        equipment.purchaseDate = cleanedPurDate
+        equipment.expirationDate = cleanedExpDate
+        equipment.floor = row['floor']
+        equipment.is_active = True if row['is_active'] == "1" else False            
+        equipment.assignedTo = User.objects.get(id=int(row['assignedTo_id']))
+        equipment.officeLocation = Location.objects.get(id=int(row['officeLocation_id']))
+        equipment.vendor = Vendor.objects.get(id=int(row['vendor_id']))
+        equipment.save()
+    os.remove("uploaded.csv")
+
+def exportPage(request):
     date = datetime.date.today()
     user = request.user
     navigationPage = 'usernav.html'
@@ -558,16 +627,20 @@ def reportPage(request):
         navigationPage = 'adminnav.html'   
     context = {
         'date':date,
-        'user':user,
         'navigationPage':navigationPage,
     }    
-    return render(request, 'report.html', context)
+    if "Export" in request.POST:
+        print("Export")
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="equipments.csv"'
 
-def importPage(request):
-    return render(request, 'import.html', {})
-
-def exportPage(request):
-    return render(request, 'export.html', {})
+        writer = csv.writer(response)
+        writer.writerow(['id','name', 'equipmentType', 'purchaseDate', 'expirationDate', 'floor', 'is_active', 'assignedTo_id', 'officeLocation_id', 'vendor_id'])
+        equipments = Equipment.objects.all().values_list('id','name', 'equipmentType', 'purchaseDate', 'expirationDate', 'floor', 'is_active', 'assignedTo_id', 'officeLocation_id', 'vendor_id')
+        for equipment in equipments:
+            writer.writerow(equipment)
+        return response
+    return render(request, 'export.html', context)
 
 def accountPage(request):
     u = request.user
