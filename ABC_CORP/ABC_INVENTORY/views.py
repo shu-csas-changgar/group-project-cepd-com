@@ -38,8 +38,27 @@ def registerPage(request):
         phone=request.POST.get('phone')
         address=request.POST.get('address')
         p1=request.POST.get('password1')
-        loc=request.POST.get('location')
-        location = Location.objects.get(name=loc)
+        loc=int(request.POST.get('location'))
+        location = Location.objects.get(id=loc)
+
+        '''
+        Error Handle Section
+
+        Errors to Handle:
+        -Error when entering an email that already exist in database
+            --errorMessage = "User with this email aready exist, enter a different email."
+            --redirectUrlName = "register"
+            --redirectPageName = "Register"
+
+        -Registration does not check if both passwords are the same
+            --errorMessage = "Passwords do not match, enter the same password for both password fields."
+            --redirectUrlName = "register"
+            --redirectPageName = "Register"
+        
+        if(some error condition):
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+        '''
+
         User.objects.create_user(email=email, firstName=firstName, lastName=lastName, password=p1, phone=phone, address=address, officeLocation=Location(id=location.id))
         messages.success(request, 'Account was created for ' + firstName + " " + lastName)
         return redirect('login')
@@ -181,7 +200,7 @@ def updateVendor(request,vendorId):
         'vendor':v
     }
     if request.method == 'POST':
-        name = request.POST.get('name')        
+        name = request.POST.get('name')
         address = request.POST.get('address')
         email = request.POST.get('email')
         phone = request.POST.get('phone')
@@ -208,7 +227,7 @@ def updateUser(request,userId):
         'navigationPage': navigationPage,
         'locations': locations,
         'user': u,
-        'hasAdded':False,        
+        'hasAdded':False,
     }
 
     if request.method == 'POST':
@@ -253,7 +272,7 @@ def deactivateEquipment(request,equipmentId):
             e.save()
             return redirect('searchEquipment')
         if "no" in request.POST:
-            return redirect('searchEquipment')            
+            return redirect('searchEquipment')
         return render(request, 'deactivateEquipment.html', context)
     else:
         return redirect('home')
@@ -272,8 +291,8 @@ def deactivateVendor(request,vendorId):
             v.is_active = False
             v.save()
             return redirect('searchVendor')
-        if "no" in request.POST:
-            return redirect('searchVendor')            
+        if "no" in request.POST:            
+            return redirect('searchVendor')
         return render(request, 'deactivateVendor.html', context)
     else:
         return redirect('home')
@@ -287,9 +306,20 @@ def deactivateUser(request,userId):
             'date':date,
             'navigationPage': navigationPage,
             'user':u,
-        }
-
-        return render(request, 'deactivateUser.html', context)
+            }
+        if request.user.id == userId: 
+            errorMessage = "Bad Operation, User you are attempting to deactivate is currently logged in."
+            redirectUrlName = "searchUser"
+            redirectPageName = "Search User"
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)  
+        elif "Yes" in request.POST:   
+            u.is_active = False
+            u.save()
+            return redirect('home')
+        elif "No" in request.POST:
+            return redirect('home')   
+        else:          
+            return render(request, 'deactivateUser.html', context)
     else:
         return redirect('home')
 
@@ -299,6 +329,12 @@ def displayEquipment(request, equipmentId):
     navigationPage = 'usernav.html'
     if request.user.is_admin:
         navigationPage = 'adminnav.html'
+
+    '''
+    Update Needed
+    -Does not display all an equipment's props
+	--Add remaining equipment properties
+    '''
 
     context = {'equipment':e, 'navigationPage' : navigationPage, 'date': date}
     return render(request, 'displayEquipment.html', context)
@@ -319,6 +355,12 @@ def displayUser(request, userId):
     navigationPage = 'usernav.html'
     if request.user.is_admin:
         navigationPage = 'adminnav.html'
+
+    '''
+    Update Needed
+    -Does not display all an User's props
+	--Add remaining User properties
+    '''
 
     context = {'user':u, 'navigationPage' : navigationPage, 'date': date}
     return render(request, 'displayUser.html', context)
@@ -393,15 +435,57 @@ def searchEquipment(request):
 def searchUser(request):
     date = datetime.date.today()
     navigationPage = 'usernav.html'
+    locations = Location.objects.all()
     if request.user.is_admin:
         navigationPage = 'adminnav.html'
 
-    
     context = {
-        'date':date,
-        'navigationPage': navigationPage,
+            'date':date,
+            'navigationPage': navigationPage,
+            'locations':locations,
+            'hasAdded':False,
     }
-    
+    if request.method == 'POST':
+        firstName=request.POST.get('first-name')
+        lastName=request.POST.get('last-name')
+        email=request.POST.get('email')
+        locationId=int(request.POST.get('location'))
+        is_admin=request.POST.get('is_admin')
+
+        selectedFName = "Any"
+        selectedLName = "Any"
+        selectedEmail = "Any"
+        selectedLocation = "Any"
+        selectedIsAdmin = "Any"
+
+        users = User.objects.filter(is_active=True)
+        if firstName != "":
+            selectedFName = firstName
+            users=users.filter(firstName=firstName)
+        if lastName != "":
+            selectedLName=lastName
+            users=users.filter(lastName=lastName)
+        if email != "":
+            selectedEmail = email
+            users=users.filter(email=email)
+        if locationId != -1:
+            locationOBJ = Location.objects.get(id=locationId)
+            selectedLocation = locationOBJ.name
+            users = users.filter(officeLocation=locationOBJ)
+        selectedIsAdmin = is_admin      
+        if is_admin == "Yes":
+            users = users.filter(is_admin=True)
+        if is_admin == "No":
+            users = users.filter(is_admin=False)
+
+        context['users'] = users
+        context['selectedFName'] = selectedFName
+        context['selectedLName'] = selectedLName
+        context['selectedEmail'] = selectedEmail
+        context['selectedLocation'] = selectedLocation
+        context['selectedIsAdmin'] = selectedIsAdmin
+        context['hasAdded'] = True
+        return render(request, 'searchUser.html', context)
     return render(request, 'searchUser.html', context)
 
 def searchVendor(request):
@@ -481,6 +565,19 @@ def addEquipment(request):
             expirationDate = datetime.datetime.strptime(ed, '%Y-%m-%d')
             floor = request.POST.get('floor')
 
+            '''
+            Error Handle Section
+
+            Errors to Handle:
+            -User can enter expiration that is earlier than purchase date
+                --errorMessage = "Expiration date is earlier than Purchase date, ensure Purchase date is earlier than Expiration date."
+                --redirectUrlName = "addEquipment"
+                --redirectPageName = "Add Equipment"
+            
+            if(some error condition):
+                return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+            '''
+
             e = Equipment(name=name,assignedTo=User(id=assignedToId),
                 officeLocation=Location(id=officeLocationId),
                 vendor=Vendor(id=vendorId), equipmentType=equipmentType,
@@ -505,7 +602,7 @@ def addVendor(request):
             'hasAdded':False,
         }
         if request.method == 'POST':
-            name = request.POST.get('name')        
+            name = request.POST.get('name')
             address = request.POST.get('address')
             email = request.POST.get('email')
             phone = request.POST.get('phone')
@@ -543,6 +640,24 @@ def addUser(request):
             locId=request.POST.get('location')
             location = Location.objects.get(id=locId)
             is_admin = False if request.POST.get('is_admin') == None else True
+
+            '''
+            Error Handle Section
+
+            Errors to Handle:
+            -Error when entering an email that already exist in database
+                --errorMessage = "User with this email aready exist, enter a different email."
+                --redirectUrlName = "addUser"
+                --redirectPageName = "Add User"
+
+            -Does not check if both passwords are the same
+                --errorMessage = "Passwords do not match, enter the same password for both password fields."
+                --redirectUrlName = "addUser"
+                --redirectPageName = "Add User"
+            
+            if(some error condition):
+                return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+            '''
 
             u = User.objects.create_user(email=email, firstName=firstName,
             lastName=lastName, password=p1, phone=phone, address=address,
@@ -653,7 +768,7 @@ def accountPage(request):
         'date':date,
         'navigationPage': navigationPage,
         'locations': locations,
-        'user': u, 
+        'user': u,
     }
 
     if request.method == 'POST':
@@ -667,6 +782,24 @@ def accountPage(request):
         location = Location.objects.get(id=locId)
         is_admin = False if request.POST.get('is_admin') == None else True
 
+        '''
+        Error Handle Section
+
+        Errors to Handle:
+        -Error when entering an email that already exist in database
+            --errorMessage = "User with this email aready exist, enter a different email."
+            --redirectUrlName = "account"
+            --redirectPageName = "Account"
+
+        -Does not check if both passwords are the same
+            --errorMessage = "Passwords do not match, enter the same password for both password fields."
+            --redirectUrlName = "account"
+            --redirectPageName = "Account"
+        
+        if(some error condition):
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+        '''
+
         u.email=email
         u.firstName=firstName
         u.lastName=lastName
@@ -678,4 +811,14 @@ def accountPage(request):
         u.save()
         return redirect('logout')
     return render(request, 'account.html', context)
+
+def errorHandler(request,errorMessage, redirectUrlName, redirectPageName):
+    date = datetime.date.today()
+    context = {
+            'date':date,
+            'errorMessage':errorMessage,
+            'redirectUrlName': redirectUrlName,
+            'redirectPageName': redirectPageName,
+        }
+    return render(request, 'error.html', context)
 
