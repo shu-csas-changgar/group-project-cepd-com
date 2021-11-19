@@ -709,7 +709,7 @@ def importPage(request):
     return render(request, 'import.html', context)
 
 def handle_uploaded_file(f):    
-    DATE_FORMAT = '%Y-%m-%d'
+    DATE_FORMAT = '%m/%d/%Y'
     with open('./uploaded.csv', 'wb+') as destination:
         for chunk in f.chunks():
             destination.write(chunk)
@@ -727,7 +727,7 @@ def handle_uploaded_file(f):
         equipment.purchaseDate = cleanedPurDate
         equipment.expirationDate = cleanedExpDate
         equipment.floor = row['floor']
-        equipment.is_active = True if row['is_active'] == "1" else False            
+        equipment.is_active = True if row['is_active'] == "TRUE" else False            
         equipment.assignedTo = User.objects.get(id=int(row['assignedTo_id']))
         equipment.officeLocation = Location.objects.get(id=int(row['officeLocation_id']))
         equipment.vendor = Vendor.objects.get(id=int(row['vendor_id']))
