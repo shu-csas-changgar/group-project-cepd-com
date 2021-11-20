@@ -6,9 +6,10 @@
 .body-card-text {
     font-family: Verdana, Helvetica, sans-serif;
     color: rgb(55, 96, 220);
-    margin-left: 30px;
+    margin-left: 350px;
     font-weight: bold;
 }
+
 .form-text {
     font-family: Verdana, Helvetica, sans-serif;
     color: rgb(55, 96, 220);
@@ -24,6 +25,14 @@
     margin-left: 30px;
 }
 
+.form-container-import{
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+    width: 274px;
+    height: 200px;
+    margin-left: 270px;
+}
 
 /* Clear floats after the columns */
 
@@ -57,18 +66,6 @@
     margin-top: 6px;
 }
 
-
-input[type=submit]{
-    background-color: rgb(55, 96, 220);
-    color: white;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    text-align: center;
-    width: 200px;
-}
-
 input[type=file] {
     background-color: rgb(55, 96, 220);
     color: white;
@@ -82,7 +79,6 @@ input[type=file] {
     margin-left: 5%;
     margin-right: 5%;
     float: left;
-    margin-bottom: 10px;
 }
 
 input[type=file]:hover {
@@ -98,6 +94,14 @@ label {
 }
 
 .import-btn {
+    background-color: rgb(55, 96, 220);
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    width: 242px;
     margin-top: 10px;
     margin-left: 5%;
     margin-right: 5%;
@@ -113,17 +117,20 @@ label {
     opacity: 1;
     -webkit-transition: .3s ease-in-out;
     transition: .3s ease-in-out;
-    margin-left: 30px;
-    color: white;
+    margin-left: 235px;
+    background-color: white;
     font-weight: bold;
     font-size: large;
     padding: 12px 20px;
-    width: 350px;
-    height: 250px;
+    width: 400px;
+    height: 156px;
     cursor: pointer;
     border: none;
-    background-image: url("../media/addImage.png");
+    background-image: url("../media/exportImage.png");
     background-size: cover;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
 }
 .footer {
     background-color: rgb(55, 96, 220);
