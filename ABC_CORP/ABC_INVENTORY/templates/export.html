@@ -1,0 +1,33 @@
+{% extends navigationPage %} 
+{% load static %}
+{% block content %}
+    <!DOCTYPE html>
+        <head>
+            <title>ABC CORP Export</title>
+            <link rel="stylesheet" type="text/css" href="{% static '/css/report.css' %}"> 
+        </head>
+        <body>
+            <div class="body-card">
+            <p class="body-card-text"> Export Equipment</p>
+                <form method="post" class = "exportform">
+                    {% csrf_token %}
+                    <div class="form-text">
+                        <h4></h4>
+                    </div>
+                    <input type="submit" name="Export" class="export-btn" value="">
+                </form>
+            </div>
+            </div>
+        </body>
+        <footer class="footer">
+            <div id="footer-text">                
+                <p>Copyright &copy; {{date.year}} - ABC CORPORATION - All Rights Reserved</p>
+            </div>
+        </footer>
+        <script>
+            $('a.report.dropbtn').addClass('active')
+        </script> 
+    </html>
+
+
+{% endblock %} 
