@@ -1,10 +1,16 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
+from .models import  User, Location, Equipment, Vendor
 from django.contrib import messages
 from .forms import CreateUserForm
-from .models import  User, Location, Equipment, Vendor
-import datetime
 from django.http import HttpResponse
+from .forms import UploadFileForm
+from csv import DictReader
+from datetime import datetime as dt
+import datetime
+from pytz import UTC
+import csv
+import os
 
 def loginPage(request):
     if request.method == 'POST':
@@ -33,8 +39,26 @@ def registerPage(request):
         address=request.POST.get('address')
         p1=request.POST.get('password1')
         loc=int(request.POST.get('location'))
-        print(loc)
         location = Location.objects.get(id=loc)
+
+        '''
+        Error Handle Section
+
+        Errors to Handle:
+        -Error when entering an email that already exist in database
+            --errorMessage = "User with this email aready exist, enter a different email."
+            --redirectUrlName = "register"
+            --redirectPageName = "Register"
+
+        -Registration does not check if both passwords are the same
+            --errorMessage = "Passwords do not match, enter the same password for both password fields."
+            --redirectUrlName = "register"
+            --redirectPageName = "Register"
+        
+        if(some error condition):
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+        '''
+
         User.objects.create_user(email=email, firstName=firstName, lastName=lastName, password=p1, phone=phone, address=address, officeLocation=Location(id=location.id))
         messages.success(request, 'Account was created for ' + firstName + " " + lastName)
         return redirect('login')
@@ -267,7 +291,7 @@ def deactivateVendor(request,vendorId):
             v.is_active = False
             v.save()
             return redirect('searchVendor')
-        if "no" in request.POST:
+        if "no" in request.POST:            
             return redirect('searchVendor')
         return render(request, 'deactivateVendor.html', context)
     else:
@@ -284,8 +308,10 @@ def deactivateUser(request,userId):
             'user':u,
             }
         if request.user.id == userId: 
-            error_string = "Invalid Operation, Cannot Deactivate Current User. Kindly Return To Home Page: " + '<a href="/home">HOME PAGE</a>'
-            return HttpResponse(error_string)   
+            errorMessage = "Bad Operation, User you are attempting to deactivate is currently logged in."
+            redirectUrlName = "searchUser"
+            redirectPageName = "Search User"
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)  
         elif "Yes" in request.POST:   
             u.is_active = False
             u.save()
@@ -303,6 +329,12 @@ def displayEquipment(request, equipmentId):
     navigationPage = 'usernav.html'
     if request.user.is_admin:
         navigationPage = 'adminnav.html'
+
+    '''
+    Update Needed
+    -Does not display all an equipment's props
+	--Add remaining equipment properties
+    '''
 
     context = {'equipment':e, 'navigationPage' : navigationPage, 'date': date}
     return render(request, 'displayEquipment.html', context)
@@ -323,6 +355,12 @@ def displayUser(request, userId):
     navigationPage = 'usernav.html'
     if request.user.is_admin:
         navigationPage = 'adminnav.html'
+
+    '''
+    Update Needed
+    -Does not display all an User's props
+	--Add remaining User properties
+    '''
 
     context = {'user':u, 'navigationPage' : navigationPage, 'date': date}
     return render(request, 'displayUser.html', context)
@@ -527,6 +565,19 @@ def addEquipment(request):
             expirationDate = datetime.datetime.strptime(ed, '%Y-%m-%d')
             floor = request.POST.get('floor')
 
+            '''
+            Error Handle Section
+
+            Errors to Handle:
+            -User can enter expiration that is earlier than purchase date
+                --errorMessage = "Expiration date is earlier than Purchase date, ensure Purchase date is earlier than Expiration date."
+                --redirectUrlName = "addEquipment"
+                --redirectPageName = "Add Equipment"
+            
+            if(some error condition):
+                return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+            '''
+
             e = Equipment(name=name,assignedTo=User(id=assignedToId),
                 officeLocation=Location(id=officeLocationId),
                 vendor=Vendor(id=vendorId), equipmentType=equipmentType,
@@ -590,6 +641,24 @@ def addUser(request):
             location = Location.objects.get(id=locId)
             is_admin = False if request.POST.get('is_admin') == None else True
 
+            '''
+            Error Handle Section
+
+            Errors to Handle:
+            -Error when entering an email that already exist in database
+                --errorMessage = "User with this email aready exist, enter a different email."
+                --redirectUrlName = "addUser"
+                --redirectPageName = "Add User"
+
+            -Does not check if both passwords are the same
+                --errorMessage = "Passwords do not match, enter the same password for both password fields."
+                --redirectUrlName = "addUser"
+                --redirectPageName = "Add User"
+            
+            if(some error condition):
+                return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+            '''
+
             u = User.objects.create_user(email=email, firstName=firstName,
             lastName=lastName, password=p1, phone=phone, address=address,
             officeLocation=Location(id=location.id),is_admin=is_admin)
@@ -603,24 +672,86 @@ def addUser(request):
     else:
         return redirect('home')
 
-def reportPage(request):
+def importPage(request):
+    if(request.user.is_admin):
+        date = datetime.date.today()
+        navigationPage = 'adminnav.html'    
+
+        context = {
+            'date':date,
+            'navigationPage':navigationPage,
+        } 
+        
+        if "Download Template" in request.POST:
+            response = HttpResponse(content_type='text/csv')
+            response['Content-Disposition'] = 'attachment; filename="equipmentTemplate.csv"'
+
+            writer = csv.writer(response)
+            writer.writerow(['id','name', 'equipmentType', 'purchaseDate', 'expirationDate', 'floor', 'is_active', 'assignedTo_id', 'officeLocation_id', 'vendor_id'])
+            
+            equipments = Equipment.objects.all().values_list('id','name', 'equipmentType', 'purchaseDate', 'expirationDate', 'floor', 'is_active', 'assignedTo_id', 'officeLocation_id', 'vendor_id')
+            writer.writerow(equipments.get(id=1))        
+            return response
+        
+        if "Import" in request.POST:
+            form = UploadFileForm(request.POST, request.FILES)
+            if form.is_valid():
+                handle_uploaded_file(request.FILES['file'])
+                context['form'] = UploadFileForm()
+                return render(request, 'import.html', context)
+        
+        form = UploadFileForm()
+        context['form'] = form
+        return render(request, 'import.html', context)
+    else:
+        return redirect('home')
+
+def handle_uploaded_file(f):    
+    DATE_FORMAT = '%m/%d/%Y'
+    with open('./uploaded.csv', 'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
+    for row in DictReader(open('./uploaded.csv')):
+        equipment = Equipment()
+        equipment.name = row['name']
+        equipment.equipmentType = row['equipmentType']
+        purDate = row['purchaseDate']
+        expDate = row['expirationDate']
+        cleanedPurDate = UTC.localize(
+            dt.strptime(purDate, DATE_FORMAT))
+        cleanedExpDate = UTC.localize(
+            dt.strptime(expDate, DATE_FORMAT))            
+        equipment.purchaseDate = cleanedPurDate
+        equipment.expirationDate = cleanedExpDate
+        equipment.floor = row['floor']
+        equipment.is_active = True if row['is_active'] == "TRUE" or row['is_active'] == "1" else False            
+        equipment.assignedTo = User.objects.get(id=int(row['assignedTo_id']))
+        equipment.officeLocation = Location.objects.get(id=int(row['officeLocation_id']))
+        equipment.vendor = Vendor.objects.get(id=int(row['vendor_id']))
+        equipment.save()
+    os.remove("uploaded.csv")
+
+def exportPage(request):
     date = datetime.date.today()
     user = request.user
     navigationPage = 'usernav.html'
     if user.is_admin:
-        navigationPage = 'adminnav.html'
+        navigationPage = 'adminnav.html'   
     context = {
         'date':date,
-        'user':user,
         'navigationPage':navigationPage,
-    }
-    return render(request, 'report.html', context)
+    }    
+    if "Export" in request.POST:
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="equipments.csv"'
 
-def importPage(request):
-    return render(request, 'import.html', {})
-
-def exportPage(request):
-    return render(request, 'export.html', {})
+        writer = csv.writer(response)
+        writer.writerow(['id','name', 'equipmentType', 'purchaseDate', 'expirationDate', 'floor', 'is_active', 'assignedTo_id', 'officeLocation_id', 'vendor_id'])
+        equipments = Equipment.objects.all().values_list('id','name', 'equipmentType', 'purchaseDate', 'expirationDate', 'floor', 'is_active', 'assignedTo_id', 'officeLocation_id', 'vendor_id')
+        for equipment in equipments:
+            writer.writerow(equipment)
+        return response
+    return render(request, 'export.html', context)
 
 def accountPage(request):
     u = request.user
@@ -647,6 +778,24 @@ def accountPage(request):
         location = Location.objects.get(id=locId)
         is_admin = False if request.POST.get('is_admin') == None else True
 
+        '''
+        Error Handle Section
+
+        Errors to Handle:
+        -Error when entering an email that already exist in database
+            --errorMessage = "User with this email aready exist, enter a different email."
+            --redirectUrlName = "account"
+            --redirectPageName = "Account"
+
+        -Does not check if both passwords are the same
+            --errorMessage = "Passwords do not match, enter the same password for both password fields."
+            --redirectUrlName = "account"
+            --redirectPageName = "Account"
+        
+        if(some error condition):
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+        '''
+
         u.email=email
         u.firstName=firstName
         u.lastName=lastName
@@ -658,3 +807,14 @@ def accountPage(request):
         u.save()
         return redirect('logout')
     return render(request, 'account.html', context)
+
+def errorHandler(request,errorMessage, redirectUrlName, redirectPageName):
+    date = datetime.date.today()
+    context = {
+            'date':date,
+            'errorMessage':errorMessage,
+            'redirectUrlName': redirectUrlName,
+            'redirectPageName': redirectPageName,
+        }
+    return render(request, 'error.html', context)
+

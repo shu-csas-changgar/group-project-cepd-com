@@ -1,0 +1,36 @@
+{% extends navigationPage %} 
+{% load static %}
+{% block content %}
+    <!DOCTYPE html>
+        <head>
+            <title>ABC CORP Import</title>
+            <link rel="stylesheet" type="text/css" href="{% static '/css/report.css' %}"> 
+        </head>
+        <body>
+            <div class="body-card">
+            <p class="body-card-text"> Import Equipment</p>
+                <div class="form-container-import">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row">
+                            {{ form }}
+                        </div>
+                        <br>
+                        <input type="submit" name="Import" class="import-btn" value="Import">
+                        <input type="submit" name="Download Template" class="import-btn" value="Download Template">
+                    </form>
+                </div>
+            </div>
+        </body>
+        <footer class="footer">
+            <div id="footer-text">                
+                <p>Copyright &copy; {{date.year}} - ABC CORPORATION - All Rights Reserved</p>
+            </div>
+        </footer>
+        <script>
+            $('a.report.dropbtn').addClass('active')
+        </script> 
+    </html>
+    
+    
+{% endblock %} 
