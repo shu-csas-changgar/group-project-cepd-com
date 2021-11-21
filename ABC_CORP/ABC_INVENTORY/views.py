@@ -675,7 +675,6 @@ def addUser(request):
 def importPage(request):
     if(request.user.is_admin):
         date = datetime.date.today()
-        user = request.user
         navigationPage = 'adminnav.html'    
 
         context = {
