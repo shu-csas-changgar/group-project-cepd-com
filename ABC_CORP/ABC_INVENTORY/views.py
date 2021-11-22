@@ -343,12 +343,6 @@ def displayEquipment(request, equipmentId):
     if request.user.is_admin:
         navigationPage = 'adminnav.html'
 
-    '''
-    Update Needed
-    -Does not display all an equipment's props
-	--Add remaining equipment properties
-    '''
-
     context = {'equipment':e, 'navigationPage' : navigationPage, 'date': date}
     return render(request, 'displayEquipment.html', context)
 
@@ -368,12 +362,6 @@ def displayUser(request, userId):
     navigationPage = 'usernav.html'
     if request.user.is_admin:
         navigationPage = 'adminnav.html'
-
-    '''
-    Update Needed
-    -Does not display all an User's props
-	--Add remaining User properties
-    '''
 
     context = {'user':u, 'navigationPage' : navigationPage, 'date': date}
     return render(request, 'displayUser.html', context)
