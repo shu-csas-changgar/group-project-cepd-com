@@ -23,6 +23,12 @@
                       <div class="user-info" id="expiration">Expiration Date: {{equipment.expirationDate}}</div>
                       <div class="user-info" id="floor">Floor: {{equipment.floor}}</div>
                       <div class="user-info" id="phone">Vendor: {{equipment.vendor}}</div>
+                      {% if equipment.is_active %}
+                        <div class="user-info" id="is_active">Is Active: Yes</div>
+                      {% else %}
+                        <div class="user-info" id="is_active">Is Active: No</div>
+                      {% endif %}
+                      <div class="user-info" id="phone">Assigned To: {{equipment.assignedTo}}</div>
                   </div>
               </div>
             </div>

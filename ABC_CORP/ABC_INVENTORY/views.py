@@ -38,26 +38,24 @@ def registerPage(request):
         phone=request.POST.get('phone')
         address=request.POST.get('address')
         p1=request.POST.get('password1')
+        p2=request.POST.get('password2')
         loc=int(request.POST.get('location'))
         location = Location.objects.get(id=loc)
 
-        '''
-        Error Handle Section
 
-        Errors to Handle:
-        -Error when entering an email that already exist in database
-            --errorMessage = "User with this email aready exist, enter a different email."
-            --redirectUrlName = "register"
-            --redirectPageName = "Register"
+        userExists=User.objects.filter(email=email).exists()
 
-        -Registration does not check if both passwords are the same
-            --errorMessage = "Passwords do not match, enter the same password for both password fields."
-            --redirectUrlName = "register"
-            --redirectPageName = "Register"
-        
-        if(some error condition):
+        if userExists:
+            errorMessage = "A user with the email you entered currently exists in the system, Kindly try again."
+            redirectUrlName = "register"
+            redirectPageName= "Register"
             return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
-        '''
+
+        if p1 != p2:
+            errorMessage = "Passwords do not match, enter the same password for both password fields."
+            redirectUrlName = "register"
+            redirectPageName= "Register"
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
 
         User.objects.create_user(email=email, firstName=firstName, lastName=lastName, password=p1, phone=phone, address=address, officeLocation=Location(id=location.id))
         messages.success(request, 'Account was created for ' + firstName + " " + lastName)
@@ -237,9 +235,24 @@ def updateUser(request,userId):
         phone=request.POST.get('phone')
         address=request.POST.get('address')
         p1=request.POST.get('password1')
+        p2=request.POST.get('password2')
         locId=request.POST.get('location')
         location = Location.objects.get(id=locId)
         is_admin = False if request.POST.get('is_admin') == None else True
+
+        userExists=User.objects.filter(email=email).exists()
+
+        if userExists and email != u.email:
+            errorMessage = "A user with the email you entered currently exists in the system, Kindly try again."
+            redirectUrlName = "updateUser"
+            redirectPageName= "Update User"
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName, userId)
+
+        if p1 != p2:
+            errorMessage = "Passwords do not match, enter the same password for both password fields."
+            redirectUrlName = "updateUser"
+            redirectPageName= "Update User"
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName, userId)
 
         u.email=email
         u.firstName=firstName
@@ -291,7 +304,7 @@ def deactivateVendor(request,vendorId):
             v.is_active = False
             v.save()
             return redirect('searchVendor')
-        if "no" in request.POST:            
+        if "no" in request.POST:
             return redirect('searchVendor')
         return render(request, 'deactivateVendor.html', context)
     else:
@@ -307,18 +320,18 @@ def deactivateUser(request,userId):
             'navigationPage': navigationPage,
             'user':u,
             }
-        if request.user.id == userId: 
+        if request.user.id == userId:
             errorMessage = "Bad Operation, User you are attempting to deactivate is currently logged in."
             redirectUrlName = "searchUser"
             redirectPageName = "Search User"
-            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)  
-        elif "Yes" in request.POST:   
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+        elif "Yes" in request.POST:
             u.is_active = False
             u.save()
             return redirect('home')
         elif "No" in request.POST:
-            return redirect('home')   
-        else:          
+            return redirect('home')
+        else:
             return render(request, 'deactivateUser.html', context)
     else:
         return redirect('home')
@@ -329,12 +342,6 @@ def displayEquipment(request, equipmentId):
     navigationPage = 'usernav.html'
     if request.user.is_admin:
         navigationPage = 'adminnav.html'
-
-    '''
-    Update Needed
-    -Does not display all an equipment's props
-	--Add remaining equipment properties
-    '''
 
     context = {'equipment':e, 'navigationPage' : navigationPage, 'date': date}
     return render(request, 'displayEquipment.html', context)
@@ -355,12 +362,6 @@ def displayUser(request, userId):
     navigationPage = 'usernav.html'
     if request.user.is_admin:
         navigationPage = 'adminnav.html'
-
-    '''
-    Update Needed
-    -Does not display all an User's props
-	--Add remaining User properties
-    '''
 
     context = {'user':u, 'navigationPage' : navigationPage, 'date': date}
     return render(request, 'displayUser.html', context)
@@ -472,7 +473,7 @@ def searchUser(request):
             locationOBJ = Location.objects.get(id=locationId)
             selectedLocation = locationOBJ.name
             users = users.filter(officeLocation=locationOBJ)
-        selectedIsAdmin = is_admin      
+        selectedIsAdmin = is_admin
         if is_admin == "Yes":
             users = users.filter(is_admin=True)
         if is_admin == "No":
@@ -573,7 +574,7 @@ def addEquipment(request):
                 --errorMessage = "Expiration date is earlier than Purchase date, ensure Purchase date is earlier than Expiration date."
                 --redirectUrlName = "addEquipment"
                 --redirectPageName = "Add Equipment"
-            
+
             if(some error condition):
                 return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
             '''
@@ -637,27 +638,24 @@ def addUser(request):
             phone=request.POST.get('phone')
             address=request.POST.get('address')
             p1=request.POST.get('password1')
+            p2=request.POST.get('password2')
             locId=request.POST.get('location')
             location = Location.objects.get(id=locId)
             is_admin = False if request.POST.get('is_admin') == None else True
 
-            '''
-            Error Handle Section
+            userExists=User.objects.filter(email=email).exists()
 
-            Errors to Handle:
-            -Error when entering an email that already exist in database
-                --errorMessage = "User with this email aready exist, enter a different email."
-                --redirectUrlName = "addUser"
-                --redirectPageName = "Add User"
-
-            -Does not check if both passwords are the same
-                --errorMessage = "Passwords do not match, enter the same password for both password fields."
-                --redirectUrlName = "addUser"
-                --redirectPageName = "Add User"
-            
-            if(some error condition):
+            if userExists:
+                errorMessage = "A user with the email you entered currently exists in the system, Kindly try again."
+                redirectUrlName = "addUser"
+                redirectPageName= "Add User"
                 return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
-            '''
+
+            if p1 != p2:
+                errorMessage = "Passwords do not match, enter the same password for both password fields."
+                redirectUrlName = "addUser"
+                redirectPageName= "Add User"
+                return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
 
             u = User.objects.create_user(email=email, firstName=firstName,
             lastName=lastName, password=p1, phone=phone, address=address,
@@ -675,38 +673,38 @@ def addUser(request):
 def importPage(request):
     if(request.user.is_admin):
         date = datetime.date.today()
-        navigationPage = 'adminnav.html'    
+        navigationPage = 'adminnav.html'
 
         context = {
             'date':date,
             'navigationPage':navigationPage,
-        } 
-        
+        }
+
         if "Download Template" in request.POST:
             response = HttpResponse(content_type='text/csv')
             response['Content-Disposition'] = 'attachment; filename="equipmentTemplate.csv"'
 
             writer = csv.writer(response)
             writer.writerow(['id','name', 'equipmentType', 'purchaseDate', 'expirationDate', 'floor', 'is_active', 'assignedTo_id', 'officeLocation_id', 'vendor_id'])
-            
+
             equipments = Equipment.objects.all().values_list('id','name', 'equipmentType', 'purchaseDate', 'expirationDate', 'floor', 'is_active', 'assignedTo_id', 'officeLocation_id', 'vendor_id')
-            writer.writerow(equipments.get(id=1))        
+            writer.writerow(equipments.get(id=1))
             return response
-        
+
         if "Import" in request.POST:
             form = UploadFileForm(request.POST, request.FILES)
             if form.is_valid():
                 handle_uploaded_file(request.FILES['file'])
                 context['form'] = UploadFileForm()
                 return render(request, 'import.html', context)
-        
+
         form = UploadFileForm()
         context['form'] = form
         return render(request, 'import.html', context)
     else:
         return redirect('home')
 
-def handle_uploaded_file(f):    
+def handle_uploaded_file(f):
     DATE_FORMAT = '%m/%d/%Y'
     with open('./uploaded.csv', 'wb+') as destination:
         for chunk in f.chunks():
@@ -720,11 +718,11 @@ def handle_uploaded_file(f):
         cleanedPurDate = UTC.localize(
             dt.strptime(purDate, DATE_FORMAT))
         cleanedExpDate = UTC.localize(
-            dt.strptime(expDate, DATE_FORMAT))            
+            dt.strptime(expDate, DATE_FORMAT))
         equipment.purchaseDate = cleanedPurDate
         equipment.expirationDate = cleanedExpDate
         equipment.floor = row['floor']
-        equipment.is_active = True if row['is_active'] == "TRUE" or row['is_active'] == "1" else False            
+        equipment.is_active = True if row['is_active'] == "TRUE" or row['is_active'] == "1" else False
         equipment.assignedTo = User.objects.get(id=int(row['assignedTo_id']))
         equipment.officeLocation = Location.objects.get(id=int(row['officeLocation_id']))
         equipment.vendor = Vendor.objects.get(id=int(row['vendor_id']))
@@ -736,11 +734,11 @@ def exportPage(request):
     user = request.user
     navigationPage = 'usernav.html'
     if user.is_admin:
-        navigationPage = 'adminnav.html'   
+        navigationPage = 'adminnav.html'
     context = {
         'date':date,
         'navigationPage':navigationPage,
-    }    
+    }
     if "Export" in request.POST:
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="equipments.csv"'
@@ -774,27 +772,24 @@ def accountPage(request):
         phone=request.POST.get('phone')
         address=request.POST.get('address')
         p1=request.POST.get('password1')
+        p2=request.POST.get('password2')
         locId=request.POST.get('location')
         location = Location.objects.get(id=locId)
         is_admin = False if request.POST.get('is_admin') == None else True
 
-        '''
-        Error Handle Section
+        userExists=User.objects.filter(email=email).exists()
 
-        Errors to Handle:
-        -Error when entering an email that already exist in database
-            --errorMessage = "User with this email aready exist, enter a different email."
-            --redirectUrlName = "account"
-            --redirectPageName = "Account"
-
-        -Does not check if both passwords are the same
-            --errorMessage = "Passwords do not match, enter the same password for both password fields."
-            --redirectUrlName = "account"
-            --redirectPageName = "Account"
-        
-        if(some error condition):
+        if userExists and email!=request.user.email:
+            errorMessage = "A user with the email you entered currently exists in the system, Kindly try again."
+            redirectUrlName = "account"
+            redirectPageName= "Account"
             return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
-        '''
+
+        if p1 != p2:
+            errorMessage = "Passwords do not match, enter the same password for both password fields."
+            redirectUrlName = "account"
+            redirectPageName= "Account"
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
 
         u.email=email
         u.firstName=firstName
@@ -808,13 +803,13 @@ def accountPage(request):
         return redirect('logout')
     return render(request, 'account.html', context)
 
-def errorHandler(request,errorMessage, redirectUrlName, redirectPageName):
+def errorHandler(request,errorMessage, redirectUrlName, redirectPageName, someParameterValue = -1):
     date = datetime.date.today()
     context = {
             'date':date,
             'errorMessage':errorMessage,
             'redirectUrlName': redirectUrlName,
             'redirectPageName': redirectPageName,
+            'someParameterValue' : someParameterValue,
         }
     return render(request, 'error.html', context)
-

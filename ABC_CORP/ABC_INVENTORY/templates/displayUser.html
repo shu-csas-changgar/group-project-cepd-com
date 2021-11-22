@@ -23,6 +23,21 @@
                       <div class="user-info" id="address">Address: {{user.address}}</div>
                       <div class="user-info" id="phone">Phone: {{user.phone}}</div>
                       <div class="user-info" id="location">Location: {{user.officeLocation}}</div>
+                      {% if user.is_active %}
+                        <div class="user-info" id="location">Is Active: Yes</div>
+                      {% else %}
+                        <div class="user-info" id="location">Is Active: No</div>
+                      {% endif %}
+
+                      {% if user.is_admin %}
+                          <div class="user-info" id="location">Is Admin: Yes</div>
+                      {% else %}
+                          <div class="user-info" id="location">Is Admin: No</div>
+                      {% endif %}
+
+
+
+
                   </div>
               </div>
             </div>
