@@ -42,23 +42,6 @@ def registerPage(request):
         loc=int(request.POST.get('location'))
         location = Location.objects.get(id=loc)
 
-        '''
-        Error Handle Section
-
-        Errors to Handle:
-        -Error when entering an email that already exist in database
-            --errorMessage = "User with this email aready exist, enter a different email."
-            --redirectUrlName = "register"
-            --redirectPageName = "Register"
-
-        -Registration does not check if both passwords are the same
-            --errorMessage = "Passwords do not match, enter the same password for both password fields."
-            --redirectUrlName = "register"
-            --redirectPageName = "Register"
-
-        if(some error condition):
-            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
-        '''
 
         userExists=User.objects.filter(email=email).exists()
 
@@ -657,37 +640,21 @@ def addUser(request):
             location = Location.objects.get(id=locId)
             is_admin = False if request.POST.get('is_admin') == None else True
 
-            '''
-            Error Handle Section
 
-            Errors to Handle:
-            -Error when entering an email that already exist in database
-                --errorMessage = "User with this email aready exist, enter a different email."
-                --redirectUrlName = "addUser"
-                --redirectPageName = "Add User"
-
-            -Does not check if both passwords are the same
-                --errorMessage = "Passwords do not match, enter the same password for both password fields."
-                --redirectUrlName = "addUser"
-                --redirectPageName = "Add User"
-
-            if(some error condition):
-                return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
-            '''
             userExists=User.objects.filter(email=email).exists()
 
             if userExists==True:
                 errorMessage = "A user with the email you entered currently exists in the system, Kindly try again."
-                redirectUrlName = "register"
-                redirectPageName= "Register Page"
+                redirectUrlName = "addUser"
+                redirectPageName= "Add User"
                 return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
 
 
 
             if p1 != p2:
                 errorMessage = "Passwords do not match, enter the same password for both password fields."
-                redirectUrlName = "register"
-                redirectPageName= "Register Page"
+                redirectUrlName = "addUser"
+                redirectPageName= "Add User"
                 return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
 
             u = User.objects.create_user(email=email, firstName=firstName,
@@ -810,36 +777,22 @@ def accountPage(request):
         location = Location.objects.get(id=locId)
         is_admin = False if request.POST.get('is_admin') == None else True
 
-        '''
-        Error Handle Section
-
-        Errors to Handle:
-        -Error when entering an email that already exist in database
-            --errorMessage = "User with this email aready exist, enter a different email."
-            --redirectUrlName = "account"
-            --redirectPageName = "Account"
-
-        -Does not check if both passwords are the same
-            --errorMessage = "Passwords do not match, enter the same password for both password fields."
-            --redirectUrlName = "account"
-            --redirectPageName = "Account"
-
-        if(some error condition):
-            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
-        '''
-
+        userCurrentEmail = User.objects.filter(email=u.email)
         userExists=User.objects.filter(email=email).exists()
+        print(request.user.email)
 
-        if userExists==True:
+        #if email exists but that email isn't the user's current email, it's an error
+        #This ensures user can change their email too
+        if userExists==True and email!=request.user.email:
             errorMessage = "A user with the email you entered currently exists in the system, Kindly try again."
-            redirectUrlName = "register"
-            redirectPageName= "Register Page"
+            redirectUrlName = "account"
+            redirectPageName= "Account Page"
             return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
 
         if p1 != p2:
             errorMessage = "Passwords do not match, enter the same password for both password fields."
-            redirectUrlName = "register"
-            redirectPageName= "Register Page"
+            redirectUrlName = "account"
+            redirectPageName= "Account Page"
             return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
 
         u.email=email
