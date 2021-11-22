@@ -808,13 +808,14 @@ def accountPage(request):
         return redirect('logout')
     return render(request, 'account.html', context)
 
-def errorHandler(request,errorMessage, redirectUrlName, redirectPageName):
+def errorHandler(request,errorMessage, redirectUrlName, redirectPageName, someParameterValue = -1):
     date = datetime.date.today()
     context = {
             'date':date,
             'errorMessage':errorMessage,
             'redirectUrlName': redirectUrlName,
             'redirectPageName': redirectPageName,
+            'someParameterValue' : someParameterValue,
         }
     return render(request, 'error.html', context)
 
