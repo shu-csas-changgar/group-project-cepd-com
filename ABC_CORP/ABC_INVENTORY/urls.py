@@ -25,6 +25,7 @@ urlpatterns = [
     path('export/', views.exportPage, name="export"),
     path('account/', views.accountPage, name="account"),
     path('error/<str:errorMessage>/<str:redirectUrlName>/<str:redirectPageName>', views.errorHandler, name="error"),
+    path('error/<str:errorMessage>/<str:redirectUrlName>/<str:redirectPageName>/<int:someParameterValue>', views.errorHandler, name="error"),
 
 
 ]

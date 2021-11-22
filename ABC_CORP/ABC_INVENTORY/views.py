@@ -45,16 +45,16 @@ def registerPage(request):
 
         userExists=User.objects.filter(email=email).exists()
 
-        if userExists==True:
+        if userExists:
             errorMessage = "A user with the email you entered currently exists in the system, Kindly try again."
             redirectUrlName = "register"
-            redirectPageName= "Register Page"
+            redirectPageName= "Register"
             return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
 
         if p1 != p2:
             errorMessage = "Passwords do not match, enter the same password for both password fields."
             redirectUrlName = "register"
-            redirectPageName= "Register Page"
+            redirectPageName= "Register"
             return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
 
         User.objects.create_user(email=email, firstName=firstName, lastName=lastName, password=p1, phone=phone, address=address, officeLocation=Location(id=location.id))
@@ -235,9 +235,24 @@ def updateUser(request,userId):
         phone=request.POST.get('phone')
         address=request.POST.get('address')
         p1=request.POST.get('password1')
+        p2=request.POST.get('password2')
         locId=request.POST.get('location')
         location = Location.objects.get(id=locId)
         is_admin = False if request.POST.get('is_admin') == None else True
+
+        userExists=User.objects.filter(email=email).exists()
+
+        if userExists and email != u.email:
+            errorMessage = "A user with the email you entered currently exists in the system, Kindly try again."
+            redirectUrlName = "updateUser"
+            redirectPageName= "Update User"
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName, userId)
+
+        if p1 != p2:
+            errorMessage = "Passwords do not match, enter the same password for both password fields."
+            redirectUrlName = "updateUser"
+            redirectPageName= "Update User"
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName, userId)
 
         u.email=email
         u.firstName=firstName
@@ -640,16 +655,13 @@ def addUser(request):
             location = Location.objects.get(id=locId)
             is_admin = False if request.POST.get('is_admin') == None else True
 
-
             userExists=User.objects.filter(email=email).exists()
 
-            if userExists==True:
+            if userExists:
                 errorMessage = "A user with the email you entered currently exists in the system, Kindly try again."
                 redirectUrlName = "addUser"
                 redirectPageName= "Add User"
                 return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
-
-
 
             if p1 != p2:
                 errorMessage = "Passwords do not match, enter the same password for both password fields."
@@ -777,22 +789,18 @@ def accountPage(request):
         location = Location.objects.get(id=locId)
         is_admin = False if request.POST.get('is_admin') == None else True
 
-        userCurrentEmail = User.objects.filter(email=u.email)
         userExists=User.objects.filter(email=email).exists()
-        print(request.user.email)
 
-        #if email exists but that email isn't the user's current email, it's an error
-        #This ensures user can change their email too
-        if userExists==True and email!=request.user.email:
+        if userExists and email!=request.user.email:
             errorMessage = "A user with the email you entered currently exists in the system, Kindly try again."
             redirectUrlName = "account"
-            redirectPageName= "Account Page"
+            redirectPageName= "Account"
             return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
 
         if p1 != p2:
             errorMessage = "Passwords do not match, enter the same password for both password fields."
             redirectUrlName = "account"
-            redirectPageName= "Account Page"
+            redirectPageName= "Account"
             return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
 
         u.email=email
@@ -807,12 +815,13 @@ def accountPage(request):
         return redirect('logout')
     return render(request, 'account.html', context)
 
-def errorHandler(request,errorMessage, redirectUrlName, redirectPageName):
+def errorHandler(request,errorMessage, redirectUrlName, redirectPageName, someParameterValue = -1):
     date = datetime.date.today()
     context = {
             'date':date,
             'errorMessage':errorMessage,
             'redirectUrlName': redirectUrlName,
             'redirectPageName': redirectPageName,
+            'someParameterValue' : someParameterValue,
         }
     return render(request, 'error.html', context)
