@@ -567,7 +567,7 @@ def addEquipment(request):
             floor = request.POST.get('floor')
 
             if expirationDate < purchaseDate:
-                errorMessage = "Expiration date was before the purchase date!"
+                errorMessage = "Expiration date is earlier than Purchase date, ensure Purchase date is earlier than Expiration date."
                 redirectUrlName = "addEquipment"
                 redirectPageName= "Add Equipment"
                 return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
