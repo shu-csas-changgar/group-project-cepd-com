@@ -566,18 +566,11 @@ def addEquipment(request):
             expirationDate = datetime.datetime.strptime(ed, '%Y-%m-%d')
             floor = request.POST.get('floor')
 
-            '''
-            Error Handle Section
-
-            Errors to Handle:
-            -User can enter expiration that is earlier than purchase date
-                --errorMessage = "Expiration date is earlier than Purchase date, ensure Purchase date is earlier than Expiration date."
-                --redirectUrlName = "addEquipment"
-                --redirectPageName = "Add Equipment"
-
-            if(some error condition):
+            if expirationDate < purchaseDate:
+                errorMessage = "Expiration date was before the purchase date!"
+                redirectUrlName = "addEquipment"
+                redirectPageName= "Add Equipment"
                 return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
-            '''
 
             e = Equipment(name=name,assignedTo=User(id=assignedToId),
                 officeLocation=Location(id=officeLocationId),
