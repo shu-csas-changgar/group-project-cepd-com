@@ -17,6 +17,11 @@ def loginPage(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
 
+        u = User.objects.get(email = email)
+        if(u != None and not u.is_active):
+            messages.info(request, 'Contact Admin to Activate User')
+            return render(request, 'login.html', {})
+
         user = authenticate(request, email=email, password=password)
 
         if user is not None:
@@ -57,7 +62,9 @@ def registerPage(request):
             redirectPageName= "Register"
             return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
 
-        User.objects.create_user(email=email, firstName=firstName, lastName=lastName, password=p1, phone=phone, address=address, officeLocation=Location(id=location.id))
+        user = User.objects.create_user(email=email, firstName=firstName, lastName=lastName, password=p1, phone=phone, address=address, officeLocation=Location(id=location.id))
+        user.is_active = False
+        user.save()
         messages.success(request, 'Account was created for ' + firstName + " " + lastName)
         return redirect('login')
     return render(request, 'register.html', {'form':form, 'locations':locations})
@@ -175,7 +182,6 @@ def updateEquipment(request,equipmentId):
         e.purchaseDate = purchaseDate
         e.expirationDate = expirationDate
         e.floor = floor
-        e.is_active = True
         e.save()
 
         context['hasAdded'] = True
@@ -225,6 +231,7 @@ def updateUser(request,userId):
         'navigationPage': navigationPage,
         'locations': locations,
         'user': u,
+        'loggedOnUser': request.user,
         'hasAdded':False,
     }
 
@@ -238,7 +245,9 @@ def updateUser(request,userId):
         p2=request.POST.get('password2')
         locId=request.POST.get('location')
         location = Location.objects.get(id=locId)
-        is_admin = False if request.POST.get('is_admin') == None else True
+        is_admin = False
+        if(u.is_admin):
+            is_admin = False if request.POST.get('is_admin') == None else True
 
         userExists=User.objects.filter(email=email).exists()
 
@@ -267,6 +276,9 @@ def updateUser(request,userId):
         context['hasAdded'] = True
         officeLocation = Location.objects.get(id=locId)
         context['officeLocation'] = officeLocation
+
+        if email == request.user.email:
+            return redirect('logout')
         return render(request, 'updateUser.html', context)
     return render(request, 'updateUser.html', context)
 
@@ -288,7 +300,11 @@ def deactivateEquipment(request,equipmentId):
             return redirect('searchEquipment')
         return render(request, 'deactivateEquipment.html', context)
     else:
-        return redirect('home')
+        errorMessage = "Non Admins cannot Deactivate Equipment."
+        redirectUrlName = "searchEquipment"
+        redirectPageName= "Search Equipment"
+        return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+
 
 def deactivateVendor(request,vendorId):
     date = datetime.date.today()
@@ -308,7 +324,10 @@ def deactivateVendor(request,vendorId):
             return redirect('searchVendor')
         return render(request, 'deactivateVendor.html', context)
     else:
-        return redirect('home')
+        errorMessage = "Non Admins cannot Deactivate Vendor."
+        redirectUrlName = "searchVendor"
+        redirectPageName= "Search Vendor"
+        return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
 
 def deactivateUser(request,userId):
     date = datetime.date.today()
@@ -328,13 +347,87 @@ def deactivateUser(request,userId):
         elif "Yes" in request.POST:
             u.is_active = False
             u.save()
-            return redirect('home')
+            return redirect('searchUser')
         elif "No" in request.POST:
-            return redirect('home')
+            return redirect('searchUser')
         else:
             return render(request, 'deactivateUser.html', context)
     else:
-        return redirect('home')
+        errorMessage = "Non Admins cannot Deactivate User."
+        redirectUrlName = "searchUser"
+        redirectPageName= "Search User"
+        return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+
+def activateEquipment(request,equipmentId):
+    date = datetime.date.today()
+    navigationPage = 'adminnav.html'
+    if request.user.is_admin:
+        e = Equipment.objects.get(id=equipmentId)
+        context = {
+            'date':date,
+            'navigationPage': navigationPage,
+            'equipment':e,
+        }
+        if "yes" in request.POST:
+            e.is_active = True
+            e.save()
+            return redirect('searchEquipment')
+        if "no" in request.POST:
+            return redirect('searchEquipment')
+        return render(request, 'activateEquipment.html', context)
+    else:
+        errorMessage = "Non Admins cannot Activate Equipment."
+        redirectUrlName = "searchEquipment"
+        redirectPageName= "Search Equipment"
+        return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+
+
+def activateVendor(request,vendorId):
+    date = datetime.date.today()
+    navigationPage = 'adminnav.html'
+    if request.user.is_admin:
+        v = Vendor.objects.get(id=vendorId)
+        context = {
+            'date':date,
+            'navigationPage': navigationPage,
+            'vendor':v,
+        }
+        if "yes" in request.POST:
+            v.is_active = True
+            v.save()
+            return redirect('searchVendor')
+        if "no" in request.POST:
+            return redirect('searchVendor')
+        return render(request, 'activateVendor.html', context)
+    else:
+        errorMessage = "Non Admins cannot Activate Vendor."
+        redirectUrlName = "searchVendor"
+        redirectPageName= "Search Vendor"
+        return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+
+def activateUser(request,userId):
+    date = datetime.date.today()
+    navigationPage = 'adminnav.html'
+    if request.user.is_admin:
+        u = User.objects.get(id=userId)
+        context = {
+            'date':date,
+            'navigationPage': navigationPage,
+            'user':u,
+        }
+        if "Yes" in request.POST:
+            u.is_active = True
+            u.save()
+            return redirect('searchUser')
+        elif "No" in request.POST:
+            return redirect('searchUser')
+        else:
+            return render(request, 'activateUser.html', context)
+    else:
+        errorMessage = "Non Admins cannot Activate User."
+        redirectUrlName = "searchUser"
+        redirectPageName= "Search User"
+        return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
 
 def displayEquipment(request, equipmentId):
     e = Equipment.objects.get(id=equipmentId)
@@ -369,8 +462,11 @@ def displayUser(request, userId):
 def searchEquipment(request):
     date = datetime.date.today()
     navigationPage = 'usernav.html'
+    isAdmin = False
+    is_inactive = False
     if request.user.is_admin:
         navigationPage = 'adminnav.html'
+        isAdmin = True
 
     users = User.objects.all()
     locations = Location.objects.all()
@@ -384,21 +480,29 @@ def searchEquipment(request):
         'locations': locations,
         'vendors':vendors,
         'hasAdded':False,
+        'isAdmin': isAdmin
     }
 
     if request.method == 'POST':
+        name = request.POST.get('name')
         assignedToId = int(request.POST.get('assigned_to'))
         officeLocationId = int(request.POST.get('office_location'))
         vendorId = int(request.POST.get('vendor'))
         equipmentType = request.POST.get('equipment_type')
+        if isAdmin:
+            is_inactive= False if request.POST.get('is_inactive') == None else True
 
+        selectedName = "Any"
         selectedassingedTo = "Any"
         selectedofficeLocation = "Any"
         selectedvendor = "Any"
         selectedequipmentType = "Any"
+        selectedIsInactive = "False"
 
-        #Only pulls active Equipments
-        equipments = Equipment.objects.filter(is_active=True)
+        equipments = Equipment.objects.all()
+        if name != "":
+            selectedName = name
+            equipments = equipments.filter(name = name)
         if assignedToId != -1:
             u = User.objects.get(id=assignedToId)
             selectedassingedTo = u.firstName+" "+u.lastName
@@ -414,6 +518,11 @@ def searchEquipment(request):
         if equipmentType != "-1":
             selectedequipmentType = equipmentType
             equipments = equipments.filter(equipmentType = equipmentType)
+        selectedIsInactive = is_inactive
+        if is_inactive == True:
+            equipments = equipments.filter(is_active=False)
+        if is_inactive == False:
+            equipments = equipments.filter(is_active=True)
 
         e = []
         for equipment in equipments:
@@ -424,10 +533,17 @@ def searchEquipment(request):
                     'assignedTo': str(asTo.firstName+' '+asTo.lastName),
                 }
             )
+
+        context['selectedName'] = selectedName
         context['selectedassingedTo'] = selectedassingedTo
         context['selectedofficeLocation'] = selectedofficeLocation
         context['selectedvendor'] = selectedvendor
         context['selectedequipmentType'] = selectedequipmentType
+        context['selectedIsInactive'] = selectedIsInactive
+        context['totalQueryCount'] = equipments.count()
+        unassingedUser = User.objects.get(id=1)
+        context['totalAssignedCount'] = equipments.exclude(assignedTo = unassingedUser).count()
+        context['totalUnassignedCount'] = equipments.filter(assignedTo = unassingedUser).count()
         context['hasAdded'] = True
         context['equipments'] = e
         return render(request, 'searchEquipment.html', context)
@@ -437,29 +553,36 @@ def searchUser(request):
     date = datetime.date.today()
     navigationPage = 'usernav.html'
     locations = Location.objects.all()
+    isAdmin = False
+    is_inactive = False
     if request.user.is_admin:
         navigationPage = 'adminnav.html'
+        isAdmin = True
 
     context = {
             'date':date,
             'navigationPage': navigationPage,
             'locations':locations,
             'hasAdded':False,
+            'isAdmin': isAdmin
     }
     if request.method == 'POST':
         firstName=request.POST.get('first-name')
         lastName=request.POST.get('last-name')
         email=request.POST.get('email')
         locationId=int(request.POST.get('location'))
-        is_admin=request.POST.get('is_admin')
+        is_admin= False if request.POST.get('is_admin') == None else True
+        if isAdmin:
+            is_inactive= False if request.POST.get('is_inactive') == None else True
 
         selectedFName = "Any"
         selectedLName = "Any"
         selectedEmail = "Any"
         selectedLocation = "Any"
         selectedIsAdmin = "Any"
+        selectedIsInactive = "False"
 
-        users = User.objects.filter(is_active=True)
+        users = User.objects.all().exclude(id=1)
         if firstName != "":
             selectedFName = firstName
             users=users.filter(firstName=firstName)
@@ -474,10 +597,15 @@ def searchUser(request):
             selectedLocation = locationOBJ.name
             users = users.filter(officeLocation=locationOBJ)
         selectedIsAdmin = is_admin
-        if is_admin == "Yes":
+        if is_admin == True:
             users = users.filter(is_admin=True)
-        if is_admin == "No":
+        if is_admin == False:
             users = users.filter(is_admin=False)
+        selectedIsInactive = is_inactive
+        if is_inactive == True:
+            users = users.filter(is_active=False)
+        if is_inactive == False:
+            users = users.filter(is_active=True)
 
         context['users'] = users
         context['selectedFName'] = selectedFName
@@ -485,6 +613,8 @@ def searchUser(request):
         context['selectedEmail'] = selectedEmail
         context['selectedLocation'] = selectedLocation
         context['selectedIsAdmin'] = selectedIsAdmin
+        context['selectedIsInactive'] = selectedIsInactive
+        context['totalQueryCount'] = users.count()
         context['hasAdded'] = True
         return render(request, 'searchUser.html', context)
     return render(request, 'searchUser.html', context)
@@ -492,13 +622,17 @@ def searchUser(request):
 def searchVendor(request):
     date = datetime.date.today()
     navigationPage = 'usernav.html'
+    isAdmin = False
+    is_inactive = False
     if request.user.is_admin:
         navigationPage = 'adminnav.html'
+        isAdmin = True
 
     context = {
         'date':date,
         'navigationPage': navigationPage,
         'hasAdded':False,
+        'isAdmin' : isAdmin,
     }
 
     if request.method == 'POST':
@@ -506,14 +640,16 @@ def searchVendor(request):
         address = request.POST.get('address')
         email = request.POST.get('email')
         phone = request.POST.get('phone')
+        if isAdmin:
+            is_inactive= False if request.POST.get('is_inactive') == None else True
 
         selectedName = "Any"
         selectedAddress = "Any"
         selectedEmail = "Any"
         selectedPhone = "Any"
+        selectedIsInactive = "False"
 
-        #Only pulls active Vendor
-        vendors = Vendor.objects.filter(is_active=True)
+        vendors = Vendor.objects.all()
         if name != "":
             selectedName = name
             vendors = vendors.filter(name = name)
@@ -526,12 +662,19 @@ def searchVendor(request):
         if phone != "":
             selectedPhone = phone
             vendors = vendors.filter(phone = phone)
+        selectedIsInactive = is_inactive
+        if is_inactive == True:
+            vendors = vendors.filter(is_active=False)
+        if is_inactive == False:
+            vendors = vendors.filter(is_active=True)
 
         context['vendors'] = vendors
         context['selectedName'] = selectedName
         context['selectedAddress'] = selectedAddress
         context['selectedEmail'] = selectedEmail
         context['selectedPhone'] = selectedPhone
+        context['selectedIsInactive'] = selectedIsInactive
+        context['totalQueryCount'] = vendors.count()
         context['hasAdded'] = True
         return render(request, 'searchVendor.html', context)
 
@@ -750,6 +893,7 @@ def accountPage(request):
     navigationPage = 'usernav.html'
     if request.user.is_admin:
         navigationPage = 'adminnav.html'
+
     locations = Location.objects.all()
     context = {
         'date':date,
@@ -757,7 +901,7 @@ def accountPage(request):
         'locations': locations,
         'user': u,
     }
-
+    
     if request.method == 'POST':
         firstName=request.POST.get('first_name')
         lastName=request.POST.get('last_name')
@@ -768,7 +912,9 @@ def accountPage(request):
         p2=request.POST.get('password2')
         locId=request.POST.get('location')
         location = Location.objects.get(id=locId)
-        is_admin = False if request.POST.get('is_admin') == None else True
+        is_admin = False
+        if(u.is_admin):
+            is_admin = False if request.POST.get('is_admin') == None else True
 
         userExists=User.objects.filter(email=email).exists()
 

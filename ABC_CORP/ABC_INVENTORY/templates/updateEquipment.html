@@ -126,7 +126,11 @@
                         </p>
                         <p id="short-description-links">
                             <a href="{% url 'updateEquipment' equipmentId=equipment.id %}">Update</a> |
-                            <a href="{% url 'deactivateEquipment' equipmentId=equipment.id %}">Deactivate</a> |
+                            {% if equipment.is_active %}
+                                <a href="{% url 'deactivateEquipment' equipmentId=equipment.id %}">Deactivate</a> |
+                            {% else %}
+                                <a href="{% url 'activateEquipment' equipmentId=equipment.id %}">Activate</a> |
+                            {%endif%}
                             <a href="{% url 'displayEquipment' equipmentId=equipment.id %}">View</a>
                         </p><br/><br/><br/>
                         <p id="short-description-value">

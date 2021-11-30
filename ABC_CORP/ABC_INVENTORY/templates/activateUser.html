@@ -1,0 +1,37 @@
+{% extends navigationPage %}
+{% load static %}
+{% block content %}
+    <!DOCTYPE html>
+
+        <head>
+            <title>ABC CORP Activate User</title>
+            <link rel="stylesheet" type="text/css" href="{% static '/css/deactivate.css' %}">
+        </head>
+        <body>
+            <div class="body-card">
+                <p class="body-card-text"> Activate User</p>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-text">
+                        <h4>Are you sure you want to activate this User?</h4>
+                        <p>First Name: {{user.firstName}}</p>
+                        <p>Last Name: {{user.lastName}}</p>
+                        <p>Email: {{user.email}}</p>
+                        <p>Phone: {{user.phone}}</p>
+                        <p>Location: {{user.officeLocation}}</p>
+                        <p>Address: {{user.address}}</p>
+                    </div>
+                    <input type="submit"name="Yes" class="deactivate-btn" value="Yes">
+                    <input type="submit" name="No" class="deactivate-btn" value="No">
+                </form>
+            </div>
+        </body>
+        <footer class="footer">
+            <div id="footer-text">
+                <p>Copyright &copy; {{date.year}} - ABC CORPORATION - All Rights Reserved</p>
+            </div>
+        </footer>
+    </html>
+
+
+{% endblock %}

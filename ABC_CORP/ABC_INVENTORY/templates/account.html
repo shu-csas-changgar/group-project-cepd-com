@@ -85,18 +85,16 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-25">
-                            <label class="form-text" >Is Admin?</label>
+                        {% if user.is_admin%}
+                            <div class="row">
+                                <div class="col-25">
+                                <label class="form-text" >Is Admin?</label>
+                                </div>
+                                <div class="col-75">                            
+                                    <input type="checkbox" name="is_admin" checked>
+                                </div>
                             </div>
-                            <div class="col-75">
-                            {% if user.is_admin%}
-                                <input type="checkbox" name="is_admin" value=True checked>
-                            {% else %}
-                                <input type="checkbox" name="is_admin" value=False>
-                            {% endif%}
-                            </div>
-                        </div>
+                        {% endif%}
                          <br>
                         <input type="submit" class="add-btn" value="Update &#38; Logout">
                     </form>
