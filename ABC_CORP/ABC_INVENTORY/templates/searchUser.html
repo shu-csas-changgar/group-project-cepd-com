@@ -60,18 +60,24 @@
 
                         <div class="row">
                             <div class="col-25">
-                            <label class="form-text" >Is User an Admin?</label>
+                            <label class="form-text" >User is Admin</label>
                             </div>
                             <div class="col-75">
-
-                              <input type="radio" name="is_admin" value="Yes">
-                              <label for="age1">Yes</label><br>
-
-                              <input type="radio" name="is_admin" value="No" checked>
-                              <label for="age2">No</label><br>
-
+                                <input type="checkbox" name="is_admin">
+                                <br> 
                             </div>
                         </div>
+                        {% if isAdmin %}
+                            <div class="row">
+                                <div class="col-25">
+                                <label class="form-text" >User is Deactivated</label>
+                                </div>
+                                <div class="col-75">
+                                    <input type="checkbox" name="is_inactive">
+                                    <br> 
+                                </div>
+                            </div>
+                        {%endif%}
 
                         <input type="submit" class="search-btn" value="Search">
                     </form>
@@ -84,6 +90,8 @@
                         <p>Email: {{ selectedEmail }}</p>
                         <p>Location: {{selectedLocation}}</p>
                         <p>Is Admin? : {{selectedIsAdmin}}</p>
+                        <p>Is Deactivated? : {{selectedIsInactive}}</p>
+                        <p>Total Query Count: {{ totalQueryCount }}</p> 
                     </div>
                     {% for user in users %}
                         <div class="short-description">
@@ -99,7 +107,11 @@
 
                             <p id="short-description-links">
                                 <a href="{% url 'updateUser' userId=user.id %}">Update</a> |
-                                <a href="{% url 'deactivateUser' userId=user.id %}">Deactivate</a> |
+                                {% if selectedIsInactive %}
+                                    <a href="{% url 'activateUser' userId=user.id %}">Activate</a> |
+                                {%else%}
+                                    <a href="{% url 'deactivateUser' userId=user.id %}">Deactivate</a> |
+                                {%endif%}
                                 <a href="{% url 'displayUser' userId=user.id %}">View</a>
                             </p><br/><br/><br/>
                             <p id="short-description-value">

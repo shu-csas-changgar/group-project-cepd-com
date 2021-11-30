@@ -12,6 +12,11 @@ class Command(BaseCommand):
     help = "Loads data from csv files onto our database"
 
     def handle(self, *args, **options):
+        print("Creating Unassinged User")
+        db = get_user_model()
+        db.objects.create_user('unassinged@gmail.com','Unassigned','','')
+        print('Unassinged User Created')
+
         print("Creating Super User")
         db = get_user_model()
         db.objects.create_superuser('super@gmail.com','Super','Super','password')
