@@ -182,7 +182,6 @@ def updateEquipment(request,equipmentId):
         e.purchaseDate = purchaseDate
         e.expirationDate = expirationDate
         e.floor = floor
-        e.is_active = True
         e.save()
 
         context['hasAdded'] = True
@@ -232,6 +231,7 @@ def updateUser(request,userId):
         'navigationPage': navigationPage,
         'locations': locations,
         'user': u,
+        'loggedOnUser': request.user,
         'hasAdded':False,
     }
 
@@ -245,7 +245,9 @@ def updateUser(request,userId):
         p2=request.POST.get('password2')
         locId=request.POST.get('location')
         location = Location.objects.get(id=locId)
-        is_admin = False if request.POST.get('is_admin') == None else True
+        is_admin = False
+        if(u.is_admin):
+            is_admin = False if request.POST.get('is_admin') == None else True
 
         userExists=User.objects.filter(email=email).exists()
 
@@ -274,6 +276,9 @@ def updateUser(request,userId):
         context['hasAdded'] = True
         officeLocation = Location.objects.get(id=locId)
         context['officeLocation'] = officeLocation
+
+        if email == request.user.email:
+            return redirect('logout')
         return render(request, 'updateUser.html', context)
     return render(request, 'updateUser.html', context)
 
@@ -457,8 +462,11 @@ def displayUser(request, userId):
 def searchEquipment(request):
     date = datetime.date.today()
     navigationPage = 'usernav.html'
+    isAdmin = False
+    is_inactive = False
     if request.user.is_admin:
         navigationPage = 'adminnav.html'
+        isAdmin = True
 
     users = User.objects.all()
     locations = Location.objects.all()
@@ -472,21 +480,29 @@ def searchEquipment(request):
         'locations': locations,
         'vendors':vendors,
         'hasAdded':False,
+        'isAdmin': isAdmin
     }
 
     if request.method == 'POST':
+        name = request.POST.get('name')
         assignedToId = int(request.POST.get('assigned_to'))
         officeLocationId = int(request.POST.get('office_location'))
         vendorId = int(request.POST.get('vendor'))
         equipmentType = request.POST.get('equipment_type')
+        if isAdmin:
+            is_inactive= False if request.POST.get('is_inactive') == None else True
 
+        selectedName = "Any"
         selectedassingedTo = "Any"
         selectedofficeLocation = "Any"
         selectedvendor = "Any"
         selectedequipmentType = "Any"
+        selectedIsInactive = "False"
 
-        #Only pulls active Equipments
-        equipments = Equipment.objects.filter(is_active=True)
+        equipments = Equipment.objects.all()
+        if name != "":
+            selectedName = name
+            equipments = equipments.filter(name = name)
         if assignedToId != -1:
             u = User.objects.get(id=assignedToId)
             selectedassingedTo = u.firstName+" "+u.lastName
@@ -502,6 +518,11 @@ def searchEquipment(request):
         if equipmentType != "-1":
             selectedequipmentType = equipmentType
             equipments = equipments.filter(equipmentType = equipmentType)
+        selectedIsInactive = is_inactive
+        if is_inactive == True:
+            equipments = equipments.filter(is_active=False)
+        if is_inactive == False:
+            equipments = equipments.filter(is_active=True)
 
         e = []
         for equipment in equipments:
@@ -512,10 +533,17 @@ def searchEquipment(request):
                     'assignedTo': str(asTo.firstName+' '+asTo.lastName),
                 }
             )
+
+        context['selectedName'] = selectedName
         context['selectedassingedTo'] = selectedassingedTo
         context['selectedofficeLocation'] = selectedofficeLocation
         context['selectedvendor'] = selectedvendor
         context['selectedequipmentType'] = selectedequipmentType
+        context['selectedIsInactive'] = selectedIsInactive
+        context['totalQueryCount'] = equipments.count()
+        unassingedUser = User.objects.get(id=1)
+        context['totalAssignedCount'] = equipments.exclude(assignedTo = unassingedUser).count()
+        context['totalUnassignedCount'] = equipments.filter(assignedTo = unassingedUser).count()
         context['hasAdded'] = True
         context['equipments'] = e
         return render(request, 'searchEquipment.html', context)
@@ -621,7 +649,6 @@ def searchVendor(request):
         selectedPhone = "Any"
         selectedIsInactive = "False"
 
-        #Only pulls active Vendor
         vendors = Vendor.objects.all()
         if name != "":
             selectedName = name
