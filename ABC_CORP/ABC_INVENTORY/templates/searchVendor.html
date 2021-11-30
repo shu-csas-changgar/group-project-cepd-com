@@ -45,6 +45,17 @@
                                 <input type="text" name="phone" placeholder="Enter Phone">
                             </div>
                         </div>
+                        {% if isAdmin %}
+                            <div class="row">
+                                <div class="col-25">
+                                <label class="form-text" >Vendor is Deactivated</label>
+                                </div>
+                                <div class="col-75">
+                                    <input type="checkbox" name="is_inactive">
+                                    <br> 
+                                </div>
+                            </div>
+                        {%endif%}
                         <input type="submit" class="search-btn" value="Search">
                     </form>
                 </div>
@@ -54,7 +65,9 @@
                         <p>Name: {{ selectedName }}</p>
                         <p>Address: {{ selectedAddress }}</p>
                         <p>Email: {{ selectedEmail }}</p>
-                        <p>Phone Number: {{ selectedPhone }}</p>                        
+                        <p>Phone Number: {{ selectedPhone }}</p>  
+                        <p>Is Deactivated?: {{ selectedIsInactive }}</p> 
+                        <p>Total Query Count: {{ totalQueryCount }}</p>                        
                     </div>
                     {% for val in vendors %}
                         <div class="short-description">
@@ -69,7 +82,11 @@
                             </p>
                             <p id="short-description-links">
                                 <a href="{% url 'updateVendor' vendorId=val.id %}">Update</a> |
-                                <a href="{% url 'deactivateVendor' vendorId=val.id %}">Deactivate</a> |
+                                {% if selectedIsInactive %}
+                                    <a href="{% url 'activateVendor' vendorId=val.id %}">Activate</a> |
+                                {%else%}  
+                                    <a href="{% url 'deactivateVendor' vendorId=val.id %}">Deactivate</a> |  
+                                {%endif%} 
                                 <a href="{% url 'displayVendor' vendorId=val.id %}">View</a>
                             </p><br/><br/><br/>
                             <p id="short-description-value">

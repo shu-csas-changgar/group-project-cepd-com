@@ -15,6 +15,14 @@
                         {% csrf_token %}
                         <div class="row">
                             <div class="col-25">
+                            <label class="form-text" >Equipment Name</label>
+                            </div>
+                            <div class="col-75">
+                                <input type="text" name="name" placeholder="Enter Equipment Name">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-25">
                             <label class="form-text" >Equipment Type</label>
                             </div>
                             <div class="col-75">
@@ -65,6 +73,17 @@
                                 </select>
                             </div>
                         </div>
+                        {% if isAdmin %}
+                            <div class="row">
+                                <div class="col-25">
+                                <label class="form-text" >Equipment is Deactivated</label>
+                                </div>
+                                <div class="col-75">
+                                    <input type="checkbox" name="is_inactive">
+                                    <br> 
+                                </div>
+                            </div>
+                        {%endif%}
                         <input type="submit" class="search-btn" value="Search">
                     </form>
                 </div>
@@ -72,10 +91,15 @@
                 {% if hasAdded %}
                     <div id="search-query">
                         <h3>Search Query:</h3>
+                        <p>Equipment Name: {{ selectedName }}</p>
                         <p>Equipment Type: {{ selectedequipmentType }}</p>
                         <p>Assigned To: {{ selectedassingedTo }}</p>
                         <p>Office Location: {{ selectedofficeLocation }}</p>
-                        <p>Vendor: {{ selectedvendor }}</p>                        
+                        <p>Vendor: {{ selectedvendor }}</p>    
+                        <p>Is Deactivated? : {{selectedIsInactive}}</p>
+                        <p>Total Query Count: {{ totalQueryCount }}</p>
+                        <p>Total Assigned Count: {{ totalAssignedCount }}</p>
+                        <p>Total Unssigned Count: {{ totalUnassignedCount }}</p>                     
                     </div>
                     {% for val in equipments %}
                         <div class="short-description">
@@ -90,7 +114,11 @@
                             </p>
                             <p id="short-description-links">
                                 <a href="{% url 'updateEquipment' equipmentId=val.equipment.id %}">Update</a> |
-                                <a href="{% url 'deactivateEquipment' equipmentId=val.equipment.id %}">Deactivate</a> |
+                                {% if selectedIsInactive %}
+                                    <a href="{% url 'activateEquipment' equipmentId=val.equipment.id %}">Activate</a> |
+                                {%else%}
+                                    <a href="{% url 'deactivateEquipment' equipmentId=val.equipment.id %}">Deactivate</a> |
+                                {%endif%}
                                 <a href="{% url 'displayEquipment' equipmentId=val.equipment.id %}">View</a>
                             </p><br/><br/><br/>
                             <p id="short-description-value">

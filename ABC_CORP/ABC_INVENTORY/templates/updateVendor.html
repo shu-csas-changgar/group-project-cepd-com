@@ -62,7 +62,11 @@
                         </p>
                         <p id="short-description-links">
                             <a href="{% url 'updateVendor' vendorId=vendor.id %}">Update</a> |
-                            <a href="{% url 'deactivateVendor' vendorId=vendor.id %}">Deactivate</a> |
+                            {% if vendor.is_active %}
+                                <a href="{% url 'deactivateVendor' vendorId=vendor.id %}">Deactivate</a> |
+                            {% else %}
+                                <a href="{% url 'activateVendor' vendorId=vendor.id %}">Activate</a> |
+                            {% endif %}
                             <a href="{% url 'displayVendor' vendorId=vendor.id %}">View</a>
                         </p><br/><br/><br/>
                         <p id="short-description-value">
