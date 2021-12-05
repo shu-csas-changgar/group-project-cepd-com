@@ -37,7 +37,8 @@
                             <label class="form-text" >Email</label>
                             </div>
                             <div class="col-75">
-                                <input type="text" name="email" placeholder="Enter Email">
+                                <div class="popuptext" id="myPopup"></div>
+                                <input type="text" id="inputEmail" name="email" placeholder="Enter Email">
                             </div>
                         </div>
 
@@ -64,7 +65,7 @@
                             </div>
                             <div class="col-75">
                                 <input type="checkbox" name="is_admin">
-                                <br> 
+                                <br>
                             </div>
                         </div>
                         {% if isAdmin %}
@@ -74,7 +75,7 @@
                                 </div>
                                 <div class="col-75">
                                     <input type="checkbox" name="is_inactive">
-                                    <br> 
+                                    <br>
                                 </div>
                             </div>
                         {%endif%}
@@ -91,7 +92,7 @@
                         <p>Location: {{selectedLocation}}</p>
                         <p>Is Admin? : {{selectedIsAdmin}}</p>
                         <p>Is Deactivated? : {{selectedIsInactive}}</p>
-                        <p>Total Query Count: {{ totalQueryCount }}</p> 
+                        <p>Total Query Count: {{ totalQueryCount }}</p>
                     </div>
                     {% for user in users %}
                         <div class="short-description">
@@ -136,6 +137,25 @@
         </footer>
         <script>
             $('a.search.dropbtn').addClass('active')
+
+            document.getElementById("inputEmail").onkeyup = function () {validateEmail()};
+            function validateEmail(){
+              document.getElementById("inputEmail").style.color="red";
+              var email = document.getElementById("inputEmail")
+              var regexEmail = /\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
+              document.getElementById("myPopup").innerHTML="Invalid Email ";
+              document.getElementById("myPopup").style.color = "red";
+              document.getElementById("myPopup").style.fontFamily = "Georgia";
+              if(email.value == ""){
+                document.getElementById("myPopup").innerHTML="";
+              }
+              if(regexEmail.test(email.value)){
+                document.getElementById("inputEmail").style.color="black";
+                document.getElementById("myPopup").innerHTML=" ";
+
+
+              }
+            }
         </script>
     </html>
 

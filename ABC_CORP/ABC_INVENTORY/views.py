@@ -11,6 +11,7 @@ import datetime
 from pytz import UTC
 import csv
 import os
+import re
 
 def loginPage(request):
     if request.method == 'POST':
@@ -22,6 +23,8 @@ def loginPage(request):
             redirectUrlName = "login"
             redirectPageName= "Login"
             return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+
+
 
 
         u = User.objects.get(email = email)
@@ -53,6 +56,13 @@ def registerPage(request):
         p2=request.POST.get('password2')
         loc=int(request.POST.get('location'))
         location = Location.objects.get(id=loc)
+
+        if emailValidator(email) != True:
+            errorMessage = "Invalid Email Submitted, kindly try again"
+            redirectUrlName = "register"
+            redirectPageName= "Register"
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+
 
 
         userExists=User.objects.filter(email=email).exists()
@@ -579,6 +589,13 @@ def searchUser(request):
         email=request.POST.get('email')
         locationId=int(request.POST.get('location'))
         is_admin= False if request.POST.get('is_admin') == None else True
+
+        if emailValidator(email) != True:
+            errorMessage = "Invalid Email Submitted, kindly try again"
+            redirectUrlName = "searchUser"
+            redirectPageName= "Search User"
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+
         if isAdmin:
             is_inactive= False if request.POST.get('is_inactive') == None else True
 
@@ -959,3 +976,10 @@ def errorHandler(request,errorMessage, redirectUrlName, redirectPageName, somePa
             'someParameterValue' : someParameterValue,
         }
     return render(request, 'error.html', context)
+
+def emailValidator(email):
+    regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Z|a-z]{2,}\b'
+    if re.fullmatch(regex, email):
+        return True
+    else:
+        return False
