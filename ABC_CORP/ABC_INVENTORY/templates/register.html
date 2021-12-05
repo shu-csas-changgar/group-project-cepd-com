@@ -9,16 +9,7 @@ z{% load static %}
 		<style lang="en" type="text/css" id="dark-mode-native-style"></style>
     	<meta charset="utf-8">
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-		<script>
-			function hoverIn(){
-				document.getElementById("register-btn").style.backgroundColor="black";
-				document.getElementById("register-btn").style.bordercolor="black";
-			}
 
-			function hoverOut(){
-				document.getElementById("register-btn").style.backgroundColor="#6495ED";
-			}
-      </script>
    </head>
 
    <body>
@@ -48,7 +39,8 @@ z{% load static %}
 
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">Email address</label>
-                  <input class="form-control" name="email" id="inputEmail" aria-describedby="emailHelp">
+									  <div class="popuptext" id="myPopup"></div>
+                  <input type="text" onkeyup="validateEmail" class="form-control" name="email" id="inputEmail" aria-describedby="emailHelp">
                 </div>
 
                 <div class="mb-3">
@@ -98,6 +90,40 @@ z{% load static %}
           </section>
         </section>
       </section>
+
+			<script>
+				function hoverIn(){
+					document.getElementById("register-btn").style.backgroundColor="black";
+					document.getElementById("register-btn").style.bordercolor="black";
+				}
+
+				function hoverOut(){
+					document.getElementById("register-btn").style.backgroundColor="#6495ED";
+				}
+
+				document.getElementById("inputEmail").onkeyup = function () {validateEmail()};
+				function validateEmail(){
+					document.getElementById("inputEmail").style.color="red";
+					var email = document.getElementById("inputEmail")
+					var regexEmail = /\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
+					document.getElementById("myPopup").innerHTML="Invalid Email ";
+					document.getElementById("myPopup").style.color = "red";
+					document.getElementById("myPopup").style.fontFamily = "Georgia";
+					if(email.value == ""){
+						document.getElementById("myPopup").innerHTML="";
+					}
+					if(regexEmail.test(email.value)){
+						document.getElementById("inputEmail").style.color="black";
+						document.getElementById("myPopup").innerHTML=" ";
+
+
+					}
+				}
+
+
+
+
+	      </script>
 
 	</body>
 </html>

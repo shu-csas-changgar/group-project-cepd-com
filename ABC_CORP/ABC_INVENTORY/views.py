@@ -17,6 +17,13 @@ def loginPage(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
 
+        if not email or not password:
+            errorMessage = "Email or Password is empty"
+            redirectUrlName = "login"
+            redirectPageName= "Login"
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+
+
         u = User.objects.get(email = email)
         if(u != None and not u.is_active):
             messages.info(request, 'Contact Admin to Activate User')
@@ -901,7 +908,7 @@ def accountPage(request):
         'locations': locations,
         'user': u,
     }
-    
+
     if request.method == 'POST':
         firstName=request.POST.get('first_name')
         lastName=request.POST.get('last_name')
