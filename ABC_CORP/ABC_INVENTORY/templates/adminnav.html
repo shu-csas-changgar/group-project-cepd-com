@@ -37,13 +37,6 @@
 
 </ul>
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-<script type ="text/javascript">
-    $(document).on('click', 'li.dropdown', function(){
-    $(this).siblings().find('a.dropbtn').removeClass('active')
-    $(this).addClass('active').siblings().removeClass('active')
-    $(this).find("a.dropbtn").addClass('active')
-  })
-  </script>
 
 {% block content%}
 
