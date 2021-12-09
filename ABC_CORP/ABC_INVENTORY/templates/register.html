@@ -40,28 +40,28 @@ z{% load static %}
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">Email address</label>
 									  <div class="popuptext" id="myPopup"></div>
-                  <input type="text" onkeyup="validateEmail" class="form-control" name="email" id="inputEmail" aria-describedby="emailHelp">
+                  <input type="text" onkeyup="validateEmail" id="inputEmail" class="form-control" name="email" aria-describedby="emailHelp">
                 </div>
 
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">Phone</label>
 									<div class="popuptext" id="myPopup2"></div>
-                  <input class="form-control" name="phone" id="inputphone" aria-describedby="emailHelp">
+                  <input class="form-control" name="phone" id="inputPhone" aria-describedby="emailHelp">
                 </div>
 
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">Address</label>
-                  <input class="form-control" name="address" id="inputPhone" aria-describedby="emailHelp">
+                  <input class="form-control" name="address" aria-describedby="emailHelp">
                 </div>
 
                 <div class="mb-3">
                   <label for="exampleInputEmail1" id="pwd1" class="form-label">Password</label>
-                  <input type="password" class="form-control" name="password1" id="inputPhone" aria-describedby="emailHelp">
+                  <input type="password" class="form-control" name="password1" aria-describedby="emailHelp">
                 </div>
 
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">Re-Enter Password</label>
-                  <input type="password" class="form-control" name="password2" id="inputPhone" aria-describedby="emailHelp">
+                  <input type="password" class="form-control" name="password2"  aria-describedby="emailHelp">
                 </div>
 
                 <div class="mb-3" class="form-control">
@@ -121,9 +121,9 @@ z{% load static %}
 					}
 				}
 
-				document.getElementById("inputphone").onkeyup = function () {validateEmail()};
+				document.getElementById("inputPhone").onkeyup = function () {validatePhone()};
 				function validatePhone(){
-					document.getElementById("inputphone").style.color="red";
+					document.getElementById("inputPhone").style.color="red";
 					var phone =  document.getElementById("inputPhone");
 					var regex = /^\d{10}$/;
 
@@ -134,8 +134,9 @@ z{% load static %}
 					if(phone.value == ""){
 						document.getElementById("myPopup2").innerHTML="";
 					}
-					if(regexEmail.test(phone.value)){
-						document.getElementById("inputphone").style.color="black";
+					if(regex.test(phone.value) && (phone.value.length)==10){
+						console.log(phone.value)
+						document.getElementById("inputPhone").style.color="black";
 						document.getElementById("myPopup2").innerHTML=" ";
 
 

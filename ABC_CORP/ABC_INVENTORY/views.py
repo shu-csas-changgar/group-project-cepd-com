@@ -14,7 +14,7 @@ import os
 import re
 
 def phoneValidator(phone):
-    regex = "/[^0-9 +\-]/"
+    regex = "^([\s\d]+)$"
     if re.fullmatch(regex, phone):
         return True
     else:
@@ -241,21 +241,19 @@ def updateVendor(request,vendorId):
         email = request.POST.get('email')
         phone = request.POST.get('phone')
 
-        if email=="":
-            email=v.email
-        elif emailValidator(email) != True:
+
+        if emailValidator(email) != True:
             errorMessage = "Invalid Email Submitted, kindly try again"
             redirectUrlName = "updateVendor"
             redirectPageName= "Update Vendor"
-            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName,vendorId)
 
-        if phone=="":
-            phone=v.phone
-        elif phoneValidator(phone)!=True:
+
+        if phoneValidator(phone)!=True:
             errorMessage = "Invalid Phone Submitted, kindly try again"
             redirectUrlName = "updateVendor"
             redirectPageName= "Update Vendor"
-            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName, vendorId)
 
         v.name=name
         v.address=address
@@ -302,7 +300,7 @@ def updateUser(request,userId):
             errorMessage = "Invalid Email Submitted, kindly try again"
             redirectUrlName = "updateUser"
             redirectPageName= "Update User"
-            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName, userId)
 
         if phone=="":
             phone=u.phone
@@ -368,7 +366,7 @@ def deactivateEquipment(request,equipmentId):
         errorMessage = "Non Admins cannot Deactivate Equipment."
         redirectUrlName = "searchEquipment"
         redirectPageName= "Search Equipment"
-        return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+        return errorHandler(request, errorMessage, redirectUrlName, redirectPageName, equipmentId)
 
 
 def deactivateVendor(request,vendorId):
@@ -392,7 +390,7 @@ def deactivateVendor(request,vendorId):
         errorMessage = "Non Admins cannot Deactivate Vendor."
         redirectUrlName = "deactivateVendor"
         redirectPageName= "Deactivate Vendor"
-        return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+        return errorHandler(request, errorMessage, redirectUrlName, redirectPageName,vendorId)
 
 def deactivateUser(request,userId):
     date = datetime.date.today()
@@ -408,7 +406,7 @@ def deactivateUser(request,userId):
             errorMessage = "Bad Operation, User you are attempting to deactivate is currently logged in."
             redirectUrlName = "searchUser"
             redirectPageName = "Search User"
-            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName, userId)
         elif "Yes" in request.POST:
             u.is_active = False
             u.save()
@@ -444,7 +442,7 @@ def activateEquipment(request,equipmentId):
         errorMessage = "Non Admins cannot Activate Equipment."
         redirectUrlName = "searchEquipment"
         redirectPageName= "Search Equipment"
-        return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+        return errorHandler(request, errorMessage, redirectUrlName, redirectPageName, equipmentId)
 
 
 def activateVendor(request,vendorId):
@@ -468,7 +466,7 @@ def activateVendor(request,vendorId):
         errorMessage = "Non Admins cannot Activate Vendor."
         redirectUrlName = "searchVendor"
         redirectPageName= "Search Vendor"
-        return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+        return errorHandler(request, errorMessage, redirectUrlName, redirectPageName, vendorId)
 
 def activateUser(request,userId):
     date = datetime.date.today()
@@ -492,7 +490,7 @@ def activateUser(request,userId):
         errorMessage = "Non Admins cannot Activate User."
         redirectUrlName = "searchUser"
         redirectPageName= "Search User"
-        return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+        return errorHandler(request, errorMessage, redirectUrlName, redirectPageName, userId)
 
 def displayEquipment(request, equipmentId):
     e = Equipment.objects.get(id=equipmentId)
@@ -716,12 +714,13 @@ def searchVendor(request):
         email = request.POST.get('email')
         phone = request.POST.get('phone')
 
-        if phone=="":
-            if phoneValidator(phone)!=True:
-                errorMessage = "Invalid Phone Submitted, kindly try again"
-                redirectUrlName = "searchVendor"
-                redirectPageName= "Search Vendor"
-                return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+
+
+        if phone!="" and phoneValidator(phone)!=True:
+            errorMessage = "Invalid Phone Submitted, kindly try again"
+            redirectUrlName = "searchVendor"
+            redirectPageName= "Search Vendor"
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
 
 
 
