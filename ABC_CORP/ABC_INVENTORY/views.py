@@ -17,6 +17,12 @@ def loginPage(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
 
+        users = User.objects.filter(email = email)
+
+        if(users.count() == 0):
+            messages.info(request, 'User does not Exist')
+            return render(request, 'login.html', {})
+
         u = User.objects.get(email = email)
         if(u != None and not u.is_active):
             messages.info(request, 'Contact Admin to Activate User')
