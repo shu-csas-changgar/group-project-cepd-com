@@ -13,6 +13,14 @@ import csv
 import os
 import re
 
+def phoneValidator(phone):
+    regex = "/[^0-9 +\-]/"
+    if re.fullmatch(regex, phone):
+        return True
+    else:
+        return False
+
+
 def loginPage(request):
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -62,6 +70,13 @@ def registerPage(request):
             redirectUrlName = "register"
             redirectPageName= "Register"
             return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+
+        if phoneValidator(phone)!=True:
+            errorMessage = "Invalid Phone Submitted, kindly try again"
+            redirectUrlName = "register"
+            redirectPageName= "Register"
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+
 
 
 
@@ -226,8 +241,18 @@ def updateVendor(request,vendorId):
         email = request.POST.get('email')
         phone = request.POST.get('phone')
 
-        if emailValidator(email) != True:
+        if email=="":
+            email=v.email
+        elif emailValidator(email) != True:
             errorMessage = "Invalid Email Submitted, kindly try again"
+            redirectUrlName = "updateVendor"
+            redirectPageName= "Update Vendor"
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+
+        if phone=="":
+            phone=v.phone
+        elif phoneValidator(phone)!=True:
+            errorMessage = "Invalid Phone Submitted, kindly try again"
             redirectUrlName = "updateVendor"
             redirectPageName= "Update Vendor"
             return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
@@ -270,8 +295,19 @@ def updateUser(request,userId):
         location = Location.objects.get(id=locId)
         is_admin = False
 
-        if emailValidator(email) != True:
+        if email=="":
+            email=u.email
+
+        elif emailValidator(email) != True:
             errorMessage = "Invalid Email Submitted, kindly try again"
+            redirectUrlName = "updateUser"
+            redirectPageName= "Update User"
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+
+        if phone=="":
+            phone=u.phone
+        elif phoneValidator(phone)!=True:
+            errorMessage = "Invalid Phone Submitted, kindly try again"
             redirectUrlName = "updateUser"
             redirectPageName= "Update User"
             return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
@@ -354,8 +390,8 @@ def deactivateVendor(request,vendorId):
         return render(request, 'deactivateVendor.html', context)
     else:
         errorMessage = "Non Admins cannot Deactivate Vendor."
-        redirectUrlName = "searchVendor"
-        redirectPageName= "Search Vendor"
+        redirectUrlName = "deactivateVendor"
+        redirectPageName= "Deactivate Vendor"
         return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
 
 def deactivateUser(request,userId):
@@ -680,6 +716,12 @@ def searchVendor(request):
         email = request.POST.get('email')
         phone = request.POST.get('phone')
 
+        if phone=="":
+            if phoneValidator(phone)!=True:
+                errorMessage = "Invalid Phone Submitted, kindly try again"
+                redirectUrlName = "searchVendor"
+                redirectPageName= "Search Vendor"
+                return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
 
 
 
@@ -801,6 +843,12 @@ def addVendor(request):
                 redirectPageName= "Add Vendor"
                 return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
 
+            if phoneValidator(phone)!=True:
+                errorMessage = "Invalid Phone Submitted, kindly try again"
+                redirectUrlName = "addVendor"
+                redirectPageName= "Add Vendor"
+                return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+
             v = Vendor(name=name,address=address,
                 email=email, phone = phone)
             v.save()
@@ -838,6 +886,11 @@ def addUser(request):
 
             if emailValidator(email) != True:
                 errorMessage = "Invalid Email Submitted, kindly try again"
+                redirectUrlName = "addUser"
+                redirectPageName= "Add User"
+                return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+            if phoneValidator(phone)!=True:
+                errorMessage = "Invalid Phone Submitted, kindly try again"
                 redirectUrlName = "addUser"
                 redirectPageName= "Add User"
                 return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
@@ -985,6 +1038,13 @@ def accountPage(request):
             redirectPageName= "Account"
             return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
 
+        if phone="":
+            phone=u.phone
+        elif phoneValidator(phone)!=True:
+            errorMessage = "Invalid Phone Submitted, kindly try again"
+            redirectUrlName = "account"
+            redirectPageName= "Account"
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
         if(u.is_admin):
             is_admin = False if request.POST.get('is_admin') == None else True
 
