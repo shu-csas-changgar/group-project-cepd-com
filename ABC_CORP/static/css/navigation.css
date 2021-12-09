@@ -16,9 +16,9 @@ ul {
     padding: 0;
     background-color: rgb(55, 96, 220);
     overflow: visible;
-    position: absolute;
+    position: fixed;
     width: 15%;
-    height: 2200px;
+    height: 100%;
 }
 
 li a,
@@ -44,8 +44,6 @@ li a:hover,
     background-color: #555;
     color: white;
 }
-
-
 
 li.dropdown {
     display: inline-block;
