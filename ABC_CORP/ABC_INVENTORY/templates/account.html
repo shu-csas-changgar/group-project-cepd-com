@@ -1,11 +1,11 @@
-{% extends navigationPage %} 
+{% extends navigationPage %}
 {% load static %}
 {% block content %}
     <!DOCTYPE html>
 
         <head>
             <title>ABC CORP Account</title>
-            <link rel="stylesheet" type="text/css" href="{% static '/css/addUser.css' %}"> 
+            <link rel="stylesheet" type="text/css" href="{% static '/css/addUser.css' %}">
         </head>
         <body>
             <div class="body-card">
@@ -34,7 +34,8 @@
                             <label class="form-text">Email</label>
                             </div>
                             <div class="col-75">
-                            <input type="text" required name="email" value= "{{ user.email }}">
+                              <div class="popuptext" id="myPopup"></div>
+                            <input type="text" required name="email" id="inputEmail" value= "{{ user.email }}">
                             </div>
                         </div>
                         <div class="row">
@@ -90,7 +91,7 @@
                                 <div class="col-25">
                                 <label class="form-text" >Is Admin?</label>
                                 </div>
-                                <div class="col-75">                            
+                                <div class="col-75">
                                     <input type="checkbox" name="is_admin" checked>
                                 </div>
                             </div>
@@ -102,15 +103,34 @@
               </div>
         </body>
         <footer class="footer">
-            <div id="footer-text">                
+            <div id="footer-text">
                 <p>Copyright &copy; {{date.year}} - ABC CORPORATION - All Rights Reserved</p>
             </div>
         </footer>
         <script>
             $('a.account.dropbtn').addClass('active')
             $('li.dropdown').addClass('active')
-        </script> 
+
+            document.getElementById("inputEmail").onkeyup = function () {validateEmail()};
+            function validateEmail(){
+              document.getElementById("inputEmail").style.color="red";
+              var email = document.getElementById("inputEmail")
+              var regexEmail = /\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
+              document.getElementById("myPopup").innerHTML="Invalid Email ";
+              document.getElementById("myPopup").style.color = "red";
+              document.getElementById("myPopup").style.fontFamily = "Georgia";
+              if(email.value == ""){
+                document.getElementById("myPopup").innerHTML="";
+              }
+              if(regexEmail.test(email.value)){
+                document.getElementById("inputEmail").style.color="black";
+                document.getElementById("myPopup").innerHTML=" ";
+
+
+              }
+            }
+        </script>
     </html>
-    
-    
-{% endblock %}  
+
+
+{% endblock %}

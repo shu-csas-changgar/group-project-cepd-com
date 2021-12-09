@@ -226,6 +226,12 @@ def updateVendor(request,vendorId):
         email = request.POST.get('email')
         phone = request.POST.get('phone')
 
+        if emailValidator(email) != True:
+            errorMessage = "Invalid Email Submitted, kindly try again"
+            redirectUrlName = "updateVendor"
+            redirectPageName= "Update Vendor"
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+
         v.name=name
         v.address=address
         v.email=email
@@ -263,6 +269,12 @@ def updateUser(request,userId):
         locId=request.POST.get('location')
         location = Location.objects.get(id=locId)
         is_admin = False
+
+        if emailValidator(email) != True:
+            errorMessage = "Invalid Email Submitted, kindly try again"
+            redirectUrlName = "updateUser"
+            redirectPageName= "Update User"
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
         if(u.is_admin):
             is_admin = False if request.POST.get('is_admin') == None else True
 
@@ -590,11 +602,14 @@ def searchUser(request):
         locationId=int(request.POST.get('location'))
         is_admin= False if request.POST.get('is_admin') == None else True
 
-        if emailValidator(email) != True:
-            errorMessage = "Invalid Email Submitted, kindly try again"
-            redirectUrlName = "searchUser"
-            redirectPageName= "Search User"
-            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+        if email != "":
+            if emailValidator(email) != True:
+                errorMessage = "Invalid Email Submitted, kindly try again"
+                redirectUrlName = "searchUser"
+                redirectPageName= "Search User"
+                return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+
+
 
         if isAdmin:
             is_inactive= False if request.POST.get('is_inactive') == None else True
@@ -664,8 +679,20 @@ def searchVendor(request):
         address = request.POST.get('address')
         email = request.POST.get('email')
         phone = request.POST.get('phone')
+
+
+
+
         if isAdmin:
             is_inactive= False if request.POST.get('is_inactive') == None else True
+
+        if email != "":
+            if emailValidator(email) != True:
+                errorMessage = "Invalid Email Submitted, kindly try again"
+                redirectUrlName = "searchVendor"
+                redirectPageName= "Search Vendor"
+                return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+
 
         selectedName = "Any"
         selectedAddress = "Any"
@@ -768,6 +795,12 @@ def addVendor(request):
             email = request.POST.get('email')
             phone = request.POST.get('phone')
 
+            if emailValidator(email) != True:
+                errorMessage = "Invalid Email Submitted, kindly try again"
+                redirectUrlName = "addVendor"
+                redirectPageName= "Add Vendor"
+                return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+
             v = Vendor(name=name,address=address,
                 email=email, phone = phone)
             v.save()
@@ -802,6 +835,12 @@ def addUser(request):
             locId=request.POST.get('location')
             location = Location.objects.get(id=locId)
             is_admin = False if request.POST.get('is_admin') == None else True
+
+            if emailValidator(email) != True:
+                errorMessage = "Invalid Email Submitted, kindly try again"
+                redirectUrlName = "addUser"
+                redirectPageName= "Add User"
+                return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
 
             userExists=User.objects.filter(email=email).exists()
 
@@ -937,6 +976,15 @@ def accountPage(request):
         locId=request.POST.get('location')
         location = Location.objects.get(id=locId)
         is_admin = False
+
+        if email=="":
+            email=u.email
+        elif emailValidator(email) != True:
+            errorMessage = "Invalid Email Submitted, kindly try again"
+            redirectUrlName = "account"
+            redirectPageName= "Account"
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+
         if(u.is_admin):
             is_admin = False if request.POST.get('is_admin') == None else True
 

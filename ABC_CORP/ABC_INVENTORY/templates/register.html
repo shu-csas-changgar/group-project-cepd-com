@@ -45,7 +45,8 @@ z{% load static %}
 
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">Phone</label>
-                  <input class="form-control" name="phone" id="inputPhone" aria-describedby="emailHelp">
+									<div class="popuptext" id="myPopup2"></div>
+                  <input class="form-control" name="phone" id="inputphone" aria-describedby="emailHelp">
                 </div>
 
                 <div class="mb-3">
@@ -118,6 +119,28 @@ z{% load static %}
 
 
 					}
+				}
+
+				document.getElementById("inputphone").onkeyup = function () {validateEmail()};
+				function validatePhone(){
+					document.getElementById("inputphone").style.color="red";
+					var phone =  document.getElementById("inputPhone");
+					var regex = /^\d{10}$/;
+
+					document.getElementById("myPopup2").innerHTML="Invalid Phone";
+					document.getElementById("myPopup2").style.color = "red";
+					document.getElementById("myPopup2").style.fontFamily = "Georgia";
+
+					if(phone.value == ""){
+						document.getElementById("myPopup2").innerHTML="";
+					}
+					if(regexEmail.test(phone.value)){
+						document.getElementById("inputphone").style.color="black";
+						document.getElementById("myPopup2").innerHTML=" ";
+
+
+					}
+
 				}
 
 

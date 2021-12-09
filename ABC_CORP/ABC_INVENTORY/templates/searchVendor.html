@@ -1,11 +1,11 @@
-{% extends navigationPage %} 
+{% extends navigationPage %}
 {% load static %}
 {% block content %}
     <!DOCTYPE html>
 
         <head>
             <title>ABC CORP Search Vendor</title>
-            <link rel="stylesheet" type="text/css" href="{% static '/css/searchVendor.css' %}"> 
+            <link rel="stylesheet" type="text/css" href="{% static '/css/searchVendor.css' %}">
         </head>
         <body>
             <div class="body-card">
@@ -34,7 +34,8 @@
                             <label class="form-text" >Email</label>
                             </div>
                             <div class="col-75">
-                                <input type="text" name="email" placeholder="Enter Email"> 
+                                <div class="popuptext" id="myPopup"></div>
+                                <input type="text" name="email" id="inputEmail" placeholder="Enter Email">
                             </div>
                         </div>
                         <div class="row">
@@ -42,7 +43,8 @@
                             <label class="form-text" >Phone Number</label>
                             </div>
                             <div class="col-75">
-                                <input type="text" name="phone" placeholder="Enter Phone">
+                              <div class="popuptext" id="myPopup2"></div>
+                                <input type="text" name="phone" id="inputphone" placeholder="Enter Phone">
                             </div>
                         </div>
                         {% if isAdmin %}
@@ -52,7 +54,7 @@
                                 </div>
                                 <div class="col-75">
                                     <input type="checkbox" name="is_inactive">
-                                    <br> 
+                                    <br>
                                 </div>
                             </div>
                         {%endif%}
@@ -65,9 +67,9 @@
                         <p>Name: {{ selectedName }}</p>
                         <p>Address: {{ selectedAddress }}</p>
                         <p>Email: {{ selectedEmail }}</p>
-                        <p>Phone Number: {{ selectedPhone }}</p>  
-                        <p>Is Deactivated?: {{ selectedIsInactive }}</p> 
-                        <p>Total Query Count: {{ totalQueryCount }}</p>                        
+                        <p>Phone Number: {{ selectedPhone }}</p>
+                        <p>Is Deactivated?: {{ selectedIsInactive }}</p>
+                        <p>Total Query Count: {{ totalQueryCount }}</p>
                     </div>
                     {% for val in vendors %}
                         <div class="short-description">
@@ -84,34 +86,75 @@
                                 <a href="{% url 'updateVendor' vendorId=val.id %}">Update</a> |
                                 {% if selectedIsInactive %}
                                     <a href="{% url 'activateVendor' vendorId=val.id %}">Activate</a> |
-                                {%else%}  
-                                    <a href="{% url 'deactivateVendor' vendorId=val.id %}">Deactivate</a> |  
-                                {%endif%} 
+                                {%else%}
+                                    <a href="{% url 'deactivateVendor' vendorId=val.id %}">Deactivate</a> |
+                                {%endif%}
                                 <a href="{% url 'displayVendor' vendorId=val.id %}">View</a>
                             </p><br/><br/><br/>
                             <p id="short-description-value">
-                                {{val.name}} 
+                                {{val.name}}
                             </p>
                             <p id="short-description-value">
                                 {{val.phone}}
-                            </p>                
+                            </p>
                             <p id="short-description-value">
                                 {{val.email}}
-                            </p>              
+                            </p>
                         </div>
                     {% endfor %}
                 {% endif %}
             </div>
         </body>
         <footer class="footer">
-            <div id="footer-text">                
+            <div id="footer-text">
                 <p>Copyright &copy; {{date.year}} - ABC CORPORATION - All Rights Reserved</p>
             </div>
         </footer>
         <script>
             $('a.search.dropbtn').addClass('active')
-        </script> 
+            document.getElementById("inputEmail").onkeyup = function () {validateEmail()};
+            function validateEmail(){
+              document.getElementById("inputEmail").style.color="red";
+              var email = document.getElementById("inputEmail")
+              var regexEmail = /\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
+              document.getElementById("myPopup").innerHTML="Invalid Email ";
+              document.getElementById("myPopup").style.color = "red";
+              document.getElementById("myPopup").style.fontFamily = "Georgia";
+              if(email.value == ""){
+                document.getElementById("myPopup").innerHTML="";
+              }
+              if(regexEmail.test(email.value)){
+                document.getElementById("inputEmail").style.color="black";
+                document.getElementById("myPopup").innerHTML=" ";
+
+
+              }
+            }
+
+            document.getElementById("inputphone").onkeyup = function () {validateEmail()};
+    				function validatePhone(){
+    					document.getElementById("inputphone").style.color="red";
+    					var phone =  document.getElementById("inputPhone");
+    					var regex = /^\d{10}$/;
+
+    					document.getElementById("myPopup2").innerHTML="Invalid Phone";
+    					document.getElementById("myPopup2").style.color = "red";
+    					document.getElementById("myPopup2").style.fontFamily = "Georgia";
+
+    					if(phone.value == ""){
+    						document.getElementById("myPopup2").innerHTML="";
+    					}
+    					if(regexEmail.test(phone.value)){
+    						document.getElementById("inputphone").style.color="black";
+    						document.getElementById("myPopup2").innerHTML=" ";
+
+
+    					}
+
+    				}
+
+        </script>
     </html>
-    
-    
-{% endblock %}  
+
+
+{% endblock %}
