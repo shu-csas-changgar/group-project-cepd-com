@@ -1038,7 +1038,7 @@ def accountPage(request):
             redirectPageName= "Account"
             return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
 
-        if phone="":
+        if phone=="":
             phone=u.phone
         elif phoneValidator(phone)!=True:
             errorMessage = "Invalid Phone Submitted, kindly try again"
