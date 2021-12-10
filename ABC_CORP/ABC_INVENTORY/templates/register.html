@@ -28,44 +28,44 @@ z{% load static %}
             <form method="post">
               {% csrf_token %}
                 <div class="mb-3">
-                  <label for="exampleInputEmail1" class="form-label">First Name</label>
-                  <input class="form-control" name="first-name" id="inputFirstName" aria-describedby="emailHelp">
+                  <label class="form-label">First Name</label>
+                  <input class="form-control" name="first-name" id="inputFirstName">
                 </div>
 
                 <div class="mb-3">
-                  <label for="exampleInputPassword1" class="form-label">Last Name</label>
+                  <label class="form-label">Last Name</label>
                   <input class="form-control" name="last-name" id="inputLastName">
                 </div>
 
                 <div class="mb-3">
-                  <label for="exampleInputEmail1" class="form-label">Email address</label>
-									  <div class="popuptext" id="myPopup"></div>
-                  <input type="text" onkeyup="validateEmail" id="inputEmail" class="form-control" name="email" aria-describedby="emailHelp">
+                  <label class="form-label">Email address</label>
+					<div class="popuptext" id="myPopup"></div>
+                  <input type="text" onkeyup="validateEmail" id="inputEmail" class="form-control" name="email" placeholder="email@gmail.com">
                 </div>
 
                 <div class="mb-3">
-                  <label for="exampleInputEmail1" class="form-label">Phone</label>
+                  <label class="form-label">Phone</label>
 									<div class="popuptext" id="myPopup2"></div>
-                  <input class="form-control" name="phone" id="inputPhone" aria-describedby="emailHelp">
+                  <input class="form-control" name="phone" id="inputPhone" placeholder="000-000-0000">
                 </div>
 
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">Address</label>
-                  <input class="form-control" name="address" aria-describedby="emailHelp">
+                  <input class="form-control" name="address">
                 </div>
 
                 <div class="mb-3">
-                  <label for="exampleInputEmail1" id="pwd1" class="form-label">Password</label>
-                  <input type="password" class="form-control" name="password1" aria-describedby="emailHelp">
+                  <label id="pwd1" class="form-label">Password</label>
+                  <input type="password" class="form-control" name="password1">
                 </div>
 
                 <div class="mb-3">
-                  <label for="exampleInputEmail1" class="form-label">Re-Enter Password</label>
-                  <input type="password" class="form-control" name="password2"  aria-describedby="emailHelp">
+                  <label class="form-label">Re-Enter Password</label>
+                  <input type="password" class="form-control" name="password2">
                 </div>
 
                 <div class="mb-3" class="form-control">
-                  <label for="exampleInputEmail1" class="form-label">Select Location</label>
+                  <label class="form-label">Select Location</label>
                   <div>
                     <select name="location">
                     {% for location in locations %}
@@ -106,7 +106,7 @@ z{% load static %}
 				function validateEmail(){
 					document.getElementById("inputEmail").style.color="red";
 					var email = document.getElementById("inputEmail")
-					var regexEmail = /\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
+					var regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 					document.getElementById("myPopup").innerHTML="Invalid Email ";
 					document.getElementById("myPopup").style.color = "red";
 					document.getElementById("myPopup").style.fontFamily = "Georgia";

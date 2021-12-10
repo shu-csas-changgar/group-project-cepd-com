@@ -38,7 +38,7 @@
                             </div>
                             <div class="col-75">
                                 <div class="popuptext" id="myPopup"></div>
-                                <input type="text" id="inputEmail" name="email" placeholder="Enter Email">
+                                <input type="text" id="inputEmail" name="email" placeholder="email@gmail.com">
                             </div>
                         </div>
 
@@ -142,7 +142,7 @@
             function validateEmail(){
               document.getElementById("inputEmail").style.color="red";
               var email = document.getElementById("inputEmail")
-              var regexEmail = /\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
+              var regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
               document.getElementById("myPopup").innerHTML="Invalid Email ";
               document.getElementById("myPopup").style.color = "red";
               document.getElementById("myPopup").style.fontFamily = "Georgia";
@@ -152,8 +152,6 @@
               if(regexEmail.test(email.value)){
                 document.getElementById("inputEmail").style.color="black";
                 document.getElementById("myPopup").innerHTML=" ";
-
-
               }
             }
         </script>

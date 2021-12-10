@@ -44,7 +44,7 @@
                             </div>
                             <div class="col-75">
                               <div class="popuptext" id="myPopup2"></div>
-                            <input type="text" required name="phone" id="inputphone" value= "{{ user.phone }}">
+                            <input type="text" required name="phone" id="inputPhone" value= "{{ user.phone }}" placeholder="000-000-0000">
                             </div>
                         </div>
                         <div class="row">
@@ -93,7 +93,11 @@
                                 <label class="form-text" >Is Admin?</label>
                                 </div>
                                 <div class="col-75">
-                                    <input type="checkbox" name="is_admin">
+                                    {% if user.is_admin %}
+                                        <input type="checkbox" checked="checked" name="is_admin">
+                                    {% else%}
+                                        <input type="checkbox" name="is_admin">
+                                    {% endif%}
                                 </div>
                             </div>
                         {% endif%}
@@ -146,7 +150,7 @@
             function validateEmail(){
               document.getElementById("inputEmail").style.color="red";
               var email = document.getElementById("inputEmail")
-              var regexEmail = /\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
+              var regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
               document.getElementById("myPopup").innerHTML="Invalid Email ";
               document.getElementById("myPopup").style.color = "red";
               document.getElementById("myPopup").style.fontFamily = "Georgia";
@@ -156,31 +160,29 @@
               if(regexEmail.test(email.value)){
                 document.getElementById("inputEmail").style.color="black";
                 document.getElementById("myPopup").innerHTML=" ";
-
-
               }
             }
-            document.getElementById("inputphone").onkeyup = function () {validateEmail()};
-    				function validatePhone(){
-    					document.getElementById("inputphone").style.color="red";
-    					var phone =  document.getElementById("inputPhone");
-    					var regex = /^\d{10}$/;
+            
+            document.getElementById("inputPhone").onkeyup = function () {validatePhone()};
+				function validatePhone(){
+					document.getElementById("inputPhone").style.color="red";
+					var phone =  document.getElementById("inputPhone");
+					var regex = /^\d{10}$/;
 
-    					document.getElementById("myPopup2").innerHTML="Invalid Phone";
-    					document.getElementById("myPopup2").style.color = "red";
-    					document.getElementById("myPopup2").style.fontFamily = "Georgia";
+					document.getElementById("myPopup2").innerHTML="Invalid Phone";
+					document.getElementById("myPopup2").style.color = "red";
+					document.getElementById("myPopup2").style.fontFamily = "Georgia";
 
-    					if(phone.value == ""){
-    						document.getElementById("myPopup2").innerHTML="";
-    					}
-    					if(regexEmail.test(phone.value)){
-    						document.getElementById("inputphone").style.color="black";
-    						document.getElementById("myPopup2").innerHTML=" ";
+					if(phone.value == ""){
+						document.getElementById("myPopup2").innerHTML="";
+					}
+					if(regex.test(phone.value) && (phone.value.length)==10){
+						console.log(phone.value)
+						document.getElementById("inputPhone").style.color="black";
+						document.getElementById("myPopup2").innerHTML=" ";
+					}
+				}
 
-
-    					}
-
-    				}
         </script>
     </html>
 
