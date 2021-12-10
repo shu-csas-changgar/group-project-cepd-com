@@ -9,16 +9,7 @@ z{% load static %}
 		<style lang="en" type="text/css" id="dark-mode-native-style"></style>
     	<meta charset="utf-8">
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-		<script>
-			function hoverIn(){
-				document.getElementById("register-btn").style.backgroundColor="black";
-				document.getElementById("register-btn").style.bordercolor="black";
-			}
 
-			function hoverOut(){
-				document.getElementById("register-btn").style.backgroundColor="#6495ED";
-			}
-      </script>
    </head>
 
    <body>
@@ -37,42 +28,44 @@ z{% load static %}
             <form method="post">
               {% csrf_token %}
                 <div class="mb-3">
-                  <label for="exampleInputEmail1" class="form-label">First Name</label>
-                  <input class="form-control" name="first-name" id="inputFirstName" aria-describedby="emailHelp">
+                  <label class="form-label">First Name</label>
+                  <input class="form-control" name="first-name" id="inputFirstName">
                 </div>
 
                 <div class="mb-3">
-                  <label for="exampleInputPassword1" class="form-label">Last Name</label>
+                  <label class="form-label">Last Name</label>
                   <input class="form-control" name="last-name" id="inputLastName">
                 </div>
 
                 <div class="mb-3">
-                  <label for="exampleInputEmail1" class="form-label">Email address</label>
-                  <input class="form-control" name="email" id="inputEmail" aria-describedby="emailHelp">
+                  <label class="form-label">Email address</label>
+					<div class="popuptext" id="myPopup"></div>
+                  <input type="text" onkeyup="validateEmail" id="inputEmail" class="form-control" name="email" placeholder="email@gmail.com">
                 </div>
 
                 <div class="mb-3">
-                  <label for="exampleInputEmail1" class="form-label">Phone</label>
-                  <input class="form-control" name="phone" id="inputPhone" aria-describedby="emailHelp">
+                  <label class="form-label">Phone</label>
+					<div class="popuptext" id="myPopup2"></div>
+                  <input class="form-control" name="phone" id="inputPhone" placeholder="000-000-0000">
                 </div>
 
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">Address</label>
-                  <input class="form-control" name="address" id="inputPhone" aria-describedby="emailHelp">
+                  <input class="form-control" name="address">
                 </div>
 
                 <div class="mb-3">
-                  <label for="exampleInputEmail1" id="pwd1" class="form-label">Password</label>
-                  <input type="password" class="form-control" name="password1" id="inputPhone" aria-describedby="emailHelp">
+                  <label id="pwd1" class="form-label">Password</label>
+                  <input type="password" class="form-control" name="password1">
                 </div>
 
                 <div class="mb-3">
-                  <label for="exampleInputEmail1" class="form-label">Re-Enter Password</label>
-                  <input type="password" class="form-control" name="password2" id="inputPhone" aria-describedby="emailHelp">
+                  <label class="form-label">Re-Enter Password</label>
+                  <input type="password" class="form-control" name="password2">
                 </div>
 
                 <div class="mb-3" class="form-control">
-                  <label for="exampleInputEmail1" class="form-label">Select Location</label>
+                  <label class="form-label">Select Location</label>
                   <div>
                     <select name="location">
                     {% for location in locations %}
@@ -98,6 +91,56 @@ z{% load static %}
           </section>
         </section>
       </section>
+
+			<script>
+				function hoverIn(){
+					document.getElementById("register-btn").style.backgroundColor="black";
+					document.getElementById("register-btn").style.bordercolor="black";
+				}
+
+				function hoverOut(){
+					document.getElementById("register-btn").style.backgroundColor="#6495ED";
+				}
+
+				document.getElementById("inputEmail").onkeyup = function () {validateEmail()};
+				function validateEmail(){
+					document.getElementById("inputEmail").style.color="red";
+					var email = document.getElementById("inputEmail")
+					var regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+					document.getElementById("myPopup").innerHTML="Invalid Email ";
+					document.getElementById("myPopup").style.color = "red";
+					document.getElementById("myPopup").style.fontFamily = "Georgia";
+					if(email.value == ""){
+						document.getElementById("myPopup").innerHTML="";
+					}
+					if(regexEmail.test(email.value)){
+						document.getElementById("inputEmail").style.color="black";
+						document.getElementById("myPopup").innerHTML=" ";
+					}
+				}
+
+				document.getElementById("inputPhone").onkeyup = function () {validatePhone()};
+				function validatePhone(){
+					document.getElementById("inputPhone").style.color="red";
+					var phone =  document.getElementById("inputPhone");
+					var regex = /^\d{10}$/;
+
+					document.getElementById("myPopup2").innerHTML="Invalid Phone";
+					document.getElementById("myPopup2").style.color = "red";
+					document.getElementById("myPopup2").style.fontFamily = "Georgia";
+
+					if(phone.value == ""){
+						document.getElementById("myPopup2").innerHTML="";
+					}
+					if(regex.test(phone.value) && (phone.value.length)==10){
+						console.log(phone.value)
+						document.getElementById("inputPhone").style.color="black";
+						document.getElementById("myPopup2").innerHTML=" ";
+					}
+				}
+
+
+	      </script>
 
 	</body>
 </html>

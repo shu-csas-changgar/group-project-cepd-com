@@ -11,11 +11,30 @@ import datetime
 from pytz import UTC
 import csv
 import os
+import re
 
 def loginPage(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
+
+        if not email or emailValidator(email) != True:
+            errorMessage = "Invalid Email Submitted, kindly try again"
+            redirectUrlName = "login"
+            redirectPageName= "Login"
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+
+        if not password:
+            errorMessage = "Password is empty"
+            redirectUrlName = "login"
+            redirectPageName= "Login"
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+
+        userExist = User.objects.filter(email = email).exists()
+
+        if(not userExist):
+            messages.info(request, 'User does not Exist')
+            return render(request, 'login.html', {})
 
         u = User.objects.get(email = email)
         if(u != None and not u.is_active):
@@ -47,6 +66,17 @@ def registerPage(request):
         loc=int(request.POST.get('location'))
         location = Location.objects.get(id=loc)
 
+        if emailValidator(email) != True:
+            errorMessage = "Invalid Email Submitted, kindly try again"
+            redirectUrlName = "register"
+            redirectPageName= "Register"
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+
+        if phoneValidator(phone) != True:
+            errorMessage = "Invalid Phone Submitted, kindly try again"
+            redirectUrlName = "register"
+            redirectPageName= "Register"
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
 
         userExists=User.objects.filter(email=email).exists()
 
@@ -209,6 +239,20 @@ def updateVendor(request,vendorId):
         email = request.POST.get('email')
         phone = request.POST.get('phone')
 
+
+        if emailValidator(email) != True:
+            errorMessage = "Invalid Email Submitted, kindly try again"
+            redirectUrlName = "updateVendor"
+            redirectPageName= "Update Vendor"
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName,vendorId)
+
+
+        if phoneValidator(phone)!=True:
+            errorMessage = "Invalid Phone Submitted, kindly try again"
+            redirectUrlName = "updateVendor"
+            redirectPageName= "Update Vendor"
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName, vendorId)
+
         v.name=name
         v.address=address
         v.email=email
@@ -248,6 +292,18 @@ def updateUser(request,userId):
         is_admin = False
         if(u.is_admin):
             is_admin = False if request.POST.get('is_admin') == None else True
+
+        if emailValidator(email) != True:
+            errorMessage = "Invalid Email Submitted, kindly try again"
+            redirectUrlName = "updateUser"
+            redirectPageName= "Update User"
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName, userId)
+
+        if phoneValidator(phone)!=True:
+            errorMessage = "Invalid Phone Submitted, kindly try again"
+            redirectUrlName = "updateUser"
+            redirectPageName= "Update User"
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName, userId)
 
         userExists=User.objects.filter(email=email).exists()
 
@@ -303,7 +359,7 @@ def deactivateEquipment(request,equipmentId):
         errorMessage = "Non Admins cannot Deactivate Equipment."
         redirectUrlName = "searchEquipment"
         redirectPageName= "Search Equipment"
-        return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+        return errorHandler(request, errorMessage, redirectUrlName, redirectPageName, equipmentId)
 
 
 def deactivateVendor(request,vendorId):
@@ -325,9 +381,9 @@ def deactivateVendor(request,vendorId):
         return render(request, 'deactivateVendor.html', context)
     else:
         errorMessage = "Non Admins cannot Deactivate Vendor."
-        redirectUrlName = "searchVendor"
-        redirectPageName= "Search Vendor"
-        return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+        redirectUrlName = "deactivateVendor"
+        redirectPageName= "Deactivate Vendor"
+        return errorHandler(request, errorMessage, redirectUrlName, redirectPageName,vendorId)
 
 def deactivateUser(request,userId):
     date = datetime.date.today()
@@ -343,7 +399,8 @@ def deactivateUser(request,userId):
             errorMessage = "Bad Operation, User you are attempting to deactivate is currently logged in."
             redirectUrlName = "searchUser"
             redirectPageName = "Search User"
-            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName, userId)
+        
         elif "Yes" in request.POST:
             u.is_active = False
             u.save()
@@ -379,7 +436,7 @@ def activateEquipment(request,equipmentId):
         errorMessage = "Non Admins cannot Activate Equipment."
         redirectUrlName = "searchEquipment"
         redirectPageName= "Search Equipment"
-        return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+        return errorHandler(request, errorMessage, redirectUrlName, redirectPageName, equipmentId)
 
 
 def activateVendor(request,vendorId):
@@ -403,7 +460,7 @@ def activateVendor(request,vendorId):
         errorMessage = "Non Admins cannot Activate Vendor."
         redirectUrlName = "searchVendor"
         redirectPageName= "Search Vendor"
-        return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+        return errorHandler(request, errorMessage, redirectUrlName, redirectPageName, vendorId)
 
 def activateUser(request,userId):
     date = datetime.date.today()
@@ -427,7 +484,7 @@ def activateUser(request,userId):
         errorMessage = "Non Admins cannot Activate User."
         redirectUrlName = "searchUser"
         redirectPageName= "Search User"
-        return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+        return errorHandler(request, errorMessage, redirectUrlName, redirectPageName, userId)
 
 def displayEquipment(request, equipmentId):
     e = Equipment.objects.get(id=equipmentId)
@@ -575,6 +632,14 @@ def searchUser(request):
         if isAdmin:
             is_inactive= False if request.POST.get('is_inactive') == None else True
 
+
+        if email != "" and emailValidator(email) != True:
+            if emailValidator(email) != True:
+                errorMessage = "Invalid Email Submitted, kindly try again"
+                redirectUrlName = "searchUser"
+                redirectPageName= "Search User"
+                return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+
         selectedFName = "Any"
         selectedLName = "Any"
         selectedEmail = "Any"
@@ -642,6 +707,18 @@ def searchVendor(request):
         phone = request.POST.get('phone')
         if isAdmin:
             is_inactive= False if request.POST.get('is_inactive') == None else True
+
+        if phone != "" and phoneValidator(phone)!=True:
+            errorMessage = "Invalid Phone Submitted, kindly try again"
+            redirectUrlName = "searchVendor"
+            redirectPageName= "Search Vendor"
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+
+        if email != "" and emailValidator(email) != True:
+            errorMessage = "Invalid Email Submitted, kindly try again"
+            redirectUrlName = "searchVendor"
+            redirectPageName= "Search Vendor"
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
 
         selectedName = "Any"
         selectedAddress = "Any"
@@ -744,6 +821,18 @@ def addVendor(request):
             email = request.POST.get('email')
             phone = request.POST.get('phone')
 
+            if emailValidator(email) != True:
+                errorMessage = "Invalid Email Submitted, kindly try again"
+                redirectUrlName = "addVendor"
+                redirectPageName= "Add Vendor"
+                return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+
+            if phoneValidator(phone) != True:
+                errorMessage = "Invalid Phone Submitted, kindly try again"
+                redirectUrlName = "addVendor"
+                redirectPageName= "Add Vendor"
+                return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+
             v = Vendor(name=name,address=address,
                 email=email, phone = phone)
             v.save()
@@ -778,6 +867,18 @@ def addUser(request):
             locId=request.POST.get('location')
             location = Location.objects.get(id=locId)
             is_admin = False if request.POST.get('is_admin') == None else True
+
+            if emailValidator(email) != True:
+                errorMessage = "Invalid Email Submitted, kindly try again"
+                redirectUrlName = "addUser"
+                redirectPageName= "Add User"
+                return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+
+            if phoneValidator(phone)!=True:
+                errorMessage = "Invalid Phone Submitted, kindly try again"
+                redirectUrlName = "addUser"
+                redirectPageName= "Add User"
+                return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
 
             userExists=User.objects.filter(email=email).exists()
 
@@ -901,7 +1002,7 @@ def accountPage(request):
         'locations': locations,
         'user': u,
     }
-    
+
     if request.method == 'POST':
         firstName=request.POST.get('first_name')
         lastName=request.POST.get('last_name')
@@ -915,6 +1016,18 @@ def accountPage(request):
         is_admin = False
         if(u.is_admin):
             is_admin = False if request.POST.get('is_admin') == None else True
+
+        if emailValidator(email) != True:
+            errorMessage = "Invalid Email Submitted, kindly try again"
+            redirectUrlName = "account"
+            redirectPageName= "Account"
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+
+        if phoneValidator(phone)!=True:
+            errorMessage = "Invalid Phone Submitted, kindly try again"
+            redirectUrlName = "account"
+            redirectPageName= "Account"
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
 
         userExists=User.objects.filter(email=email).exists()
 
@@ -952,3 +1065,17 @@ def errorHandler(request,errorMessage, redirectUrlName, redirectPageName, somePa
             'someParameterValue' : someParameterValue,
         }
     return render(request, 'error.html', context)
+
+def emailValidator(email):
+    regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Z|a-z]{2,}\b'
+    if re.fullmatch(regex, email):
+        return True
+    else:
+        return False
+
+def phoneValidator(phone):
+    regex = "^([\s\d]+)$"
+    if re.fullmatch(regex, phone) and len(phone) == 10:
+        return True
+    else:
+        return False

@@ -32,12 +32,13 @@
               {% csrf_token %}
 
                 <div class="mb-3">
-                  <label for="exampleInputEmail1" class="form-label">Email address</label>
-                  <input type="email" class="form-control" name="email" id="exampleInputEmail1" aria-describedby="emailHelp">
+                  <label class="form-label">Email address</label>
+                  <div class="popuptext" id="myPopup"></div>
+                  <input type="email" class="form-control" name="email" onkeyup="validateEmail" id="inputEmail" placeholder="email@gmail.com">
                 </div>
 
                 <div class="mb-3">
-                  <label for="exampleInputPassword1" class="form-label">Password</label>
+                  <label class="form-label">Password</label>
                   <input type="password" class="form-control" name="password" id="exampleInputPassword1">
                 </div>
 
@@ -62,5 +63,23 @@
       </section>
    </body>
 
+   <script>
+    document.getElementById("inputEmail").onkeyup = function () {validateEmail()};
+    function validateEmail(){
+      document.getElementById("inputEmail").style.color="red";
+      var email = document.getElementById("inputEmail")
+      var regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+      document.getElementById("myPopup").innerHTML="Invalid Email ";
+      document.getElementById("myPopup").style.color = "red";
+      document.getElementById("myPopup").style.fontFamily = "Georgia";
+      if(email.value == ""){
+        document.getElementById("myPopup").innerHTML="";
+      }
+      if(regexEmail.test(email.value)){
+        document.getElementById("inputEmail").style.color="black";
+        document.getElementById("myPopup").innerHTML=" ";
+      }
+    }
+   </script>
 
 </html>
