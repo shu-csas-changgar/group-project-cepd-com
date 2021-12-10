@@ -131,7 +131,7 @@ input[type=submit] {
 .footer {
     background-color: rgb(55, 96, 220);
     height: 200px;
-    position: sticky;
+    margin-top: 1300px;
 }
 
 #footer-text {

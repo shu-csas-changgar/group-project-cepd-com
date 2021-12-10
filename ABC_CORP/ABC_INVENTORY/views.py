@@ -18,11 +18,23 @@ def loginPage(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
 
-        if not email or not password:
-            errorMessage = "Email or Password is empty"
+        if not email or emailValidator(email) != True:
+            errorMessage = "Invalid Email Submitted, kindly try again"
             redirectUrlName = "login"
             redirectPageName= "Login"
             return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+
+        if not password:
+            errorMessage = "Password is empty"
+            redirectUrlName = "login"
+            redirectPageName= "Login"
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+
+        userExist = User.objects.filter(email = email).exists()
+
+        if(not userExist):
+            messages.info(request, 'User does not Exist')
+            return render(request, 'login.html', {})
 
         u = User.objects.get(email = email)
         if(u != None and not u.is_active):

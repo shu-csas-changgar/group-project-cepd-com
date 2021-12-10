@@ -6,36 +6,37 @@
 </head>
 <body>
 
-<ul>
-  <p id="head">ABC CORP</p>
-  <li class="dropdown"><a class="home dropbtn" href="{% url 'home' %}">Home</a></li>
-  <li class="dropdown">
-    <a href="javascript:void(0)" class ="add dropbtn">Add</a>
-    <div class="dropdown-content">
-      <a href="{% url 'addEquipment' %}">Equipment</a>
-      <a href="{% url 'addUser' %}">User</a>
-      <a href="{% url 'addVendor' %}">Vendor</a>
-    </div>
-  </li>
-  <li class="dropdown">
-    <a href="javascript:void(0)" class ="search dropbtn">Search</a>
-    <div class="dropdown-content">
-      <a href="{% url 'searchEquipment' %}">Equipment</a>
-      <a href="{% url 'searchUser' %}">Users</a>
-      <a href="{% url 'searchVendor' %}">Vendors</a>
-    </div>
-  </li>
-  <li class="dropdown">
-    <a href="javascript:void(0)" class ="report dropbtn">Report</a>
-    <div class="dropdown-content">
-      <a href="{% url 'import' %}">Import</a>
-      <a href="{% url 'export' %}">Export</a>
-    </div>
-  </li>
-  <li class="dropdown"><a href="{% url 'account' %}" class ="account dropbtn">Account</a></li>
-  <li class="dropdown"><a href="{% url 'logout' %}" class ="logout dropbtn">Logout</a></li>
+  <ul>
+    <p id="head">ABC CORP</p>
+    <li class="dropdown"><a class="home dropbtn" href="{% url 'home' %}">Home</a></li>
+    <li class="dropdown">
+      <a href="javascript:void(0)" class ="add dropbtn">Add</a>
+      <div class="dropdown-content">
+        <a href="{% url 'addEquipment' %}">Equipment</a>
+        <a href="{% url 'addUser' %}">User</a>
+        <a href="{% url 'addVendor' %}">Vendor</a>
+      </div>
+    </li>
+    <li class="dropdown">
+      <a href="javascript:void(0)" class ="search dropbtn">Search</a>
+      <div class="dropdown-content">
+        <a href="{% url 'searchEquipment' %}">Equipment</a>
+        <a href="{% url 'searchUser' %}">Users</a>
+        <a href="{% url 'searchVendor' %}">Vendors</a>
+      </div>
+    </li>
+    <li class="dropdown">
+      <a href="javascript:void(0)" class ="report dropbtn">Report</a>
+      <div class="dropdown-content">
+        <a href="{% url 'import' %}">Import</a>
+        <a href="{% url 'export' %}">Export</a>
+      </div>
+    </li>
+    <li class="dropdown"><a href="{% url 'account' %}" class ="account dropbtn">Account</a></li>
+    <li class="dropdown"><a href="{% url 'logout' %}" class ="logout dropbtn">Logout</a></li>
 
-</ul>
+  </ul>
+
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 
 {% block content%}
