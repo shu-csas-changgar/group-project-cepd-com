@@ -1,13 +1,13 @@
 .body-card {
     margin-left: 15%;
-    height: 900px;
+    height: 500px;
     padding-top: 1.5rem;
 }
 
 .body-card-text {
     font-family: Verdana, Helvetica, sans-serif;
     color: rgb(55, 96, 220);
-    margin-left: 350px;
+    margin-left: 470px;
     font-weight: bold;
 }
 
@@ -131,7 +131,7 @@ input[type=submit] {
 .footer {
     background-color: rgb(55, 96, 220);
     height: 200px;
-    margin-top: 1300px;
+    margin-top: 100px;
 }
 
 #footer-text {
