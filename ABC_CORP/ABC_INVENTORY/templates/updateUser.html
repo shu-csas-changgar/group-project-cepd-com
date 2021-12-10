@@ -1,11 +1,11 @@
-{% extends navigationPage %} 
+{% extends navigationPage %}
 {% load static %}
 {% block content %}
     <!DOCTYPE html>
 
         <head>
             <title>ABC CORP Update User</title>
-            <link rel="stylesheet" type="text/css" href="{% static '/css/addUser.css' %}"> 
+            <link rel="stylesheet" type="text/css" href="{% static '/css/addUser.css' %}">
         </head>
         <body>
             <div class="body-card">
@@ -34,7 +34,8 @@
                             <label class="form-text">Email</label>
                             </div>
                             <div class="col-75">
-                            <input type="text" required name="email" value= "{{ user.email }}">
+                              <div class="popuptext" id="myPopup"></div>
+                            <input type="text" required name="email" id="inputEmail" value= "{{ user.email }}">
                             </div>
                         </div>
                         <div class="row">
@@ -42,7 +43,8 @@
                             <label class="form-text">Phone</label>
                             </div>
                             <div class="col-75">
-                            <input type="text" required name="phone" value= "{{ user.phone }}">
+                              <div class="popuptext" id="myPopup2"></div>
+                            <input type="text" required name="phone" id="inputPhone" value= "{{ user.phone }}" placeholder="000-000-0000">
                             </div>
                         </div>
                         <div class="row">
@@ -91,7 +93,11 @@
                                 <label class="form-text" >Is Admin?</label>
                                 </div>
                                 <div class="col-75">
-                                    <input type="checkbox" name="is_admin">
+                                    {% if user.is_admin %}
+                                        <input type="checkbox" checked="checked" name="is_admin">
+                                    {% else%}
+                                        <input type="checkbox" name="is_admin">
+                                    {% endif%}
                                 </div>
                             </div>
                         {% endif%}
@@ -124,24 +130,61 @@
                         </p>
                         <p id="short-description-value">
                             {{officeLocation}}
-                        </p>  
+                        </p>
                         <p id="short-description-value">
                             {{user.email}}
                         </p>
-                                              
+
                     </div>
                 {% endif %}
             </div>
         </body>
         <footer class="footer">
-            <div id="footer-text">                
+            <div id="footer-text">
                 <p>Copyright &copy; {{date.year}} - ABC CORPORATION - All Rights Reserved</p>
             </div>
         </footer>
         <script>
             $('a.add.dropbtn').addClass('active')
-        </script> 
+            document.getElementById("inputEmail").onkeyup = function () {validateEmail()};
+            function validateEmail(){
+              document.getElementById("inputEmail").style.color="red";
+              var email = document.getElementById("inputEmail")
+              var regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+              document.getElementById("myPopup").innerHTML="Invalid Email ";
+              document.getElementById("myPopup").style.color = "red";
+              document.getElementById("myPopup").style.fontFamily = "Georgia";
+              if(email.value == ""){
+                document.getElementById("myPopup").innerHTML="";
+              }
+              if(regexEmail.test(email.value)){
+                document.getElementById("inputEmail").style.color="black";
+                document.getElementById("myPopup").innerHTML=" ";
+              }
+            }
+            
+            document.getElementById("inputPhone").onkeyup = function () {validatePhone()};
+				function validatePhone(){
+					document.getElementById("inputPhone").style.color="red";
+					var phone =  document.getElementById("inputPhone");
+					var regex = /^\d{10}$/;
+
+					document.getElementById("myPopup2").innerHTML="Invalid Phone";
+					document.getElementById("myPopup2").style.color = "red";
+					document.getElementById("myPopup2").style.fontFamily = "Georgia";
+
+					if(phone.value == ""){
+						document.getElementById("myPopup2").innerHTML="";
+					}
+					if(regex.test(phone.value) && (phone.value.length)==10){
+						console.log(phone.value)
+						document.getElementById("inputPhone").style.color="black";
+						document.getElementById("myPopup2").innerHTML=" ";
+					}
+				}
+
+        </script>
     </html>
-    
-    
-{% endblock %}  
+
+
+{% endblock %}
