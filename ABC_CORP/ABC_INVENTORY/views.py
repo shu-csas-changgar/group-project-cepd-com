@@ -204,6 +204,13 @@ def updateEquipment(request,equipmentId):
         expirationDate = datetime.datetime.strptime(ed, '%Y-%m-%d')
         floor = request.POST.get('floor')
 
+        if expirationDate < purchaseDate:
+            errorMessage = "Expiration date is earlier than Purchase date, ensure Purchase date is earlier than Expiration date."
+            redirectUrlName = "addEquipment"
+            redirectPageName= "Add Equipment"
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+
+
         e.name = name
         e.assignedTo = User(id=assignedToId)
         e.officeLocation = Location(id=officeLocationId)
@@ -359,7 +366,7 @@ def deactivateEquipment(request,equipmentId):
         errorMessage = "Non Admins cannot Deactivate Equipment."
         redirectUrlName = "searchEquipment"
         redirectPageName= "Search Equipment"
-        return errorHandler(request, errorMessage, redirectUrlName, redirectPageName, equipmentId)
+        return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
 
 
 def deactivateVendor(request,vendorId):
@@ -381,9 +388,9 @@ def deactivateVendor(request,vendorId):
         return render(request, 'deactivateVendor.html', context)
     else:
         errorMessage = "Non Admins cannot Deactivate Vendor."
-        redirectUrlName = "deactivateVendor"
-        redirectPageName= "Deactivate Vendor"
-        return errorHandler(request, errorMessage, redirectUrlName, redirectPageName,vendorId)
+        redirectUrlName = "searchVendor"
+        redirectPageName= "Search Vendor"
+        return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
 
 def deactivateUser(request,userId):
     date = datetime.date.today()
