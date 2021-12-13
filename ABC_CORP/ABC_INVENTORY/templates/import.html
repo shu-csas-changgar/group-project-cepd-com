@@ -20,6 +20,9 @@
                         <input type="submit" name="Download Template" class="import-btn" value="Download Template">
                     </form>
                 </div>
+                {% for message in messages %}
+					<p class="notification">{{message}}</p>
+				{% endfor %}
             </div>
         </body>
         <footer class="footer">
