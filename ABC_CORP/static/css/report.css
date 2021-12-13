@@ -3,10 +3,18 @@
     height: 600px;
     padding-top: 1.5rem;
 }
+
 .body-card-text {
     font-family: Verdana, Helvetica, sans-serif;
     color: rgb(55, 96, 220);
     margin-left: 350px;
+    font-weight: bold;
+}
+
+.notification {
+    font-family: Verdana, Helvetica, sans-serif;
+    color: rgb(55, 96, 220);
+    margin-left: 275px;
     font-weight: bold;
 }
 
@@ -25,7 +33,7 @@
     margin-left: 30px;
 }
 
-.form-container-import{
+.form-container-import {
     border-radius: 5px;
     background-color: #f2f2f2;
     padding: 20px;
@@ -33,6 +41,7 @@
     height: 200px;
     margin-left: 270px;
 }
+
 
 /* Clear floats after the columns */
 
@@ -109,10 +118,10 @@ label {
     margin-bottom: 10px;
 }
 
-
 .export-btn:hover {
     opacity: .5;
 }
+
 .export-btn {
     opacity: 1;
     -webkit-transition: .3s ease-in-out;
@@ -132,11 +141,13 @@ label {
     cursor: pointer;
     text-align: center;
 }
+
 .footer {
     background-color: rgb(55, 96, 220);
     height: 200px;
     margin-top: 0px;
 }
+
 #footer-text {
     font-family: Verdana, Helvetica, sans-serif;
     color: white;

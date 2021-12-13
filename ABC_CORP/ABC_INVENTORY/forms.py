@@ -8,4 +8,4 @@ class CreateUserForm(UserCreationForm):
 		fields = ['firstName', 'lastName', 'email', 'phone','address','officeLocation','password1', 'password2']
 
 class UploadFileForm(forms.Form):
-	file = forms.FileField(required=True)
+	file = forms.FileField(required=False)

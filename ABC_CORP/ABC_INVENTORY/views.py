@@ -204,6 +204,13 @@ def updateEquipment(request,equipmentId):
         expirationDate = datetime.datetime.strptime(ed, '%Y-%m-%d')
         floor = request.POST.get('floor')
 
+        if expirationDate < purchaseDate:
+            errorMessage = "Expiration date is earlier than Purchase date, ensure Purchase date is earlier than Expiration date."
+            redirectUrlName = "addEquipment"
+            redirectPageName= "Add Equipment"
+            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+
+
         e.name = name
         e.assignedTo = User(id=assignedToId)
         e.officeLocation = Location(id=officeLocationId)
@@ -359,7 +366,7 @@ def deactivateEquipment(request,equipmentId):
         errorMessage = "Non Admins cannot Deactivate Equipment."
         redirectUrlName = "searchEquipment"
         redirectPageName= "Search Equipment"
-        return errorHandler(request, errorMessage, redirectUrlName, redirectPageName, equipmentId)
+        return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
 
 
 def deactivateVendor(request,vendorId):
@@ -381,9 +388,9 @@ def deactivateVendor(request,vendorId):
         return render(request, 'deactivateVendor.html', context)
     else:
         errorMessage = "Non Admins cannot Deactivate Vendor."
-        redirectUrlName = "deactivateVendor"
-        redirectPageName= "Deactivate Vendor"
-        return errorHandler(request, errorMessage, redirectUrlName, redirectPageName,vendorId)
+        redirectUrlName = "searchVendor"
+        redirectPageName= "Search Vendor"
+        return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
 
 def deactivateUser(request,userId):
     date = datetime.date.today()
@@ -922,16 +929,22 @@ def importPage(request):
             response['Content-Disposition'] = 'attachment; filename="equipmentTemplate.csv"'
 
             writer = csv.writer(response)
-            writer.writerow(['id','name', 'equipmentType', 'purchaseDate', 'expirationDate', 'floor', 'is_active', 'assignedTo_id', 'officeLocation_id', 'vendor_id'])
+            writer.writerow(['name', 'equipmentType', 'purchaseDate', 'expirationDate', 'floor', 'is_active', 'assignedTo_id', 'officeLocation_id', 'vendor_id'])
 
-            equipments = Equipment.objects.all().values_list('id','name', 'equipmentType', 'purchaseDate', 'expirationDate', 'floor', 'is_active', 'assignedTo_id', 'officeLocation_id', 'vendor_id')
+            equipments = Equipment.objects.all().values_list('name', 'equipmentType', 'purchaseDate', 'expirationDate', 'floor', 'is_active', 'assignedTo_id', 'officeLocation_id', 'vendor_id')
             writer.writerow(equipments.get(id=1))
             return response
 
         if "Import" in request.POST:
-            form = UploadFileForm(request.POST, request.FILES)
+            if not request.FILES:
+                errorMessage = "No File Selected, Kindly Select File"
+                redirectUrlName = "import"
+                redirectPageName= "Import"
+                return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
+            
+            form = UploadFileForm(request.POST, request.FILES)            
             if form.is_valid():
-                handle_uploaded_file(request.FILES['file'])
+                handle_uploaded_file(request, request.FILES['file'])
                 context['form'] = UploadFileForm()
                 return render(request, 'import.html', context)
 
@@ -941,7 +954,7 @@ def importPage(request):
     else:
         return redirect('home')
 
-def handle_uploaded_file(f):
+def handle_uploaded_file(request,f):
     DATE_FORMAT = '%m/%d/%Y'
     with open('./uploaded.csv', 'wb+') as destination:
         for chunk in f.chunks():
@@ -965,6 +978,7 @@ def handle_uploaded_file(f):
         equipment.vendor = Vendor.objects.get(id=int(row['vendor_id']))
         equipment.save()
     os.remove("uploaded.csv")
+    messages.info(request, 'Equipments Uploaded Succesfully!')
 
 def exportPage(request):
     date = datetime.date.today()
@@ -981,8 +995,8 @@ def exportPage(request):
         response['Content-Disposition'] = 'attachment; filename="equipments.csv"'
 
         writer = csv.writer(response)
-        writer.writerow(['id','name', 'equipmentType', 'purchaseDate', 'expirationDate', 'floor', 'is_active', 'assignedTo_id', 'officeLocation_id', 'vendor_id'])
-        equipments = Equipment.objects.all().values_list('id','name', 'equipmentType', 'purchaseDate', 'expirationDate', 'floor', 'is_active', 'assignedTo_id', 'officeLocation_id', 'vendor_id')
+        writer.writerow(['name', 'equipmentType', 'purchaseDate', 'expirationDate', 'floor', 'is_active', 'assignedTo_id', 'officeLocation_id', 'vendor_id'])
+        equipments = Equipment.objects.all().values_list('name', 'equipmentType', 'purchaseDate', 'expirationDate', 'floor', 'is_active', 'assignedTo_id', 'officeLocation_id', 'vendor_id')
         for equipment in equipments:
             writer.writerow(equipment)
         return response

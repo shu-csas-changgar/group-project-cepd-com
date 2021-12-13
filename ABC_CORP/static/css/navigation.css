@@ -17,7 +17,7 @@ ul {
     background-color: rgb(55, 96, 220);
     overflow: visible;
     position: fixed;
-    z-index: 2;
+    z-index: 1;
     width: 15%;
     height: 2200px;
 }
