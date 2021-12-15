@@ -273,77 +273,81 @@ def updateVendor(request,vendorId):
 def updateUser(request,userId):
     u = User.objects.get(id=userId)
     date = datetime.date.today()
-    navigationPage = 'usernav.html'
+    navigationPage = 'adminnav.html'
     if request.user.is_admin:
-        navigationPage = 'adminnav.html'
-    locations = Location.objects.all()
-    context = {
-        'date':date,
-        'navigationPage': navigationPage,
-        'locations': locations,
-        'user': u,
-        'loggedOnUser': request.user,
-        'hasAdded':False,
-    }
+        locations = Location.objects.all()
+        context = {
+            'date':date,
+            'navigationPage': navigationPage,
+            'locations': locations,
+            'user': u,
+            'loggedOnUser': request.user,
+            'hasAdded':False,
+        }
 
-    if request.method == 'POST':
-        firstName=request.POST.get('first_name')
-        lastName=request.POST.get('last_name')
-        email=request.POST.get('email')
-        phone=request.POST.get('phone')
-        address=request.POST.get('address')
-        p1=request.POST.get('password1')
-        p2=request.POST.get('password2')
-        locId=request.POST.get('location')
-        location = Location.objects.get(id=locId)
-        is_admin = False
-        if(u.is_admin):
-            is_admin = False if request.POST.get('is_admin') == None else True
+        if request.method == 'POST':
+            firstName=request.POST.get('first_name')
+            lastName=request.POST.get('last_name')
+            email=request.POST.get('email')
+            phone=request.POST.get('phone')
+            address=request.POST.get('address')
+            p1=request.POST.get('password1')
+            p2=request.POST.get('password2')
+            locId=request.POST.get('location')
+            location = Location.objects.get(id=locId)
+            is_admin = False
+            if(u.is_admin):
+                is_admin = False if request.POST.get('is_admin') == None else True
 
-        if emailValidator(email) != True:
-            errorMessage = "Invalid Email Submitted, kindly try again"
-            redirectUrlName = "updateUser"
-            redirectPageName= "Update User"
-            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName, userId)
+            if emailValidator(email) != True:
+                errorMessage = "Invalid Email Submitted, kindly try again"
+                redirectUrlName = "updateUser"
+                redirectPageName= "Update User"
+                return errorHandler(request, errorMessage, redirectUrlName, redirectPageName, userId)
 
-        if phoneValidator(phone)!=True:
-            errorMessage = "Invalid Phone Submitted, kindly try again"
-            redirectUrlName = "updateUser"
-            redirectPageName= "Update User"
-            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName, userId)
+            if phoneValidator(phone)!=True:
+                errorMessage = "Invalid Phone Submitted, kindly try again"
+                redirectUrlName = "updateUser"
+                redirectPageName= "Update User"
+                return errorHandler(request, errorMessage, redirectUrlName, redirectPageName, userId)
 
-        userExists=User.objects.filter(email=email).exists()
+            userExists=User.objects.filter(email=email).exists()
 
-        if userExists and email != u.email:
-            errorMessage = "A user with the email you entered currently exists in the system, Kindly try again."
-            redirectUrlName = "updateUser"
-            redirectPageName= "Update User"
-            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName, userId)
+            if userExists and email != u.email:
+                errorMessage = "A user with the email you entered currently exists in the system, Kindly try again."
+                redirectUrlName = "updateUser"
+                redirectPageName= "Update User"
+                return errorHandler(request, errorMessage, redirectUrlName, redirectPageName, userId)
 
-        if p1 != p2:
-            errorMessage = "Passwords do not match, enter the same password for both password fields."
-            redirectUrlName = "updateUser"
-            redirectPageName= "Update User"
-            return errorHandler(request, errorMessage, redirectUrlName, redirectPageName, userId)
+            if p1 != p2:
+                errorMessage = "Passwords do not match, enter the same password for both password fields."
+                redirectUrlName = "updateUser"
+                redirectPageName= "Update User"
+                return errorHandler(request, errorMessage, redirectUrlName, redirectPageName, userId)
 
-        u.email=email
-        u.firstName=firstName
-        u.lastName=lastName
-        u.set_password(p1)
-        u.phone=phone
-        u.address=address
-        u.officeLocation=Location(id=location.id)
-        u.is_admin=is_admin
-        u.save()
+            u.email=email
+            u.firstName=firstName
+            u.lastName=lastName
+            u.set_password(p1)
+            u.phone=phone
+            u.address=address
+            u.officeLocation=Location(id=location.id)
+            u.is_admin=is_admin
+            u.save()
 
-        context['hasAdded'] = True
-        officeLocation = Location.objects.get(id=locId)
-        context['officeLocation'] = officeLocation
+            context['hasAdded'] = True
+            officeLocation = Location.objects.get(id=locId)
+            context['officeLocation'] = officeLocation
 
-        if email == request.user.email:
-            return redirect('logout')
+            if email == request.user.email:
+                return redirect('logout')
+            return render(request, 'updateUser.html', context)
         return render(request, 'updateUser.html', context)
-    return render(request, 'updateUser.html', context)
+    else:
+        errorMessage = "Non Admins cannot Update Users."
+        redirectUrlName = "searchUser"
+        redirectPageName= "Search User"
+        return errorHandler(request, errorMessage, redirectUrlName, redirectPageName)
 
 def deactivateEquipment(request,equipmentId):
     date = datetime.date.today()
@@ -929,9 +933,9 @@ def importPage(request):
             response['Content-Disposition'] = 'attachment; filename="equipmentTemplate.csv"'
 
             writer = csv.writer(response)
-            writer.writerow(['name', 'equipmentType', 'purchaseDate', 'expirationDate', 'floor', 'is_active', 'assignedTo_id', 'officeLocation_id', 'vendor_id'])
-
-            equipments = Equipment.objects.all().values_list('name', 'equipmentType', 'purchaseDate', 'expirationDate', 'floor', 'is_active', 'assignedTo_id', 'officeLocation_id', 'vendor_id')
+            writer.writerow(['name', 'equipmentType', 'purchaseDate', 'expirationDate', 'floor', 'is_active', 'officeLocation_id', 'vendor_id'])
+            equipments = Equipment.objects.all().values_list('name', 'equipmentType', 'purchaseDate', 'expirationDate', 'floor', 'is_active', 'officeLocation_id', 'vendor_id')
+            
             writer.writerow(equipments.get(id=1))
             return response
 
@@ -973,7 +977,7 @@ def handle_uploaded_file(request,f):
         equipment.expirationDate = cleanedExpDate
         equipment.floor = row['floor']
         equipment.is_active = True if row['is_active'] == "TRUE" or row['is_active'] == "1" else False
-        equipment.assignedTo = User.objects.get(id=int(row['assignedTo_id']))
+        equipment.assignedTo = User.objects.get(id=1)
         equipment.officeLocation = Location.objects.get(id=int(row['officeLocation_id']))
         equipment.vendor = Vendor.objects.get(id=int(row['vendor_id']))
         equipment.save()
@@ -993,12 +997,37 @@ def exportPage(request):
     if "Export" in request.POST:
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="equipments.csv"'
-
         writer = csv.writer(response)
-        writer.writerow(['name', 'equipmentType', 'purchaseDate', 'expirationDate', 'floor', 'is_active', 'assignedTo_id', 'officeLocation_id', 'vendor_id'])
+
+        writer.writerow(['Equipments'])
+        writer.writerow(['name', 'equipmentType', 'purchaseDate', 'expirationDate', 'floor', 'is_active', 'assignedToUser_id', 'officeLocation_id', 'vendor_id'])
         equipments = Equipment.objects.all().values_list('name', 'equipmentType', 'purchaseDate', 'expirationDate', 'floor', 'is_active', 'assignedTo_id', 'officeLocation_id', 'vendor_id')
         for equipment in equipments:
             writer.writerow(equipment)
+        writer.writerow([''])
+
+        if request.user.is_admin:
+            writer.writerow(['Users'])
+            writer.writerow(['id','firstName', 'lastName', 'email', 'phone', 'address', 'officeLocation', 'is_active', 'is_admin'])
+            users = User.objects.all().exclude(id=1).values_list('id','firstName', 'lastName', 'email', 'phone', 'address', 'officeLocation', 'is_active', 'is_admin')
+            for user in users:
+                writer.writerow(user)
+            writer.writerow([''])
+
+            writer.writerow(['Vendors'])
+            writer.writerow(['id','name', 'address', 'email', 'phone', 'is_active'])
+            vendors = Vendor.objects.all().values_list('id','name', 'address', 'email', 'phone', 'is_active')
+            for vendor in vendors:
+                writer.writerow(vendor)
+            writer.writerow([''])
+
+            writer.writerow(['Locations'])
+            writer.writerow(['id','name', 'is_active'])
+            locations = Location.objects.all().values_list('id','name', 'is_active')
+            for location in locations:
+                writer.writerow(location)
+            writer.writerow([''])
+
         return response
     return render(request, 'export.html', context)
 
