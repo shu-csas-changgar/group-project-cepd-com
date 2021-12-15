@@ -18,7 +18,6 @@ class Command(BaseCommand):
         print('Unassinged User Created')
 
         print("Creating Super User")
-        db = get_user_model()
         db.objects.create_superuser('super@gmail.com','Super','Super','password')
         print('Super User Created')
 
