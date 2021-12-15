@@ -82,7 +82,6 @@ email: String <br/>
 phone: String <br/>
 address: String <br/>
 officeLocation: Location <br/>
-equipments: ListOfEquipment  <br/>
 password: String
 
 ### Equipment
