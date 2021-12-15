@@ -933,8 +933,8 @@ def importPage(request):
             response['Content-Disposition'] = 'attachment; filename="equipmentTemplate.csv"'
 
             writer = csv.writer(response)
-            writer.writerow(['name', 'equipmentType', 'purchaseDate', 'expirationDate', 'floor', 'is_active', 'officeLocation_id', 'vendor_id'])
-            equipments = Equipment.objects.all().values_list('name', 'equipmentType', 'purchaseDate', 'expirationDate', 'floor', 'is_active', 'officeLocation_id', 'vendor_id')
+            writer.writerow(['name', 'equipmentType', 'purchaseDate', 'expirationDate', 'floor', 'officeLocation_id', 'vendor_id'])
+            equipments = Equipment.objects.all().values_list('name', 'equipmentType', 'purchaseDate', 'expirationDate', 'floor', 'officeLocation_id', 'vendor_id')
             
             writer.writerow(equipments.get(id=1))
             return response
@@ -976,7 +976,7 @@ def handle_uploaded_file(request,f):
         equipment.purchaseDate = cleanedPurDate
         equipment.expirationDate = cleanedExpDate
         equipment.floor = row['floor']
-        equipment.is_active = True if row['is_active'] == "TRUE" or row['is_active'] == "1" else False
+        equipment.is_active = False
         equipment.assignedTo = User.objects.get(id=1)
         equipment.officeLocation = Location.objects.get(id=int(row['officeLocation_id']))
         equipment.vendor = Vendor.objects.get(id=int(row['vendor_id']))
